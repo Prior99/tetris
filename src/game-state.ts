@@ -17,6 +17,7 @@ export class GameState {
     public matrix: Matrix;
     public initialized: Date;
     public lastTick: Date;
+    public lastInput: Date;
     public level = 0;
     public lines = 0;
     public score = 0;
@@ -31,6 +32,7 @@ export class GameState {
         this.matrix = new Matrix(this.config.logicalSize);
         this.initialized = new Date();
         this.lastTick = new Date();
+        this.lastInput = new Date();
         this.shuffleBag = tetriminos();
         this.newTetrimino();
     }
@@ -39,29 +41,38 @@ export class GameState {
         return speed(this.level);
     }
 
-    @bind private update() {
-        if (!this.running) { return; }
+    private processMatrix() {
         const now = new Date();
         const diff = differenceInMilliseconds(now, this.lastTick) / 1000;
-        this.processInput();
         if (diff > this.speed) {
             console.log(this.offset.y);
             this.lastTick = now;
             this.checkCollision();
             this.moveTetrimino();
         }
+    }
+
+    @bind private update() {
+        if (!this.running) { return; }
+        this.processInput();
+        this.processMatrix();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
     }
 
     private processInput() {
-        if (this.input.moveLeft) {
-            this.offset = this.offset.add(vec2(-1, 0));
-        }
-        if (this.input.moveRight) {
-            this.offset = this.offset.add(vec2(1, 0));
-        }
-        if (this.input.rotate) {
-            this.currentTetrimino = this.currentTetrimino.rotateRight();
+        const now = new Date();
+        const diff = differenceInMilliseconds(now, this.lastInput) / 1000;
+        if (diff > this.config.inputSpeed) {
+            this.lastInput = now;
+            if (this.input.moveLeft) {
+                this.offset = this.offset.add(vec2(-1, 0));
+            }
+            if (this.input.moveRight) {
+                this.offset = this.offset.add(vec2(1, 0));
+            }
+            if (this.input.rotate) {
+                this.currentTetrimino = this.currentTetrimino.rotateRight();
+            }
         }
     }
 
