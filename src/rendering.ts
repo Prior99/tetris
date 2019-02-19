@@ -74,7 +74,7 @@ export class Rendering {
         for (let y = 0; y < this.config.logicalSize.y; ++y) {
             for (let x = 0; x < this.config.logicalSize.x; ++x) {
                 const pos = vec2(x, y);
-                const invertedPos = vec2(pos.x, this.config.logicalSize.y - pos.y);
+                const invertedPos = vec2(pos.x, this.config.logicalSize.y - pos.y - 1);
                 this.renderCell(invertedPos.mult(this.cellPixelSize), this.gameState.temporaryState.at(pos));
             }
         }
