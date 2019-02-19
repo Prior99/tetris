@@ -67,7 +67,7 @@ export class Matrix {
     }
 
     public collides(other: Matrix, offset: Vec2): boolean {
-        if (!this.fits(other, offset)) { throw new Error("Can't overlay."); }
+        if (!this.fits(other, offset)) { return true; }
         for (let x = 0; x < other.dimensions.x; ++x) {
             for (let y = 0; y < other.dimensions.y; ++y) {
                 if (!this.emptyAt(vec2(x, y).add(offset)) && !other.emptyAt(vec2(x, y))) { return true; }

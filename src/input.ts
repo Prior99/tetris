@@ -6,6 +6,7 @@ export class Input {
     public moveLeft = false;
     public moveRight = false;
     public rotate = false;
+    public hardDrop = false;
 
     @initialize protected initialize() {
         window.addEventListener("keyup", this.handleKeyUp);
@@ -26,6 +27,9 @@ export class Input {
             case "d":
                 this.moveRight = false;
                 break;
+            case " ":
+                this.hardDrop = false;
+                break;
         }
     }
 
@@ -42,6 +46,9 @@ export class Input {
             case "ArrowRight":
             case "d":
                 this.moveRight = true;
+                break;
+            case " ":
+                this.hardDrop = true;
                 break;
         }
     }

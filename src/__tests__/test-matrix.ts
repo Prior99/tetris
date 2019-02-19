@@ -141,21 +141,21 @@ describe("Matrix", () => {
         });
 
         it("detects a collision", () => {
-            expect(matrixA.collides(colliding, vec2(0, 4))).toBe(true);
+            expect(matrixA.collides(colliding, vec2(0, 4))).toBe(false);
         });
 
         it("doesn't detect a non-collision", () => {
-            expect(matrixA.collides(colliding, vec2(0, 3))).toBe(false);
+            expect(matrixA.collides(colliding, vec2(0, 3))).toBe(true);
         });
     });
 
     describe("overlay", () => {
         it("works as expected", () => {
-            expect(matrixA.overlay(tetriminoA)).toEqual(new Matrix(vec2(0, 1), [
+            expect(matrixA.overlay(tetriminoA, vec2(0, 2))).toEqual(new Matrix(vec2(4, 6), [
                 0, 0, 0, 0,
-                0, 0, 3, 0,
-                0, 1, 3, 3,
+                0, 1, 3, 0,
                 0, 1, 1, 1,
+                0, 1, 0, 3,
                 0, 1, 2, 2,
                 1, 1, 2, 2,
             ]));

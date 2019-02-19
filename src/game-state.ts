@@ -18,7 +18,7 @@ export class GameState {
     public initialized: Date;
     public lastTick: Date;
     public lastInput: Date;
-    public level = 0;
+    public level = 3;
     public lines = 0;
     public score = 0;
     public currentTetrimino: Matrix;
@@ -64,14 +64,31 @@ export class GameState {
         const diff = differenceInMilliseconds(now, this.lastInput) / 1000;
         if (diff > this.config.inputSpeed) {
             this.lastInput = now;
-            if (this.input.moveLeft && this.offset.x > 0) {
-                this.offset = this.offset.add(vec2(-1, 0));
+            if (this.input.moveLeft) {
+                const newOffset = this.offset.add(vec2(-1, 0));
+                if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
+                    this.offset = newOffset;
+                }
             }
-            if (this.input.moveRight && this.offset.x + this.currentTetrimino.dimensions.x < this.config.logicalSize.x) {
-                this.offset = this.offset.add(vec2(1, 0));
+            if (this.input.moveRight) {
+                const newOffset = this.offset.add(vec2(1, 0));
+                if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
+                    this.offset = newOffset;
+                }
             }
             if (this.input.rotate) {
-                this.currentTetrimino = this.currentTetrimino.rotateRight();
+                const newTetrimino = this.currentTetrimino.rotateRight();
+                if (!this.matrix.collides(newTetrimino, this.offset)) {
+                    this.currentTetrimino = newTetrimino;
+                }
+            }
+            if (this.input.hardDrop) {
+                this.input.hardDrop = false;
+                let newOffset = this.offset;
+                while (!this.matrix.collides(this.currentTetrimino, newOffset.add(vec2(0, -1)))) {
+                    newOffset = newOffset.add(vec2(0, -1));
+                }
+                this.offset = newOffset;
             }
         }
     }
@@ -95,11 +112,7 @@ export class GameState {
     }
 
     private checkCollision() {
-        const collides = (
-            (this.offset.y === 0) ||
-            (this.matrix.collides(this.currentTetrimino, this.offset.add(vec2(0, -1))))
-        );
-        if (collides) {
+        if (this.matrix.collides(this.currentTetrimino, this.offset.add(vec2(0, -1)))) {
             this.commitTetrimino();
         }
     }
