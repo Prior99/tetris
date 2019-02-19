@@ -84,7 +84,7 @@ export class GameState {
         this.currentTetrimino = this.shuffleBag.take();
         this.offset = vec2(
             Math.floor((this.config.logicalSize.x - this.currentTetrimino.dimensions.x) / 2),
-            this.config.logicalSize.y - 5,
+            this.config.logicalSize.y - this.currentTetrimino.dimensions.y,
         );
     }
 
