@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "outDir": "lib",
+        "rootDir": "src",
+        "baseUrl": "src",
+        "target": "es6",
+        "module": "commonjs",
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "lib": ["es2016", "dom"],
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["src/**/*.ts"],
+}
