@@ -70,10 +70,10 @@ export class Matrix {
         if (!this.fits(other, offset)) { throw new Error("Can't overlay."); }
         for (let x = 0; x < other.dimensions.x; ++x) {
             for (let y = 0; y < other.dimensions.y; ++y) {
-                if (!this.emptyAt(vec2(x, y).add(offset)) && !other.emptyAt(vec2(x, y))) { return false; }
+                if (!this.emptyAt(vec2(x, y).add(offset)) && !other.emptyAt(vec2(x, y))) { return true; }
             }
         }
-        return true;
+        return false;
     }
 
     public rotateLeft(): Matrix {

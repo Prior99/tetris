@@ -64,10 +64,10 @@ export class GameState {
         const diff = differenceInMilliseconds(now, this.lastInput) / 1000;
         if (diff > this.config.inputSpeed) {
             this.lastInput = now;
-            if (this.input.moveLeft) {
+            if (this.input.moveLeft && this.offset.x > 0) {
                 this.offset = this.offset.add(vec2(-1, 0));
             }
-            if (this.input.moveRight) {
+            if (this.input.moveRight && this.offset.x + this.currentTetrimino.dimensions.x < this.config.logicalSize.x) {
                 this.offset = this.offset.add(vec2(1, 0));
             }
             if (this.input.rotate) {
@@ -96,8 +96,8 @@ export class GameState {
 
     private checkCollision() {
         const collides = (
-            (this.currentTetrimino.dimensions.y + this.offset.y >= this.matrix.dimensions.y) ||
-            (this.matrix.collides(this.currentTetrimino, this.offset.add(vec2(0, 1))))
+            (this.offset.y === 0) ||
+            (this.matrix.collides(this.currentTetrimino, this.offset.add(vec2(0, -1))))
         );
         if (collides) {
             this.commitTetrimino();
