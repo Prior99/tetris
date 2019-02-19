@@ -4,24 +4,22 @@ import { vec2, Vec2 } from "./vec2";
 export class Matrix {
     static isMatrix(obj: any): obj is Matrix {
         if (typeof obj !== "object") { return false; }
-        return typeof obj.width === "number" && typeof obj.height === "number";
+        return Vec2.isVec2(obj.dimensions);
     }
 
-    public width: number;
-    public height: number;
+    public dimensions: Vec2;
     private state: Uint8Array;
 
     constructor(matrix: Matrix);
-    constructor(width: number, height: number, initialization?: CellColor[]);
-    constructor(arg1: Matrix | number, arg2?: number, initialization?: CellColor[]) {
+    constructor(dimensions: Vec2, initialization?: CellColor[]);
+    constructor(arg1: Matrix | Vec2, initialization?: CellColor[]) {
         if (Matrix.isMatrix(arg1)) {
-            this.width = arg1.width;
-            this.height = arg1.height;
+            this.dimensions = arg1.dimensions;
             this.state = new Uint8Array(this.size);
             this.state.set(arg1.state);
         } else {
-            this.width = arg1;
-            this.height = arg2;
+            if (!Vec2.isVec2(arg1)) { throw new Error("Invalid arguments."); }
+            this.dimensions = arg1;
             this.state = new Uint8Array(this.size);
             if (initialization) {
                 if (initialization.length !== this.size) { throw new Error("Wrong size."); }
@@ -31,15 +29,15 @@ export class Matrix {
     }
 
     public get size() {
-        return this.width * this.height;
+        return this.dimensions.area;
     }
 
     public at(pos: Vec2): CellColor {
-        return this.state[pos.x + (this.height - pos.y - 1) * this.width];
+        return this.state[pos.x + (this.dimensions.y - pos.y - 1) * this.dimensions.x];
     }
 
     private put(pos: Vec2, cellColor: CellColor) {
-        this.state[pos.x + (this.height - pos.y - 1) * this.width] = cellColor;
+        this.state[pos.x + (this.dimensions.y - pos.y - 1) * this.dimensions.x] = cellColor;
     }
 
     public emptyAt(pos: Vec2): boolean {
@@ -48,18 +46,21 @@ export class Matrix {
 
     public fits(other: Matrix, offset: Vec2): boolean {
         if (offset.x < 0) { return false; }
-        if (offset.x + other.width > this.width) { return false; }
+        if (offset.x + other.dimensions.x > this.dimensions.x) { return false; }
         if (offset.y < 0) { return false; }
-        if (offset.y + other.height > this.height) { return false; }
+        if (offset.y + other.dimensions.y > this.dimensions.y) { return false; }
         return true;
     }
 
     public overlay(other: Matrix, offset: Vec2): Matrix {
         if (!this.fits(other, offset)) { throw new Error("Can't overlay."); }
         const result = new Matrix(this);
-        for (let x = 0; other.width; ++x) {
-            for (let y = 0; other.height; ++y) {
-                result.put(vec2(x, y).add(offset), other.at(vec2(x, y)));
+        for (let x = 0; x < other.dimensions.x; ++x) {
+            for (let y = 0; y < other.dimensions.y; ++y) {
+                const otherCellColor = other.at(vec2(x, y));
+                if (otherCellColor !== CellColor.EMPTY) {
+                    result.put(vec2(x, y).add(offset), otherCellColor);
+                }
             }
         }
         return result;
@@ -67,8 +68,8 @@ export class Matrix {
 
     public collides(other: Matrix, offset: Vec2): boolean {
         if (!this.fits(other, offset)) { throw new Error("Can't overlay."); }
-        for (let x = 0; other.width; ++x) {
-            for (let y = 0; other.height; ++y) {
+        for (let x = 0; x < other.dimensions.x; ++x) {
+            for (let y = 0; y < other.dimensions.y; ++y) {
                 if (!this.emptyAt(vec2(x, y).add(offset)) && !other.emptyAt(vec2(x, y))) { return false; }
             }
         }
@@ -77,10 +78,10 @@ export class Matrix {
 
     public rotateLeft(): Matrix {
         // Create transposed version of matrix.
-        const result = new Matrix(this.height, this.width);
-        for (let x = 0; x < this.width; ++x) {
-            for (let y = 0; y < this.height; ++y) {
-                result.put(vec2(this.height - y - 1, x), this.at(vec2(x, y)));
+        const result = new Matrix(this.dimensions.swap());
+        for (let x = 0; x < this.dimensions.x; ++x) {
+            for (let y = 0; y < this.dimensions.y; ++y) {
+                result.put(vec2(this.dimensions.y - y - 1, x), this.at(vec2(x, y)));
             }
         }
         return result;
@@ -88,20 +89,20 @@ export class Matrix {
 
     public rotateRight(): Matrix {
         // Create transposed version of matrix.
-        const result = new Matrix(this.height, this.width);
-        for (let x = 0; x < this.width; ++x) {
-            for (let y = 0; y < this.height; ++y) {
-                result.put(vec2(y, this.width - x - 1), this.at(vec2(x, y)));
+        const result = new Matrix(this.dimensions.swap());
+        for (let x = 0; x < this.dimensions.x; ++x) {
+            for (let y = 0; y < this.dimensions.y; ++y) {
+                result.put(vec2(y, this.dimensions.x - x - 1), this.at(vec2(x, y)));
             }
         }
         return result;
     }
 
     public rotate180(): Matrix {
-        const result = new Matrix(this.width, this.height);
-        for (let x = 0; x < this.width; ++x) {
-            for (let y = 0; y < this.height; ++y) {
-                result.put(vec2(this.width - x - 1, this.height - y - 1), this.at(vec2(x, y)));
+        const result = new Matrix(this.dimensions);
+        for (let x = 0; x < this.dimensions.x; ++x) {
+            for (let y = 0; y < this.dimensions.y; ++y) {
+                result.put(vec2(this.dimensions.x - x - 1, this.dimensions.y - y - 1), this.at(vec2(x, y)));
             }
         }
         return result;
@@ -112,7 +113,7 @@ export class Matrix {
         const { fullHorizontals } = result;
         while (fullHorizontals.length > 0) {
             const current = fullHorizontals.shift();
-            result.removeHorizontal(current);
+            result.removeHorizontal(current!);
             fullHorizontals.forEach((y, index) => fullHorizontals[index] = y - 1);
         }
         return result;
@@ -120,9 +121,9 @@ export class Matrix {
 
     public get fullHorizontals(): number[] {
         const lines: number[] = [];
-        for (let y = 0; y < this.height; ++y) {
+        for (let y = 0; y < this.dimensions.y; ++y) {
             let fullHorizontal = true;
-            for (let x = 0; x < this.width; ++x) {
+            for (let x = 0; x < this.dimensions.x; ++x) {
                 if (this.emptyAt(vec2(x, y))) {
                     fullHorizontal = false;
                     break;
@@ -136,9 +137,9 @@ export class Matrix {
     }
 
     public removeHorizontal(targetY: number) {
-        for (let y = targetY; y < this.height; ++y) {
-            for (let x = 0; x < this.width; ++x) {
-                if (y === this.height - 1) {
+        for (let y = targetY; y < this.dimensions.y; ++y) {
+            for (let x = 0; x < this.dimensions.x; ++x) {
+                if (y === this.dimensions.y - 1) {
                     this.put(vec2(x, y), CellColor.EMPTY);
                 } else {
                     this.put(vec2(x, y), this.at(vec2(x, y + 1)));
@@ -148,9 +149,9 @@ export class Matrix {
     }
 
     public equals(other: Matrix): boolean {
-        if (this.width !== other.width || this.height !== other.height) { return false; }
-        for (let y = 0; y < this.height - 1; ++y) {
-            for (let x = 0; x < this.width; ++x) {
+        if (this.dimensions.x !== other.dimensions.x || this.dimensions.y !== other.dimensions.y) { return false; }
+        for (let y = 0; y < this.dimensions.y - 1; ++y) {
+            for (let x = 0; x < this.dimensions.x; ++x) {
                 if (this.at(vec2(x, y)) !== other.at(vec2(x, y))) { return false; }
             }
         }
@@ -159,10 +160,10 @@ export class Matrix {
 
     public toString(): string {
         let result = "";
-        for (let y = this.height - 1; y >= 0; --y) {
-            for (let x = 0; x < this.width; ++x) {
+        for (let y = this.dimensions.y - 1; y >= 0; --y) {
+            for (let x = 0; x < this.dimensions.x; ++x) {
                 result += this.at(vec2(x, y));
-                if (x !== this.width - 1) { result += " "; }
+                if (x !== this.dimensions.x - 1) { result += " "; }
                 else { result += "\n"; }
             }
         }

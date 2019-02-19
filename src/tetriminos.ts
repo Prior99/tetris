@@ -1,9 +1,10 @@
 import { Matrix } from "./matrix";
+import { vec2 } from "./vec2";
 import { CellColor } from "./cell-color";
 import { ShuffleBag } from "./shuffle-bag";
 
 function tetrimino(cellColor: CellColor, initialization: (1 | 0)[]) {
-    return new Matrix(4, 4, initialization.map(notEmpty => notEmpty === 1 ? cellColor : CellColor.EMPTY));
+    return new Matrix(vec2(4, 4), initialization.map(notEmpty => notEmpty === 1 ? cellColor : CellColor.EMPTY));
 }
 
 function tetriminoI() {

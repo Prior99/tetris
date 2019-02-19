@@ -7,7 +7,7 @@ describe("Matrix", () => {
     let tetriminoA: Matrix;
 
     beforeEach(() => {
-        matrixA = new Matrix(4, 6, [
+        matrixA = new Matrix(vec2(4, 6), [
             0, 0, 0, 0,
             0, 0, 3, 0,
             0, 0, 3, 3,
@@ -15,7 +15,7 @@ describe("Matrix", () => {
             0, 1, 2, 2,
             1, 1, 2, 2,
         ]);
-        matrixB = new Matrix(4, 6, [
+        matrixB = new Matrix(vec2(4, 6), [
             0, 0, 0, 0,
             4, 3, 0, 0,
             4, 3, 3, 3,
@@ -23,7 +23,7 @@ describe("Matrix", () => {
             4, 1, 2, 2,
             1, 1, 2, 0,
         ]);
-        tetriminoA = new Matrix(4, 4, [
+        tetriminoA = new Matrix(vec2(4, 4), [
             0, 0, 0, 0,
             0, 1, 0, 0,
             0, 1, 1, 1,
@@ -39,7 +39,7 @@ describe("Matrix", () => {
 
     describe("rotateLeft", () => {
         it("rotates matrix A", () => {
-            expect(matrixA.rotateLeft()).toEqual(new Matrix(6, 4, [
+            expect(matrixA.rotateLeft()).toEqual(new Matrix(vec2(6, 4), [
                 0, 0, 3, 3, 2, 2,
                 0, 3, 3, 0, 2, 2,
                 0, 0, 0, 1, 1, 1,
@@ -50,7 +50,7 @@ describe("Matrix", () => {
 
     describe("rotateRight", () => {
         it("rotates matrix A", () => {
-            expect(matrixA.rotateRight()).toEqual(new Matrix(6, 4, [
+            expect(matrixA.rotateRight()).toEqual(new Matrix(vec2(6, 4), [
                 1, 0, 0, 0, 0, 0,
                 1, 1, 1, 0, 0, 0,
                 2, 2, 0, 3, 3, 0,
@@ -61,7 +61,7 @@ describe("Matrix", () => {
 
     describe("rotate180", () => {
         it("rotates matrix A", () => {
-            expect(matrixA.rotate180()).toEqual(new Matrix(4, 6, [
+            expect(matrixA.rotate180()).toEqual(new Matrix(vec2(4, 6), [
                 2, 2, 1, 1,
                 2, 2, 1, 0,
                 3, 0, 1, 0,
@@ -108,7 +108,7 @@ describe("Matrix", () => {
 
     describe("removeHorizontals", () => {
         it("removes the horizontals from matrix A", () => {
-            expect(matrixA.removeHorizontals()).toEqual(new Matrix(4, 6, [
+            expect(matrixA.removeHorizontals()).toEqual(new Matrix(vec2(4, 6), [
                 0, 0, 0, 0,
                 0, 0, 0, 0,
                 0, 0, 3, 0,
@@ -119,13 +119,45 @@ describe("Matrix", () => {
         });
 
         it("removes the horizontals from matrix B", () => {
-            expect(matrixB.removeHorizontals()).toEqual(new Matrix(4, 6, [
+            expect(matrixB.removeHorizontals()).toEqual(new Matrix(vec2(4, 6), [
                 0, 0, 0, 0,
                 0, 0, 0, 0,
                 0, 0, 0, 0,
                 4, 3, 0, 0,
                 4, 1, 2, 0,
                 1, 1, 2, 0,
+            ]));
+        });
+    });
+
+    describe("collides", () => {
+        let colliding: Matrix;
+
+        beforeEach(() => {
+            colliding = new Matrix(vec2(3, 2), [
+                5, 5, 5,
+                5, 0, 0,
+            ]);
+        });
+
+        it("detects a collision", () => {
+            expect(matrixA.collides(colliding, vec2(0, 4))).toBe(true);
+        });
+
+        it("doesn't detect a non-collision", () => {
+            expect(matrixA.collides(colliding, vec2(0, 3))).toBe(false);
+        });
+    });
+
+    describe("overlay", () => {
+        it("works as expected", () => {
+            expect(matrixA.overlay(tetriminoA)).toEqual(new Matrix(vec2(0, 1), [
+                0, 0, 0, 0,
+                0, 0, 3, 0,
+                0, 1, 3, 3,
+                0, 1, 1, 1,
+                0, 1, 2, 2,
+                1, 1, 2, 2,
             ]));
         });
     });

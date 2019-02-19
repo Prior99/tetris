@@ -10,7 +10,8 @@
         "jsx": "react",
         "lib": ["es2016", "dom"],
         "sourceMap": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "strictNullChecks": true
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "typings/**/*"],
 }
