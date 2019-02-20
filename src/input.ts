@@ -93,6 +93,10 @@ export class Input {
                 this.gameState.inputHardDrop();
                 break;
             }
+            case "p": {
+                this.gameState.debug = !this.gameState.debug;
+                break;
+            }
         }
     }
 }

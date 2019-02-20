@@ -20,6 +20,7 @@ export class GameState {
     public level = 3;
     public lines = 0;
     public score = 0;
+    public debug = false;
     public currentTetrimino: Tetrimino;
     private running = false;
     private timeout?: number;
