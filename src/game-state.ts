@@ -67,6 +67,7 @@ export class GameState {
 
     private commitTetrimino() {
         this.playfield.update(this.currentTetrimino.overlayedOnMatrix());
+        this.playfield.update(this.playfield.removeHorizontals());
         this.newTetrimino();
     }
 
