@@ -22,8 +22,17 @@ export class Vec2 {
     public swap() {
         return vec2(this.y, this.x);
     }
+
     public mult(scalar: number): Vec2 {
         return vec2(this.x * scalar, this.y * scalar);
+    }
+
+    public horizontalCenter(): Vec2 {
+        return vec2(Math.floor(this.x / 2), this.y);
+    }
+
+    public equals(other: Vec2): boolean {
+        return this.x === other.x && this.y === other.y;
     }
 }
 

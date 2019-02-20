@@ -169,4 +169,9 @@ export class Matrix {
         }
         return result;
     }
+
+    public update(matrix: Matrix) {
+        if (!matrix.dimensions.equals(this.dimensions)) { throw new Error("Can't update with different dimensions."); }
+        this.state.set(matrix.state);
+    }
 }
