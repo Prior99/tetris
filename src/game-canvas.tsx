@@ -5,12 +5,14 @@ import { Config } from "./config";
 import { GameState } from "./game-state";
 import { Rendering } from "./rendering";
 import * as css from "./game-canvas.scss";
+import { Input } from "./input";
 
 @external
 export class GameCanvas extends React.Component {
     @inject private config: Config;
     @inject private gameState: GameState;
     @inject private rendering: Rendering;
+    @inject private input: Input;
 
     private canvas?: HTMLCanvasElement;
 
@@ -34,6 +36,7 @@ export class GameCanvas extends React.Component {
         this.rescale();
         this.rendering.updateCanvas(canvas);
         this.gameState.start();
+        this.input.enable();
     }
 
     public render() {

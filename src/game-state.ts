@@ -3,7 +3,6 @@ import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
 import { ShuffleBag } from "./shuffle-bag";
 import { Matrix } from "./matrix";
-import { Input } from "./input";
 import { Config } from "./config";
 import { speed } from "./speed";
 import { tetriminos } from "./tetriminos";
@@ -11,13 +10,11 @@ import { vec2, Vec2 } from "./vec2";
 
 @component
 export class GameState {
-    @inject private input: Input;
     @inject private config: Config;
 
     public matrix: Matrix;
     public initialized: Date;
     public lastTick: Date;
-    public lastMovement: Date;
     public level = 3;
     public lines = 0;
     public score = 0;
@@ -32,7 +29,6 @@ export class GameState {
         this.matrix = new Matrix(this.config.logicalSize);
         this.initialized = new Date();
         this.lastTick = new Date();
-        this.lastMovement = new Date();
         this.shuffleBag = tetriminos();
         this.newTetrimino();
     }
@@ -45,7 +41,6 @@ export class GameState {
         const now = new Date();
         const diff = differenceInMilliseconds(now, this.lastTick) / 1000;
         if (diff > this.speed) {
-            console.log(this.offset.y);
             this.lastTick = now;
             this.checkCollision();
             this.moveTetrimino();
@@ -54,49 +49,37 @@ export class GameState {
 
     @bind private update() {
         if (!this.running) { return; }
-        this.processInput();
         this.processMatrix();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
     }
 
-    private processInput() {
-        if (this.input.rotate) {
-            this.input.rotate = false;
-            const newTetrimino = this.currentTetrimino.rotateRight();
-            if (!this.matrix.collides(newTetrimino, this.offset)) {
-                this.currentTetrimino = newTetrimino;
-            }
-        }
-        if (this.input.hardDrop) {
-            this.input.hardDrop = false;
-            let newOffset = this.offset;
-            while (!this.matrix.collides(this.currentTetrimino, newOffset.add(vec2(0, -1)))) {
-                newOffset = newOffset.add(vec2(0, -1));
-            }
-            this.offset = newOffset;
-        }
-        if (this.input.moveLeft && this.checkMovement()) {
-            const newOffset = this.offset.add(vec2(-1, 0));
-            if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
-                this.offset = newOffset;
-            }
-        }
-        if (this.input.moveRight && this.checkMovement()) {
-            const newOffset = this.offset.add(vec2(1, 0));
-            if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
-                this.offset = newOffset;
-            }
+    public inputRotateRight() {
+        const newTetrimino = this.currentTetrimino.rotateRight();
+        if (!this.matrix.collides(newTetrimino, this.offset)) {
+            this.currentTetrimino = newTetrimino;
         }
     }
 
-    private checkMovement() {
-        const now = new Date();
-        const diff = differenceInMilliseconds(now, this.lastMovement) / 1000;
-        if (diff > this.config.inputSpeed) {
-            this.lastMovement = now;
-            return true;
+    public inputMoveLeft() {
+        const newOffset = this.offset.add(vec2(-1, 0));
+        if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
+            this.offset = newOffset;
         }
-        return false;
+    }
+
+    public inputMoveRight() {
+        const newOffset = this.offset.add(vec2(1, 0));
+        if (!this.matrix.collides(this.currentTetrimino, newOffset)) {
+            this.offset = newOffset;
+        }
+    }
+
+    public inputHardDrop() {
+        let newOffset = this.offset;
+        while (!this.matrix.collides(this.currentTetrimino, newOffset.add(vec2(0, -1)))) {
+            newOffset = newOffset.add(vec2(0, -1));
+        }
+        this.offset = newOffset;
     }
 
     private moveTetrimino() {
