@@ -61,7 +61,7 @@ export class Rendering {
                 ctx.fillStyle = "red";
                 break;
         }
-        ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize, this.cellPixelSize);
+        ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize, -this.cellPixelSize);
     }
 
     private renderClear() {
@@ -70,7 +70,7 @@ export class Rendering {
     }
 
     private translate(pos: Vec2): Vec2 {
-        return vec2(pos.x, this.config.logicalSize.y - pos.y - 1).mult(this.cellPixelSize);
+        return vec2(pos.x, this.config.logicalSize.y - pos.y).mult(this.cellPixelSize);
     }
 
     private renderDebug() {
@@ -101,8 +101,8 @@ export class Rendering {
         // Render Tetrimino.
         const pos = this.translate(this.gameState.currentTetrimino.offset);
         const dimensions = this.gameState.currentTetrimino.matrix.dimensions.mult(this.cellPixelSize);
-        this.ctx.strokeStyle = "black";
-        this.ctx.strokeRect(pos.x, pos.y, dimensions.x, dimensions.y);
+        this.ctx.strokeStyle = "red";
+        this.ctx.strokeRect(pos.x, pos.y, dimensions.x, -dimensions.y);
         this.ctx.beginPath();
         this.ctx.moveTo(pos.x - 10, pos.y - 10);
         this.ctx.lineTo(pos.x + 10, pos.y + 10);

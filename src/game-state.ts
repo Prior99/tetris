@@ -48,6 +48,9 @@ export class GameState {
         if (!this.running) { return; }
         this.processMatrix();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
+        if (this.debug) {
+            console.log(this.temporaryState.toString());
+        }
     }
 
     public inputRotateRight() { this.currentTetrimino.rotateRight(); }
