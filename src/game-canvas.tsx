@@ -26,7 +26,7 @@ export class GameCanvas extends React.Component {
         if (!canvas) { return; }
         const rect = canvas.getBoundingClientRect();
         canvas.height = rect.height;
-        const width = rect.height * this.config.ratio;
+        const width = rect.height * this.config.visibleRatio;
         canvas.width = width;
         canvas.style.width = `${width}px`;
     }

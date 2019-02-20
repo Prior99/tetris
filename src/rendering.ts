@@ -24,7 +24,7 @@ export class Rendering {
     }
 
     private get cellPixelSize() {
-        return this.pixelSize.x / this.config.logicalSize.x;
+        return this.pixelSize.x / this.config.visibleSize.x;
     }
 
     public updateCanvas(canvas: HTMLCanvasElement) {
@@ -70,7 +70,7 @@ export class Rendering {
     }
 
     private translate(pos: Vec2): Vec2 {
-        return vec2(pos.x, this.config.logicalSize.y - pos.y).mult(this.cellPixelSize);
+        return vec2(pos.x, this.config.visibleSize.y - pos.y).mult(this.cellPixelSize);
     }
 
     private renderDebug() {
@@ -79,18 +79,18 @@ export class Rendering {
         this.ctx.strokeStyle = "grey";
         this.ctx.fillStyle = "grey";
         this.ctx.font = "12px Arial";
-        for (let y = 0; y < this.config.logicalSize.y; ++y) {
+        for (let y = 0; y < this.config.visibleSize.y; ++y) {
             const origin = this.translate(vec2(0, y));
-            const destination = this.translate(vec2(this.config.logicalSize.x, y));
+            const destination = this.translate(vec2(this.config.visibleSize.x, y));
             this.ctx.beginPath();
             this.ctx.moveTo(origin.x, origin.y);
             this.ctx.lineTo(destination.x, destination.y);
             this.ctx.stroke();
             this.ctx.fillText(`${y}`, origin.x, origin.y);
         }
-        for (let x = 0; x < this.config.logicalSize.x; ++x) {
+        for (let x = 0; x < this.config.visibleSize.x; ++x) {
             const origin = this.translate(vec2(x, 0));
-            const destination = this.translate(vec2(x, this.config.logicalSize.y));
+            const destination = this.translate(vec2(x, this.config.visibleSize.y));
             this.ctx.beginPath();
             this.ctx.moveTo(origin.x, origin.y);
             this.ctx.lineTo(destination.x, destination.y);
@@ -115,8 +115,8 @@ export class Rendering {
 
     @bind private render() {
         this.renderClear();
-        for (let y = 0; y < this.config.logicalSize.y; ++y) {
-            for (let x = 0; x < this.config.logicalSize.x; ++x) {
+        for (let y = 0; y < this.config.visibleSize.y; ++y) {
+            for (let x = 0; x < this.config.visibleSize.x; ++x) {
                 const pos = vec2(x, y);
                 this.renderCell(this.translate(pos), this.gameState.temporaryState.at(pos));
             }
