@@ -10,6 +10,7 @@ export class Input {
 
     public moveLeftTimeout?: number;
     public moveRightTimeout?: number;
+    public moveDownTimeout?: number;
     public rotateTimeout?: number;
 
     public enable() {
@@ -45,6 +46,14 @@ export class Input {
                 if (this.moveRightTimeout) {
                     clearTimeout(this.moveRightTimeout);
                     this.moveRightTimeout = undefined;
+                }
+                break;
+            }
+            case "ArrowDown":
+            case "s": {
+                if (this.moveDownTimeout) {
+                    clearTimeout(this.moveDownTimeout);
+                    this.moveDownTimeout = undefined;
                 }
                 break;
             }
@@ -86,6 +95,18 @@ export class Input {
                         this.moveRightTimeout = setTimeout(repeat, this.config.inputRepeatTimeout * 1000);
                     };
                     this.moveRightTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
+                }
+                break;
+            }
+            case "ArrowDown":
+            case "s": {
+                if (!this.moveDownTimeout) {
+                    this.gameState.inputMoveDown();
+                    const repeat = () => {
+                        this.gameState.inputMoveDown();
+                        this.moveDownTimeout = setTimeout(repeat, this.config.inputRepeatTimeout * 1000);
+                    };
+                    this.moveDownTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
                 }
                 break;
             }

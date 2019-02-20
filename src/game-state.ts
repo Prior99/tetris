@@ -61,6 +61,8 @@ export class GameState {
 
     public inputMoveRight() { this.currentTetrimino.moveRight(); }
 
+    public inputMoveDown() { this.currentTetrimino.moveDown(); }
+
     public inputHardDrop() { this.currentTetrimino.hardDrop(); }
 
     private moveTetrimino() { this.currentTetrimino.moveDown(); }
