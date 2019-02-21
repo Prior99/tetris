@@ -23,4 +23,12 @@ export class TetriminoO extends Tetrimino {
             config!.logicalSize.horizontalCenter().add(vec2(0, -2)),
         );
     }
+
+    public rotateLeft() {
+        return;
+    }
+
+    public rotateRight() {
+        return;
+    }
 }
