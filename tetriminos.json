@@ -1,0 +1,19 @@
+{ "frames": {
+   "tetriminos.ase": {
+    "frame": { "x": 0, "y": 0, "w": 224, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 224, "h": 32 },
+    "sourceSize": { "w": 224, "h": 32 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3-dev",
+  "image": "tetrimins.png",
+  "format": "I8",
+  "size": { "w": 224, "h": 32 },
+  "scale": "1"
+ }
+}

@@ -1,6 +1,6 @@
 import { external, inject } from "tsdi";
 import { Matrix } from "../matrix";
-import { vec2, Vec2 } from "../vec2";
+import { vec2 } from "../vec2";
 import { matrixInitializer } from "./matrix-initializer";
 import { CellColor } from "../cell-color";
 import { Rotation, Tetrimino } from "../tetrimino";

@@ -2,11 +2,9 @@ import { component, inject, initialize } from "tsdi";
 import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
 import { ShuffleBag } from "./shuffle-bag";
-import { Matrix } from "./matrix";
 import { Config } from "./config";
 import { speed } from "./speed";
 import { Tetrimino } from "./tetrimino";
-import { vec2, Vec2 } from "./vec2";
 import { Playfield } from "./playfield";
 
 @component
@@ -49,7 +47,7 @@ export class GameState {
         this.processMatrix();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
         if (this.debug) {
-            console.log(this.temporaryState.toString());
+            console.log(this.temporaryState.toString()); // tslint:disable-line
         }
     }
 

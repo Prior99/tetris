@@ -4,11 +4,14 @@ import { GameState } from "./game-state";
 import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
 import { CellColor } from "./cell-color";
+import { SpriteTetrimino } from "./sprites";
+import { SpriteManager } from "./sprite-manager";
 
 @component
 export class Rendering {
     @inject private gameState: GameState;
     @inject private config: Config;
+    @inject private sprites: SpriteManager;
 
     private canvas?: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
@@ -33,7 +36,7 @@ export class Rendering {
     }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
-        const { ctx, pixelSize } = this;
+        const { ctx } = this;
         if (!ctx) { return; }
         switch (cellColor) {
             case CellColor.EMPTY:

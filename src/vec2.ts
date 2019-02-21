@@ -1,5 +1,5 @@
 export class Vec2 {
-    static isVec2(obj: any): obj is Vec2 {
+    public static isVec2(obj: any): obj is Vec2 {
         if (typeof obj !== "object") { return false; }
         if (typeof obj.x !== "number") { return false; }
         if (typeof obj.y !== "number") { return false; }
@@ -11,8 +11,8 @@ export class Vec2 {
         public y: number,
     ) {}
 
-    public add(vec2: Vec2): Vec2 {
-        return new Vec2(this.x + vec2.x, this.y + vec2.y);
+    public add(other: Vec2): Vec2 {
+        return new Vec2(this.x + other.x, this.y + other.y);
     }
 
     public get area() {

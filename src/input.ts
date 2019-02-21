@@ -1,4 +1,4 @@
-import { component, initialize, inject } from "tsdi";
+import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "./config";
 import { GameState } from "./game-state";

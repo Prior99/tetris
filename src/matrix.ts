@@ -2,7 +2,7 @@ import { CellColor } from "./cell-color";
 import { vec2, Vec2 } from "./vec2";
 
 export class Matrix {
-    static isMatrix(obj: any): obj is Matrix {
+    public static isMatrix(obj: any): obj is Matrix {
         if (typeof obj !== "object") { return false; }
         return Vec2.isVec2(obj.dimensions);
     }

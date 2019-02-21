@@ -4,8 +4,7 @@ import { Config } from "./config";
 
 @component
 export class Playfield extends Matrix {
-    constructor(@inject private config?: Config) {
+    constructor(@inject config?: Config) {
         super(config!.logicalSize);
     }
 }
-
