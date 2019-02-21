@@ -77,7 +77,7 @@ export class GameState {
         this.newTetrimino();
     }
 
-    public get temporaryState() { return this.currentTetrimino.overlayedOnMatrix(); }
+    public get temporaryState() { return this.currentTetrimino.overlayedOnMatrixWithGhost(); }
 
     public start() {
         this.running = true;

@@ -41,7 +41,7 @@ export class Matrix {
     }
 
     public emptyAt(pos: Vec2): boolean {
-        return this.at(pos) === CellColor.EMPTY;
+        return this.at(pos) === CellColor.EMPTY || this.at(pos) === CellColor.GHOST;
     }
 
     public fits(other: Matrix, offset: Vec2): boolean {
@@ -173,5 +173,15 @@ export class Matrix {
     public update(matrix: Matrix) {
         if (!matrix.dimensions.equals(this.dimensions)) { throw new Error("Can't update with different dimensions."); }
         this.state.set(matrix.state);
+    }
+
+    public recolor(cellColor: CellColor): Matrix {
+        const result = new Matrix(this);
+        for (let x = 0; x < result.dimensions.x; ++x) {
+            for (let y = 0; y < result.dimensions.y; ++y) {
+                result.put(vec2(x, y), result.emptyAt(vec2(x, y)) ? CellColor.EMPTY : cellColor);
+            }
+        }
+        return result;
     }
 }

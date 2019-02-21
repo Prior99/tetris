@@ -60,6 +60,9 @@ export class Rendering {
             case CellColor.TETRIMINO_Z:
                 ctx.fillStyle = "red";
                 break;
+            case CellColor.GHOST:
+                ctx.fillStyle = "grey";
+                break;
         }
         ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize, -this.cellPixelSize);
     }

@@ -7,4 +7,5 @@ export enum CellColor {
     TETRIMINO_S = 5,
     TETRIMINO_T = 6,
     TETRIMINO_Z = 7,
+    GHOST = 8,
 }

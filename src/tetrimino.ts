@@ -2,6 +2,14 @@ import { external, inject } from "tsdi";
 import { vec2, Vec2 } from "./vec2";
 import { Matrix } from "./matrix";
 import { Playfield } from "./playfield";
+import { CellColor } from "./cell-color";
+
+export enum Rotation {
+    DEG_0 = 0,
+    DEG_90 = 1,
+    DEG_180 = 2,
+    DEG_270 = 3,
+}
 
 @external
 export class Tetrimino {
@@ -10,18 +18,97 @@ export class Tetrimino {
     constructor(
         public matrix: Matrix,
         public offset: Vec2,
-    ) {}
+        public rotation?: Rotation,
+    ) {
+        switch (this.rotation) {
+            case Rotation.DEG_0: break;
+            case Rotation.DEG_90: this.matrix = this.matrix.rotateRight(); break;
+            case Rotation.DEG_180: this.matrix = this.matrix.rotateRight().rotateRight(); break;
+            case Rotation.DEG_270: this.matrix = this.matrix.rotateLeft(); break;
+        }
+    }
+
+    protected attemptRotation(matrix: Matrix, offset: Vec2): boolean {
+        if (this.playfield.collides(matrix, offset)) { return false; }
+        this.offset = offset;
+        this.matrix = matrix;
+        return true;
+    }
 
     public rotateLeft() {
         const newMatrix = this.matrix.rotateLeft();
-        if (this.playfield.collides(newMatrix, this.offset)) { return; }
-        this.matrix = newMatrix;
+        switch (this.rotation) {
+            case Rotation.DEG_0:
+                this.rotation = Rotation.DEG_270;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, -1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))) { return; }
+                return;
+            case Rotation.DEG_90:
+                this.rotation = Rotation.DEG_0;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2)))) { return; }
+                return;
+            case Rotation.DEG_180:
+                this.rotation = Rotation.DEG_90;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2)))) { return; }
+                return;
+            case Rotation.DEG_270:
+                this.rotation = Rotation.DEG_180;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -2)))) { return; }
+                return;
+        }
     }
 
     public rotateRight() {
         const newMatrix = this.matrix.rotateRight();
-        if (this.playfield.collides(newMatrix, this.offset)) { return; }
-        this.matrix = newMatrix;
+        switch (this.rotation) {
+            case Rotation.DEG_0:
+                this.rotation = Rotation.DEG_90;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2)))) { return; }
+                return;
+            case Rotation.DEG_90:
+                this.rotation = Rotation.DEG_180;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2)))) { return; }
+                return;
+            case Rotation.DEG_180:
+                this.rotation = Rotation.DEG_270;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, -1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))) { return; }
+                return;
+            case Rotation.DEG_270:
+                this.rotation = Rotation.DEG_0;
+                if (this.attemptRotation(newMatrix, this.offset)) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 0)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 1)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2)))) { return; }
+                if (this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2)))) { return; }
+                return;
+        }
     }
 
     public moveLeft() {
@@ -42,16 +129,26 @@ export class Tetrimino {
         this.offset = newOffset;
     }
 
-    public hardDrop() {
+    public get hardDropOffset() {
         let newOffset = this.offset;
         while (!this.playfield.collides(this.matrix, newOffset.add(vec2(0, -1)))) {
             newOffset = newOffset.add(vec2(0, -1));
         }
-        this.offset = newOffset;
+        return newOffset;
+    }
+
+    public hardDrop() {
+        this.offset = this.hardDropOffset;
     }
 
     public overlayedOnMatrix() {
         return this.playfield.overlay(this.matrix, this.offset);
+    }
+
+    public overlayedOnMatrixWithGhost() {
+        return this.playfield
+            .overlay(this.matrix.recolor(CellColor.GHOST), this.hardDropOffset)
+            .overlay(this.matrix, this.offset);
     }
 
     public hasHitFloor() {
