@@ -2,3 +2,8 @@ export * from "./audio-hit";
 export * from "./audio-level-up";
 export * from "./audio-move-down";
 export * from "./audio-music-120bpm";
+export * from "./audio-rotate";
+export * from "./audio-score-1";
+export * from "./audio-score-2";
+export * from "./audio-score-3";
+export * from "./audio-score-4";

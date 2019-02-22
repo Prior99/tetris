@@ -15,4 +15,12 @@ export class Sounds {
         gain.connect(this.audioContext.destination);
         source.start();
     }
+
+    public loop(audioClass: Constructable<Audio>) {
+        const audio = this.audioManager.audio(audioClass);
+        const { gain, source } = audio.createSource();
+        source.loop = true;
+        gain.connect(this.audioContext.destination);
+        source.start();
+    }
 }

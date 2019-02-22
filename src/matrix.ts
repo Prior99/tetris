@@ -108,15 +108,16 @@ export class Matrix {
         return result;
     }
 
-    public removeHorizontals(): Matrix {
-        const result = new Matrix(this);
-        const { fullHorizontals } = result;
+    public removeHorizontals(): { matrix: Matrix, count: number } {
+        const matrix = new Matrix(this);
+        const { fullHorizontals } = matrix;
+        const count = fullHorizontals.length;
         while (fullHorizontals.length > 0) {
             const current = fullHorizontals.shift();
-            result.removeHorizontal(current!);
+            matrix.removeHorizontal(current!);
             fullHorizontals.forEach((y, index) => fullHorizontals[index] = y - 1);
         }
-        return result;
+        return { matrix, count };
     }
 
     public get fullHorizontals(): number[] {

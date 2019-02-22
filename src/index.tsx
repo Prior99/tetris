@@ -21,6 +21,11 @@ import {
     AudioLevelUp,
     AudioMoveDown,
     AudioMusic120Bpm,
+    AudioRotate,
+    AudioScore1,
+    AudioScore2,
+    AudioScore3,
+    AudioScore4,
 } from "./audios";
 
 async function main() {
@@ -44,6 +49,11 @@ async function main() {
         audioManager.load(AudioLevelUp),
         audioManager.load(AudioMoveDown),
         audioManager.load(AudioMusic120Bpm),
+        audioManager.load(AudioRotate),
+        audioManager.load(AudioScore1),
+        audioManager.load(AudioScore2),
+        audioManager.load(AudioScore3),
+        audioManager.load(AudioScore4),
     ]);
 
     // Start React.
