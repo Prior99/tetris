@@ -15,6 +15,10 @@ export class Vec2 {
         return new Vec2(this.x + other.x, this.y + other.y);
     }
 
+    public sub(other: Vec2): Vec2 {
+        return new Vec2(this.x - other.x, this.y - other.y);
+    }
+
     public get area() {
         return this.x * this.y;
     }
@@ -23,8 +27,11 @@ export class Vec2 {
         return vec2(this.y, this.x);
     }
 
-    public mult(scalar: number): Vec2 {
-        return vec2(this.x * scalar, this.y * scalar);
+    public mult(other: number | Vec2): Vec2 {
+        if (typeof other === "number") {
+            return vec2(this.x * other, this.y * other);
+        }
+        return vec2(this.x * other.x, this.y * other.y);
     }
 
     public horizontalCenter(): Vec2 {
@@ -33,6 +40,10 @@ export class Vec2 {
 
     public equals(other: Vec2): boolean {
         return this.x === other.x && this.y === other.y;
+    }
+
+    public mod(other: Vec2): Vec2 {
+        return vec2(this.x % other.x, this.y % other.y);
     }
 }
 

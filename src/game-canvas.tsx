@@ -6,6 +6,7 @@ import { GameState } from "./game-state";
 import { Rendering } from "./rendering";
 import * as css from "./game-canvas.scss";
 import { Input } from "./input";
+import { vec2, Vec2 } from "./vec2";
 
 @external
 export class GameCanvas extends React.Component {
@@ -24,11 +25,11 @@ export class GameCanvas extends React.Component {
     @bind private rescale() {
         const { canvas } = this;
         if (!canvas) { return; }
-        const rect = canvas.getBoundingClientRect();
-        canvas.height = rect.height;
-        const width = rect.height * this.config.visibleRatio;
-        canvas.width = width;
-        canvas.style.width = `${width}px`;
+        const { pixelSize } =  this.rendering;
+        canvas.style.width = `${pixelSize.x}px`;
+        canvas.style.height = `${pixelSize.y}px`;
+        canvas.width = pixelSize.x;
+        canvas.height = pixelSize.y;
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {

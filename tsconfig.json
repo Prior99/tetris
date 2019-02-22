@@ -2,7 +2,6 @@
     "compilerOptions": {
         "emitDecoratorMetadata": true,
         "outDir": "lib",
-        "rootDir": "src",
         "baseUrl": "src",
         "target": "es6",
         "module": "commonjs",

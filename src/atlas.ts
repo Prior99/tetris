@@ -13,15 +13,14 @@ export interface Rect extends Offset, Dimensions {
 
 export interface Atlas {
     frames: {
-        [name: string]: {
-            frame: Rect;
-            rotated: boolean;
-            trimmed: boolean;
-            spriteSourceSize: Rect;
-            sourceSize: Dimensions;
-            duration: number;
-        };
-    };
+        filename: string;
+        frame: Rect;
+        rotated: boolean;
+        trimmed: boolean;
+        spriteSourceSize: Rect;
+        sourceSize: Dimensions;
+        duration: number;
+    }[];
     meta: {
         app: string;
         version: string;

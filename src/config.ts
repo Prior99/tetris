@@ -9,6 +9,7 @@ export class Config {
     public initialInputTimeout = 20 / 60;
     public inputRepeatTimeout = 2 / 60;
     public inputRotateRepeatTimeout = 10 / 60;
+    public tetriminoPixelSize = 32;
 
     public get visibleRatio() {
         return this.visibleSize.x / this.visibleSize.y;

@@ -4,8 +4,29 @@ import { GameState } from "./game-state";
 import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
 import { CellColor } from "./cell-color";
-import { SpriteTetrimino } from "./sprites";
-import { SpriteManager } from "./sprite-manager";
+import {
+    SpriteTetriminoI,
+    SpriteTetriminoJ,
+    SpriteTetriminoL,
+    SpriteTetriminoO,
+    SpriteTetriminoS,
+    SpriteTetriminoT,
+    SpriteTetriminoZ,
+} from "./sprites";
+import { Sprite } from "./sprite";
+import { Constructable, SpriteManager } from "./sprite-manager";
+
+function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
+    switch (cellColor) {
+        case CellColor.TETRIMINO_I: return SpriteTetriminoI;
+        case CellColor.TETRIMINO_J: return SpriteTetriminoJ;
+        case CellColor.TETRIMINO_L: return SpriteTetriminoL;
+        case CellColor.TETRIMINO_O: return SpriteTetriminoO;
+        case CellColor.TETRIMINO_S: return SpriteTetriminoS;
+        case CellColor.TETRIMINO_T: return SpriteTetriminoT;
+        case CellColor.TETRIMINO_Z: return SpriteTetriminoZ;
+    }
+}
 
 @component
 export class Rendering {
@@ -17,57 +38,55 @@ export class Rendering {
     private ctx: CanvasRenderingContext2D;
 
     @initialize
-    protected initialize() {
+    protected async initialize() {
+        await this.sprites.load(SpriteTetriminoI);
+        await this.sprites.load(SpriteTetriminoJ);
+        await this.sprites.load(SpriteTetriminoL);
+        await this.sprites.load(SpriteTetriminoO);
+        await this.sprites.load(SpriteTetriminoS);
+        await this.sprites.load(SpriteTetriminoT);
+        await this.sprites.load(SpriteTetriminoZ);
         this.render();
     }
 
-    private get pixelSize() {
-        if (!this.canvas) { return vec2(0, 0); }
-        return vec2(this.canvas.width, this.canvas.height);
+    public get pixelSize() {
+        const rect = document.body.getBoundingClientRect();
+        const naturalSize = vec2(rect.height * this.config.visibleRatio, rect.height);
+        const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
+        const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
+        return adjustedSize;
     }
 
-    private get cellPixelSize() {
-        return this.pixelSize.x / this.config.visibleSize.x;
+    private get cellPixelSize(): Vec2 {
+        const size = this.pixelSize.x / this.config.visibleSize.x;
+        return vec2(size, size);
     }
 
     public updateCanvas(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
+        this.ctx.imageSmoothingEnabled = false;
     }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
         const { ctx } = this;
         if (!ctx) { return; }
         switch (cellColor) {
-            case CellColor.EMPTY:
-                ctx.fillStyle = "white";
-                break;
             case CellColor.TETRIMINO_I:
-                ctx.fillStyle = "lightblue";
-                break;
             case CellColor.TETRIMINO_J:
-                ctx.fillStyle = "lime";
-                break;
             case CellColor.TETRIMINO_L:
-                ctx.fillStyle = "blue";
-                break;
             case CellColor.TETRIMINO_O:
-                ctx.fillStyle = "yellow";
-                break;
             case CellColor.TETRIMINO_S:
-                ctx.fillStyle = "green";
-                break;
             case CellColor.TETRIMINO_T:
-                ctx.fillStyle = "purple";
-                break;
             case CellColor.TETRIMINO_Z:
-                ctx.fillStyle = "red";
+                const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
+                this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx);
                 break;
             case CellColor.GHOST:
                 ctx.fillStyle = "grey";
+                ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize.x, -this.cellPixelSize.y);
                 break;
         }
-        ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize, -this.cellPixelSize);
     }
 
     private renderClear() {
