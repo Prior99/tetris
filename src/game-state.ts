@@ -6,12 +6,15 @@ import { Config } from "./config";
 import { speed } from "./speed";
 import { Tetrimino } from "./tetrimino";
 import { Playfield } from "./playfield";
+import { Sounds } from "./sounds";
+import { AudioMoveDown } from "./audios";
 
 @component
 export class GameState {
     @inject private config: Config;
     @inject private shuffleBag: ShuffleBag;
     @inject private playfield: Playfield;
+    @inject private sounds: Sounds;
 
     public initialized: Date;
     public lastTick: Date;
@@ -39,6 +42,7 @@ export class GameState {
             this.lastTick = now;
             if (this.currentTetrimino.hasHitFloor()) { this.commitTetrimino(); }
             this.moveTetrimino();
+            this.sounds.play(AudioMoveDown);
         }
     }
 

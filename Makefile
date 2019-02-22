@@ -8,7 +8,6 @@ node_modules:
 
 .PHONY: assets
 assets:
-	mkdir assets || true
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-i.ase --data assets/tetrimino-i.json --sheet assets/tetrimino-i.png
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-j.ase --data assets/tetrimino-j.json --sheet assets/tetrimino-j.png
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-l.ase --data assets/tetrimino-l.json --sheet assets/tetrimino-l.png

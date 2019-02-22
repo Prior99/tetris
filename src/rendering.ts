@@ -39,13 +39,6 @@ export class Rendering {
 
     @initialize
     protected async initialize() {
-        await this.sprites.load(SpriteTetriminoI);
-        await this.sprites.load(SpriteTetriminoJ);
-        await this.sprites.load(SpriteTetriminoL);
-        await this.sprites.load(SpriteTetriminoO);
-        await this.sprites.load(SpriteTetriminoS);
-        await this.sprites.load(SpriteTetriminoT);
-        await this.sprites.load(SpriteTetriminoZ);
         this.render();
     }
 
