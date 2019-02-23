@@ -28,7 +28,6 @@ export type ScoreAction =
         action: ScoreActionType.TETRIS;
         level: number;
     } | {
-        comboAction: ScoreActionType;
         action: ScoreActionType.COMBO;
         comboCount: number;
         level: number;
@@ -65,10 +64,8 @@ export function scorePointValue(action: ScoreAction): number {
         case ScoreActionType.TRIPLE: return action.level * 500;
         case ScoreActionType.TETRIS: return action.level * 800;
         case ScoreActionType.COMBO:
-            if (action.comboAction !== ScoreActionType.SINGLE || action.level >= 20) {
-                return action.comboCount * 50 * action.level;
-            }
-            return 0;
+            if (action.comboCount < 2) { return 0; }
+            return action.comboCount * 50 * action.level;
         case ScoreActionType.SOFT_DROP: return Math.min(action.cells, 20);
         case ScoreActionType.HARD_DROP: return Math.min(action.cells * 2, 40);
         case ScoreActionType.T_SPIN: return action.level * 400;

@@ -117,8 +117,8 @@ export class Rendering {
         }
 
         // Render Tetrimino.
-        const pos = this.translate(this.gameState.currentTetrimino.offset);
-        const dimensions = this.gameState.currentTetrimino.matrix.dimensions.mult(this.cellPixelSize);
+        const pos = this.translate(this.gameState.current.tetrimino.offset);
+        const dimensions = this.gameState.current.tetrimino.matrix.dimensions.mult(this.cellPixelSize);
         this.ctx.strokeStyle = "red";
         this.ctx.strokeRect(pos.x, pos.y, dimensions.x, -dimensions.y);
         this.ctx.beginPath();

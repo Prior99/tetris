@@ -154,15 +154,19 @@ export class Tetrimino {
     }
 
     public get hardDropOffset() {
-        let newOffset = this.offset;
-        while (!this.playfield.collides(this.matrix, newOffset.add(vec2(0, -1)))) {
-            newOffset = newOffset.add(vec2(0, -1));
+        let offset = this.offset;
+        let count = 0;
+        while (!this.playfield.collides(this.matrix, offset.add(vec2(0, -1)))) {
+            offset = offset.add(vec2(0, -1));
+            count++;
         }
-        return newOffset;
+        return { offset, count };
     }
 
     public hardDrop() {
-        this.offset = this.hardDropOffset;
+        const { offset, count } = this.hardDropOffset;
+        this.offset = offset;
+        return count;
     }
 
     public overlayedOnMatrix() {
@@ -171,7 +175,7 @@ export class Tetrimino {
 
     public overlayedOnMatrixWithGhost() {
         return this.playfield
-            .overlay(this.matrix.recolor(CellColor.GHOST), this.hardDropOffset)
+            .overlay(this.matrix.recolor(CellColor.GHOST), this.hardDropOffset.offset)
             .overlay(this.matrix, this.offset);
     }
 

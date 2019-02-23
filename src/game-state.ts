@@ -1,4 +1,5 @@
 import { component, inject, initialize } from "tsdi";
+import { computed, observable } from "mobx";
 import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
 import { ShuffleBag } from "./shuffle-bag";
@@ -17,6 +18,7 @@ import {
     AudioScore4,
     AudioLevelUp,
 } from "./audios";
+import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
 
 @component
 export class GameState {
@@ -27,12 +29,17 @@ export class GameState {
 
     public initialized: Date;
     public lastTick: Date;
-    public lines = 0;
-    public score = 0;
+    @observable public lines = 0;
+    @observable public score = 0;
     public debug = false;
-    public currentTetrimino: Tetrimino;
+    public current: {
+        tetrimino: Tetrimino;
+        softDrops: number;
+        hardDrops: number;
+    };
     private running = false;
     private timeout?: number;
+    private comboCount = 0;
 
     @initialize
     protected initialize() {
@@ -48,7 +55,7 @@ export class GameState {
         const diff = differenceInMilliseconds(now, this.lastTick) / 1000;
         if (diff > this.speed) {
             this.lastTick = now;
-            if (this.currentTetrimino.hasHitFloor()) { this.commitTetrimino(); }
+            if (this.current.tetrimino.hasHitFloor()) { this.commitTetrimino(); }
             this.moveTetrimino();
         }
     }
@@ -62,42 +69,49 @@ export class GameState {
         }
     }
 
-    public get level() {
+    @computed public get level() {
         const linesPerLevel = this.debug ? 2 : 10;
         return Math.floor(this.lines / linesPerLevel);
     }
 
     public inputRotateRight() {
         this.sounds.play(AudioRotate);
-        this.currentTetrimino.rotateRight();
+        this.current.tetrimino.rotateRight();
     }
 
     public inputRotateLeft() {
         this.sounds.play(AudioRotate);
-        this.currentTetrimino.rotateLeft();
+        this.current.tetrimino.rotateLeft();
     }
 
     public inputMoveLeft() {
-        this.currentTetrimino.moveLeft();
+        this.current.tetrimino.moveLeft();
         this.sounds.play(AudioMoveDown);
     }
 
     public inputMoveRight() {
-        this.currentTetrimino.moveRight();
+        this.current.tetrimino.moveRight();
         this.sounds.play(AudioMoveDown);
     }
 
     public inputMoveDown() {
-        this.currentTetrimino.moveDown();
+        this.current.softDrops++;
+        this.current.tetrimino.moveDown();
         this.sounds.play(AudioMoveDown);
     }
 
-    public inputHardDrop() { this.currentTetrimino.hardDrop(); }
+    public inputHardDrop() {
+        this.current.hardDrops = this.current.tetrimino.hardDrop();
+    }
 
-    private moveTetrimino() { this.currentTetrimino.moveDown(); }
+    private moveTetrimino() { this.current.tetrimino.moveDown(); }
 
     private newTetrimino() {
-        this.currentTetrimino = this.shuffleBag.take();
+        this.current = {
+            tetrimino: this.shuffleBag.take(),
+            softDrops: 0,
+            hardDrops: 0,
+        };
     }
 
     private handleLevelUp() {
@@ -129,20 +143,54 @@ export class GameState {
 
     private commitTetrimino() {
         this.sounds.play(AudioHit);
-        this.playfield.update(this.currentTetrimino.overlayedOnMatrix());
+        this.playfield.update(this.current.tetrimino.overlayedOnMatrix());
         const { matrix, count } = this.playfield.removeHorizontals();
-        this.playfield.update(matrix);
-        const oldLevel = this.level;
-        this.lines += count;
-        if (this.level > oldLevel) {
-            this.handleLevelUp();
+        if (count > 0) {
+            this.comboCount++;
+            this.playfield.update(matrix);
+            const oldLevel = this.level;
+            this.lines += count;
+            if (this.level > oldLevel) {
+                this.handleLevelUp();
+            } else {
+                this.playScoreSound(count);
+            }
+            this.scoreLineCount(count);
         } else {
-            this.playScoreSound(count);
+            const { level, comboCount } = this;
+            if (this.comboCount >= 2) {
+                this.awardScore({
+                    action: ScoreActionType.COMBO,
+                    level,
+                    comboCount,
+                });
+                this.comboCount = 0;
+            }
         }
         this.newTetrimino();
     }
 
-    public get temporaryState() { return this.currentTetrimino.overlayedOnMatrixWithGhost(); }
+    public awardScore(action: ScoreAction) {
+        this.score += scorePointValue(action);
+    }
+
+    public scoreLineCount(count: number) {
+        const { level } = this;
+        switch (count) {
+            case 1: this.awardScore({ action: ScoreActionType.SINGLE, level });
+            case 2: this.awardScore({ action: ScoreActionType.DOUBLE, level });
+            case 3: this.awardScore({ action: ScoreActionType.TRIPLE, level });
+            case 4: this.awardScore({ action: ScoreActionType.TETRIS, level });
+        }
+        if (this.current.hardDrops) {
+            this.awardScore({ action: ScoreActionType.HARD_DROP, cells: this.current.hardDrops });
+        }
+        if (this.current.softDrops) {
+            this.awardScore({ action: ScoreActionType.SOFT_DROP, cells: this.current.softDrops });
+        }
+    }
+
+    public get temporaryState() { return this.current.tetrimino.overlayedOnMatrixWithGhost(); }
 
     public start() {
         this.running = true;

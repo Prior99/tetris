@@ -32,6 +32,7 @@ import {
     AudioScore3,
     AudioScore4,
 } from "./audios";
+import { Info } from "./info";
 
 async function main() {
     // Setup dependency injection.
@@ -71,6 +72,7 @@ async function main() {
     <>
         <DevTools />
         <GameCanvas />
+        <Info />
     </>,
     document.getElementById("root"),
     );
