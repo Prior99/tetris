@@ -1,0 +1,31 @@
+@import "colors.scss";
+
+.menu {
+    font-family: antipasto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .wrapper {
+        h1 {
+            color: $white;
+            width: 100%;
+            border-bottom: 1px solid $white;
+        }
+
+        p {
+            margin: 10px 0;
+            color: $white;
+        }
+
+        a {
+            font-weight: bold;
+            margin: 10px 0;
+            display: block;
+            color: $white;
+            cursor: pointer;
+        }
+    }
+}

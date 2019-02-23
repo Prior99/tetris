@@ -8,6 +8,8 @@ import { AudioMusic150Bpm } from "./audio-music-150bpm";
 import { AudioMusic160Bpm } from "./audio-music-160bpm";
 import { AudioMusic170Bpm } from "./audio-music-170bpm";
 import { Constructable } from "types";
+import { UI } from "ui";
+import { autorun } from "mobx";
 
 export enum MusicSpeed {
     BPM_120,
@@ -42,10 +44,14 @@ export function musicSpeedForLevel(level: number): MusicSpeed {
 export class Sounds {
     @inject private audioManager: AudioManager;
     @inject("AudioContext") private audioContext: AudioContext;
+    @inject private ui: UI;
 
     private musicSpeed?: MusicSpeed;
     private timeStarted = 0;
     private currentMusic?: { gain: GainNode, source: AudioBufferSourceNode };
+    private musicNode: GainNode;
+    private soundsNode: GainNode;
+    private filterNode: BiquadFilterNode;
 
     public get musicAudio() {
         if (typeof this.musicSpeed !== "number") { return; }
@@ -54,13 +60,29 @@ export class Sounds {
 
     @initialize protected initialize() {
         this.timeStarted = this.audioContext.currentTime;
+
+        this.filterNode = this.audioContext.createBiquadFilter();
+        this.filterNode.type = "lowpass";
+        this.filterNode.connect(this.audioContext.destination);
+
+        this.musicNode = this.audioContext.createGain();
+        this.musicNode.connect(this.filterNode);
+
+        this.soundsNode = this.audioContext.createGain();
+        this.soundsNode.connect(this.filterNode);
+
+        autorun(() => {
+            this.soundsNode.gain.value = this.ui.volumeSounds;
+            this.musicNode.gain.value = this.ui.volumeMusic;
+        });
+
         this.changeMusicSpeed(MusicSpeed.BPM_120);
     }
 
     public play(audioClass: Constructable<Audio>) {
         const audio = this.audioManager.audio(audioClass);
         const { gain, source } = audio.createSource();
-        gain.connect(this.audioContext.destination);
+        gain.connect(this.soundsNode);
         source.start();
     }
 
@@ -83,6 +105,14 @@ export class Sounds {
         }
     }
 
+    public startMenu() {
+        this.filterNode.frequency.value = 2000;
+    }
+
+    public startGame() {
+        this.filterNode.frequency.value = 30000;
+    }
+
     public changeMusicSpeed(speed: MusicSpeed) {
         if (speed === this.musicSpeed) { return; }
         const { relativeMusicPosition } = this;
@@ -91,7 +121,7 @@ export class Sounds {
         const music = this.musicAudio!.createSource();
         const { gain, source } = music;
         this.currentMusic = music;
-        gain.connect(this.audioContext.destination);
+        gain.connect(this.musicNode);
         source.loop = true;
         source.start(0, relativeMusicPosition ? this.musicAudio!.duration * relativeMusicPosition : 0);
         this.timeStarted = this.audioContext.currentTime;

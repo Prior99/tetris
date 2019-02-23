@@ -1,5 +1,6 @@
 export * from "./game-canvas";
-export * from "./game";
+export * from "./single-player";
+export * from "./settings";
 export * from "./info";
 export * from "./loader-screen";
 export * from "./router";
