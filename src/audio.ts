@@ -14,6 +14,13 @@ export class Audio {
         this.audioBuffer = await this.audioContext.decodeAudioData(data);
     }
 
+    public get duration() {
+        if (!this.audioBuffer) {
+            throw new Error(`Attempted to get duration of audio which was not loaded:${this.url}`);
+        }
+        return this.audioBuffer.duration;
+    }
+
     public createSource(): { source: AudioBufferSourceNode, gain: GainNode } {
         if (!this.audioBuffer) { throw new Error(`Attempted to play audio which was not loaded: ${this.url}`); }
         const source = this.audioContext.createBufferSource();

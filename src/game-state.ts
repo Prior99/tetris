@@ -6,7 +6,7 @@ import { Config } from "./config";
 import { speed } from "./speed";
 import { Tetrimino } from "./tetrimino";
 import { Playfield } from "./playfield";
-import { Sounds } from "./sounds";
+import { Sounds, musicSpeedForLevel } from "./sounds";
 import {
     AudioMoveDown,
     AudioRotate,
@@ -15,7 +15,6 @@ import {
     AudioScore2,
     AudioScore3,
     AudioScore4,
-    AudioMusic120Bpm,
     AudioLevelUp,
 } from "./audios";
 
@@ -28,7 +27,7 @@ export class GameState {
 
     public initialized: Date;
     public lastTick: Date;
-    public lines = 60;
+    public lines = 0;
     public score = 0;
     public debug = false;
     public currentTetrimino: Tetrimino;
@@ -64,7 +63,8 @@ export class GameState {
     }
 
     public get level() {
-        return Math.floor(this.lines / 10);
+        const linesPerLevel = this.debug ? 2 : 10;
+        return Math.floor(this.lines / linesPerLevel);
     }
 
     public inputRotateRight() {
@@ -100,6 +100,33 @@ export class GameState {
         this.currentTetrimino = this.shuffleBag.take();
     }
 
+    private handleLevelUp() {
+        this.sounds.play(AudioLevelUp);
+        setTimeout(() => {
+            this.sounds.changeMusicSpeed(musicSpeedForLevel(this.level));
+        }, 100);
+    }
+
+    private playScoreSound(count: number) {
+        switch (count) {
+            default:
+            case 0:
+                break;
+            case 1:
+                this.sounds.play(AudioScore1);
+                break;
+            case 2:
+                this.sounds.play(AudioScore2);
+                break;
+            case 3:
+                this.sounds.play(AudioScore3);
+                break;
+            case 4:
+                this.sounds.play(AudioScore4);
+                break;
+        }
+    }
+
     private commitTetrimino() {
         this.sounds.play(AudioHit);
         this.playfield.update(this.currentTetrimino.overlayedOnMatrix());
@@ -108,25 +135,9 @@ export class GameState {
         const oldLevel = this.level;
         this.lines += count;
         if (this.level > oldLevel) {
-            this.sounds.play(AudioLevelUp);
+            this.handleLevelUp();
         } else {
-            switch (count) {
-                default:
-                case 0:
-                    break;
-                case 1:
-                    this.sounds.play(AudioScore1);
-                    break;
-                case 2:
-                    this.sounds.play(AudioScore2);
-                    break;
-                case 3:
-                    this.sounds.play(AudioScore3);
-                    break;
-                case 4:
-                    this.sounds.play(AudioScore4);
-                    break;
-            }
+            this.playScoreSound(count);
         }
         this.newTetrimino();
     }
@@ -136,7 +147,6 @@ export class GameState {
     public start() {
         this.running = true;
         this.update();
-        this.sounds.loop(AudioMusic120Bpm);
     }
 
     public stop() {
