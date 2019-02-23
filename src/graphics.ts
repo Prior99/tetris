@@ -42,4 +42,8 @@ export abstract class Graphics {
         this.canvas.height = size.y;
         this.pixelSize = size;
     }
+
+    public get scaleFactor() {
+        return this.cellPixelSize.div(this.config.tetriminoPixelSize);
+    }
 }

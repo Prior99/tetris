@@ -12,10 +12,12 @@ import {
     SpriteTetriminoS,
     SpriteTetriminoT,
     SpriteTetriminoZ,
+    SpriteTetriminoGhost,
 } from "./sprites";
 import { Sprite } from "./sprite";
 import { Constructable, SpriteManager } from "./sprite-manager";
 import { Lighting } from "./lighting";
+import { Background } from "./background";
 import { Graphics } from "./graphics";
 
 function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
@@ -27,33 +29,26 @@ function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undef
         case CellColor.TETRIMINO_S: return SpriteTetriminoS;
         case CellColor.TETRIMINO_T: return SpriteTetriminoT;
         case CellColor.TETRIMINO_Z: return SpriteTetriminoZ;
+        case CellColor.GHOST: return SpriteTetriminoGhost;
     }
 }
 
 @component
 export class Rendering extends Graphics {
     @inject private lighting: Lighting;
+    @inject private background: Background;
 
-    @initialize protected async initialize() { this.render(); }
+    @initialize protected async initialize() {
+        this.background.render();
+        this.render();
+    }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
         const { ctx } = this;
         if (!ctx) { return; }
-        switch (cellColor) {
-            case CellColor.TETRIMINO_I:
-            case CellColor.TETRIMINO_J:
-            case CellColor.TETRIMINO_L:
-            case CellColor.TETRIMINO_O:
-            case CellColor.TETRIMINO_S:
-            case CellColor.TETRIMINO_T:
-            case CellColor.TETRIMINO_Z:
-                const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
-                this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx);
-                break;
-            case CellColor.GHOST:
-                ctx.fillStyle = "grey";
-                ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize.x, -this.cellPixelSize.y);
-                break;
+        if (cellColor !== CellColor.EMPTY) {
+            const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
+            this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx);
         }
     }
 
@@ -100,25 +95,31 @@ export class Rendering extends Graphics {
     public rescale(size: Vec2) {
         super.rescale(size);
         this.lighting.rescale(size);
+        this.background.rescale(size);
+        this.background.render();
     }
 
-    @bind public render() {
-        if (!this.ctx) {
-            return;
-        }
-        this.renderClear();
+    private renderBackground() {
+        this.background.render();
         this.ctx.globalCompositeOperation = "source-over";
-        for (let y = 0; y < this.config.visibleSize.y; ++y) {
-            for (let x = 0; x < this.config.visibleSize.x; ++x) {
-                const pos = vec2(x, y);
-                this.renderCell(this.translate(pos), this.gameState.temporaryState.at(pos));
-            }
+        if (this.background.canvas) {
+            this.ctx.drawImage(
+                this.background.canvas,
+                0,
+                0,
+                this.background.pixelSize.x,
+                this.background.pixelSize.y,
+                0,
+                0,
+                this.pixelSize.x,
+                this.pixelSize.y,
+            );
         }
-        if (this.gameState.debug) {
-            this.renderDebug();
-        }
+    }
+
+    private renderLighting() {
         this.lighting.render();
-        this.ctx.globalCompositeOperation = "soft-light";
+        this.ctx.globalCompositeOperation = "multiply";
         if (this.lighting.canvas) {
             this.ctx.drawImage(
                 this.lighting.canvas,
@@ -132,5 +133,23 @@ export class Rendering extends Graphics {
                 this.pixelSize.y,
             );
         }
+    }
+
+    private renderCells() {
+        this.ctx.globalCompositeOperation = "source-over";
+        for (let y = 0; y < this.config.visibleSize.y; ++y) {
+            for (let x = 0; x < this.config.visibleSize.x; ++x) {
+                const pos = vec2(x, y);
+                this.renderCell(this.translate(pos), this.gameState.temporaryState.at(pos));
+            }
+        }
+    }
+
+    @bind public render() {
+        if (!this.ctx) { return; }
+        this.renderBackground();
+        this.renderCells();
+        this.renderLighting();
+        if (this.gameState.debug) { this.renderDebug(); }
     }
 }

@@ -5,3 +5,7 @@ export { SpriteTetriminoO } from "./sprite-tetrimino-o";
 export { SpriteTetriminoS } from "./sprite-tetrimino-s";
 export { SpriteTetriminoT } from "./sprite-tetrimino-t";
 export { SpriteTetriminoZ } from "./sprite-tetrimino-z";
+export { SpriteTetriminoGhost } from "./sprite-tetrimino-ghost";
+export { SpriteTetriminoLight } from "./sprite-tetrimino-light";
+export { SpriteFloorWood } from "./sprite-floor-wood";
+export { SpriteFloorWhiteTiles } from "./sprite-floor-white-tiles";

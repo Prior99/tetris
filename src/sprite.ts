@@ -1,9 +1,8 @@
 import { external, inject } from "tsdi";
 import { Atlas } from "./atlas";
-import { Vec2 } from "./vec2";
+import { vec2, Vec2 } from "./vec2";
 import { ImageManager } from "./image-manager";
 
-@external
 export class Sprite {
     @inject private images: ImageManager;
 
@@ -30,5 +29,10 @@ export class Sprite {
 
     public async load() {
         await this.images.load(this.atlas.meta.image);
+    }
+
+    public get dimensions() {
+        const { sourceSize } = this.atlas.frames[0];
+        return vec2(sourceSize.w, sourceSize.h);
     }
 }

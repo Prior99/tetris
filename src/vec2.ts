@@ -27,6 +27,13 @@ export class Vec2 {
         return vec2(this.y, this.x);
     }
 
+    public div(other: number | Vec2): Vec2 {
+        if (typeof other === "number") {
+            return vec2(this.x / other, this.y / other);
+        }
+        return vec2(this.x / other.x, this.y / other.y);
+    }
+
     public mult(other: number | Vec2): Vec2 {
         if (typeof other === "number") {
             return vec2(this.x * other, this.y * other);

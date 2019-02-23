@@ -18,6 +18,7 @@ export class SpriteManager {
     }
 
     public sprite<T extends Sprite>(clazz: Constructable<T>): T {
+        if (!clazz) { throw new Error("Attempted to load undefined sprite."); }
         if (!this.sprites.has(clazz)) {
             throw new Error(`Attempted to get sprite which was not loaded: ${clazz.name}`);
         }

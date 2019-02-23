@@ -45,6 +45,7 @@
         "@types/classnames": "^2.2.7",
         "@types/date-fns": "^2.6.0",
         "@types/jest": "^24.0.6",
+        "@types/random-seed": "^0.3.3",
         "@types/react": "^16.8.3",
         "classnames": "^2.2.6",
         "css-loader": "^2.1.0",
@@ -70,6 +71,7 @@
         "mobx": "^5.9.0",
         "mobx-react": "^5.4.3",
         "mobx-react-devtools": "^6.0.3",
+        "random-seed": "^0.3.0",
         "react": "^16.8.2",
         "react-dom": "^16.8.2",
         "tsdi": "^0.20.3"

@@ -15,6 +15,10 @@ import {
     SpriteTetriminoS,
     SpriteTetriminoT,
     SpriteTetriminoZ,
+    SpriteTetriminoGhost,
+    SpriteTetriminoLight,
+    SpriteFloorWood,
+    SpriteFloorWhiteTiles,
 } from "./sprites";
 import {
     AudioHit,
@@ -51,6 +55,10 @@ async function main() {
         spriteManager.load(SpriteTetriminoS),
         spriteManager.load(SpriteTetriminoT),
         spriteManager.load(SpriteTetriminoZ),
+        spriteManager.load(SpriteTetriminoGhost),
+        spriteManager.load(SpriteTetriminoLight),
+        spriteManager.load(SpriteFloorWood),
+        spriteManager.load(SpriteFloorWhiteTiles),
         audioManager.load(AudioHit),
         audioManager.load(AudioLevelUp),
         audioManager.load(AudioMoveDown),
