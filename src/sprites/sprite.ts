@@ -1,5 +1,5 @@
 import { inject } from "tsdi";
-import { Atlas, Frame, Constructable } from "types";
+import { Atlas, Frame } from "types";
 import { vec2, Vec2 } from "utils";
 import { ImageManager } from "./image-manager";
 

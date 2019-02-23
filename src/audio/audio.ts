@@ -1,5 +1,4 @@
 import { inject, external } from "tsdi";
-import { Constructable } from "types";
 
 @external
 export class Audio {

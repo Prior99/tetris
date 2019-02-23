@@ -14,6 +14,11 @@
     "jest": {
         "preset": "ts-jest",
         "collectCoverage": true,
+        "moduleDirectories": [
+            "node_modules",
+            "src",
+            "assets"
+        ],
         "moduleFileExtensions": [
             "ts",
             "js"

@@ -1,5 +1,5 @@
 import { Matrix } from "../matrix";
-import { vec2 } from "../vec2";
+import { vec2 } from "utils";
 
 describe("Matrix", () => {
     let matrixA: Matrix;
@@ -108,25 +108,31 @@ describe("Matrix", () => {
 
     describe("removeHorizontals", () => {
         it("removes the horizontals from matrix A", () => {
-            expect(matrixA.removeHorizontals()).toEqual(new Matrix(vec2(4, 6), [
-                0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 3, 0,
-                0, 0, 3, 3,
-                0, 1, 0, 3,
-                0, 1, 2, 2,
-            ]));
+            expect(matrixA.removeHorizontals()).toEqual({
+                matrix: new Matrix(vec2(4, 6), [
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0, 3, 0,
+                    0, 0, 3, 3,
+                    0, 1, 0, 3,
+                    0, 1, 2, 2,
+                ]),
+                count: 1,
+            });
         });
 
         it("removes the horizontals from matrix B", () => {
-            expect(matrixB.removeHorizontals()).toEqual(new Matrix(vec2(4, 6), [
-                0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 0,
-                4, 3, 0, 0,
-                4, 1, 2, 0,
-                1, 1, 2, 0,
-            ]));
+            expect(matrixB.removeHorizontals()).toEqual({
+                matrix: new Matrix(vec2(4, 6), [
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    4, 3, 0, 0,
+                    4, 1, 2, 0,
+                    1, 1, 2, 0,
+                ]),
+                count: 2,
+            });
         });
     });
 
