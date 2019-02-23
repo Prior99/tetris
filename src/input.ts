@@ -1,7 +1,7 @@
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "./config";
-import { GameState } from "./game-state";
+import { GameState } from "game";
 
 @component
 export class Input {

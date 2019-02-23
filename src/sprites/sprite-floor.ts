@@ -1,6 +1,6 @@
 import { external } from "tsdi";
-import { Sprite } from "../sprite";
-import { Vec2 } from "../vec2";
+import { Sprite } from "./sprite";
+import { Vec2 } from "utils";
 import * as RandomSeed from "random-seed";
 
 @external

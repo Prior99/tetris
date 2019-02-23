@@ -1,0 +1,1 @@
+{"version":3,"file":"matrix-initializer.js","sourceRoot":"","sources":["../../../../src/game/tetriminos/matrix-initializer.ts"],"names":[],"mappings":";;AAAA,8CAA0C;AAE1C,SAAgB,iBAAiB,CAAC,SAAoB,EAAE,cAAyB;IAC7E,OAAO,cAAc,CAAC,GAAG,CAAC,QAAQ,CAAC,EAAE,CAAC,QAAQ,KAAK,CAAC,CAAC,CAAC,CAAC,SAAS,CAAC,CAAC,CAAC,sBAAS,CAAC,KAAK,CAAC,CAAC;AACxF,CAAC;AAFD,8CAEC"}

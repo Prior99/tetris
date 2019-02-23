@@ -1,16 +1,20 @@
 import { component, initialize, inject } from "tsdi";
+import { without } from "ramda";
 import { observable } from "mobx";
-import { Sprite } from "./sprite";
-import { Audio } from "./audio";
-import { SpriteManager } from "./sprite-manager";
-import { AudioManager } from "./audio-manager";
+import { SpriteManager, Sprite } from "sprites";
+import { AudioManager, Audio } from "audio";
 import * as sprites from "./sprites";
-import * as audios from "./audios";
-import { Constructable } from "./constructable";
+import * as audios from "audio";
+import { Constructable } from "types";
 import { Config } from "./config";
 
-const allSprites: Constructable<Sprite>[] = Object.keys(sprites).map(key => sprites[key]);
-const allAudios: Constructable<Audio>[] = Object.keys(audios).map(key => audios[key]);
+const allSprites: Constructable<Sprite>[] =
+    without(["ImageManager", "SpriteFloor", "SpriteManager", "Sprite"], Object.keys(sprites))
+    .map(key => sprites[key]);
+
+const allAudios: Constructable<Audio>[] =
+    without(["AudioManager", "Audio", "Sounds", "musicSpeedForLevel", "MusicSpeed"], Object.keys(audios))
+    .map(key => audios[key]);
 
 export enum LoadStatus {
     PENDING = "pending",

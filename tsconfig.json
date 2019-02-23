@@ -2,7 +2,7 @@
     "compilerOptions": {
         "emitDecoratorMetadata": true,
         "outDir": "lib",
-        "baseUrl": "src",
+        "baseUrl": ".",
         "target": "es6",
         "module": "commonjs",
         "experimentalDecorators": true,
@@ -11,7 +11,11 @@
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "paths": {
+            "*": ["src/*"],
+            "assets/*": ["assets/*"]
+        }
     },
     "include": ["src/**/*.ts?", "typings/**/*", "assets/*.json"],
 }

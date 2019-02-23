@@ -15,7 +15,12 @@ module.exports = {
         extensions: [".js", ".ts", ".tsx"],
         alias: {
             "typeorm": "typeorm/browser",
-        }
+        },
+        modules: [
+            path.join(__dirname, "node_modules"),
+            path.join(__dirname, "src"),
+            path.join(__dirname, "."),
+        ],
     },
     module: {
         rules: [

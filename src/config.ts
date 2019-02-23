@@ -1,5 +1,5 @@
 import { component } from "tsdi";
-import { vec2 } from "./vec2";
+import { vec2 } from "utils";
 
 @component
 export class Config {
