@@ -1,4 +1,4 @@
-import { external, inject } from "tsdi";
+import { inject } from "tsdi";
 import { Atlas, Frame } from "./atlas";
 import { vec2, Vec2 } from "./vec2";
 import { ImageManager } from "./image-manager";

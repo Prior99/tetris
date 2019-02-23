@@ -7,82 +7,23 @@ import "./index.scss";
 import { FactoryAudioContext } from "./factory-audio-context";
 import { SpriteManager } from "./sprite-manager";
 import { AudioManager } from "./audio-manager";
-import {
-    SpriteTetriminoI,
-    SpriteTetriminoJ,
-    SpriteTetriminoL,
-    SpriteTetriminoO,
-    SpriteTetriminoS,
-    SpriteTetriminoT,
-    SpriteTetriminoZ,
-    SpriteTetriminoGhost,
-    SpriteTetriminoLight,
-    SpriteFloorWood,
-    SpriteFloorWhiteTiles,
-} from "./sprites";
-import {
-    AudioHit,
-    AudioLevelUp,
-    AudioMoveDown,
-    AudioMusic120Bpm,
-    AudioMusic130Bpm,
-    AudioMusic140Bpm,
-    AudioMusic150Bpm,
-    AudioMusic160Bpm,
-    AudioMusic170Bpm,
-    AudioRotate,
-    AudioScore1,
-    AudioScore2,
-    AudioScore3,
-    AudioScore4,
-} from "./audios";
 import { Info } from "./info";
+import { Loader } from "./loader";
+import { Router } from "./router";
 
 async function main() {
     // Setup dependency injection.
     const tsdi = new TSDI();
     tsdi.enableComponentScanner();
-
-    const spriteManager = tsdi.get(SpriteManager);
-    const audioManager = tsdi.get(AudioManager);
-
     await tsdi.get(FactoryAudioContext).initialize();
-    await Promise.all([
-        spriteManager.load(SpriteTetriminoI),
-        spriteManager.load(SpriteTetriminoJ),
-        spriteManager.load(SpriteTetriminoL),
-        spriteManager.load(SpriteTetriminoO),
-        spriteManager.load(SpriteTetriminoS),
-        spriteManager.load(SpriteTetriminoT),
-        spriteManager.load(SpriteTetriminoZ),
-        spriteManager.load(SpriteTetriminoGhost),
-        spriteManager.load(SpriteTetriminoLight),
-        spriteManager.load(SpriteFloorWood),
-        spriteManager.load(SpriteFloorWhiteTiles),
-        audioManager.load(AudioHit),
-        audioManager.load(AudioLevelUp),
-        audioManager.load(AudioMoveDown),
-        audioManager.load(AudioMusic120Bpm),
-        audioManager.load(AudioMusic130Bpm),
-        audioManager.load(AudioMusic140Bpm),
-        audioManager.load(AudioMusic150Bpm),
-        audioManager.load(AudioMusic160Bpm),
-        audioManager.load(AudioMusic170Bpm),
-        audioManager.load(AudioRotate),
-        audioManager.load(AudioScore1),
-        audioManager.load(AudioScore2),
-        audioManager.load(AudioScore3),
-        audioManager.load(AudioScore4),
-    ]);
 
     // Start React.
     ReactDOM.render(
-    <>
-        <DevTools />
-        <GameCanvas />
-        <Info />
-    </>,
-    document.getElementById("root"),
+        <>
+            <DevTools />
+            <Router />
+        </>,
+        document.getElementById("root"),
     );
 }
 

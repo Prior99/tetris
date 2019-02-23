@@ -6,7 +6,7 @@ import { GameState } from "./game-state";
 import { Rendering } from "./rendering";
 import * as css from "./game-canvas.scss";
 import { Input } from "./input";
-import { vec2, Vec2 } from "./vec2";
+import { vec2 } from "./vec2";
 
 @external
 export class GameCanvas extends React.Component {

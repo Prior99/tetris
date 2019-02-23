@@ -1,7 +1,5 @@
 import { component, inject, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
-import { GameState } from "./game-state";
-import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
 import { CellColor } from "./cell-color";
 import {
@@ -15,7 +13,6 @@ import {
     SpriteTetriminoGhost,
 } from "./sprites";
 import { Sprite } from "./sprite";
-import { SpriteManager } from "./sprite-manager";
 import { Lighting } from "./lighting";
 import { Background } from "./background";
 import { Graphics } from "./graphics";

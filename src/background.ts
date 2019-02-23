@@ -1,13 +1,8 @@
-import { component, inject, initialize } from "tsdi";
+import { component, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
-import { GameState } from "./game-state";
-import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
-import { CellColor } from "./cell-color";
-import { SpriteManager } from "./sprite-manager";
 import { SpriteFloorWhiteTiles, SpriteFloorWood }  from "./sprites";
 import { Graphics } from "./graphics";
-import { Constructable } from "./constructable";
 
 @component
 export class Background extends Graphics {
