@@ -6,10 +6,18 @@ import { Sounds, AudioHit } from "audio";
 import { bind } from "lodash-decorators";
 import * as css from "./settings.scss";
 
+export enum NetworkingMode {
+    CLIENT = "client",
+    HOST = "host",
+    DISCONNECTED = "disconnected",
+}
+
 @external @observer
 export class Settings extends React.Component {
     @inject private ui: UI;
     @inject private sounds: Sounds;
+
+    public mode = NetworkingMode.DISCONNECTED;
 
     @bind private handleBack() {
         this.ui.page = Page.MENU;

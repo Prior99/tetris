@@ -39,7 +39,7 @@ export class GameState {
         hardDrops: number;
     };
     private running = false;
-    private timeout?: number;
+    private timeout?: any;
     private comboCount = 0;
     private timeStarted?: Date;
     private lastHit?: Date;

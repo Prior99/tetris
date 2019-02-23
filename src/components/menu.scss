@@ -27,5 +27,24 @@
             color: $white;
             cursor: pointer;
         }
+
+        input {
+            background: lighten($black, 10%);
+            border: none;
+            color: $white;
+            padding: 2px;
+        }
+
+        button {
+            background: lighten($black, 5%);
+            border: none;
+            color: $white;
+            padding: 2px;
+            margin: 0 5px;
+        }
+
+        ul {
+            color: $white;
+        }
     }
 }

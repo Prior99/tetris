@@ -8,10 +8,10 @@ export class Input {
     @inject private gameState: GameState;
     @inject private config: Config;
 
-    public moveLeftTimeout?: number;
-    public moveRightTimeout?: number;
-    public moveDownTimeout?: number;
-    public rotateTimeout?: number;
+    public moveLeftTimeout?: any;
+    public moveRightTimeout?: any;
+    public moveDownTimeout?: any;
+    public rotateTimeout?: any;
 
     public enable() {
         window.addEventListener("keyup", this.handleKeyUp);

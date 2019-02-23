@@ -4,3 +4,4 @@ export * from "./settings";
 export * from "./info";
 export * from "./loader-screen";
 export * from "./router";
+export * from "./connect";

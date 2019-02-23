@@ -1,0 +1,6 @@
+@import "colors.scss";
+@import "./menu.scss";
+
+.lobby {
+    @extend .menu;
+}

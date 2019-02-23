@@ -23,6 +23,10 @@ export class Menu extends React.Component {
         this.ui.page = Page.SETTINGS;
     }
 
+    @bind private handleMultiplayer() {
+        this.ui.page = Page.CONNECT;
+    }
+
     public render() {
         return (
             <section className={css.menu}>
@@ -30,6 +34,7 @@ export class Menu extends React.Component {
                     <h1>Fretris</h1>
                     <a onClick={this.handleSinglePlayer}>Singleplayer</a>
                     <a onClick={this.handleSettings}>Settings</a>
+                    <a onClick={this.handleMultiplayer}>Multiplayer</a>
                 </div>
             </section>
         );

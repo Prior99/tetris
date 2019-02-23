@@ -6,6 +6,8 @@ import { SinglePlayer } from "./single-player";
 import { Settings } from "./settings";
 import { Menu } from "./menu";
 import { LoaderScreen } from "./loader-screen";
+import { Connect } from "./connect";
+import { Lobby } from "./lobby";
 import { Page, UI } from "ui";
 
 @external @observer
@@ -19,6 +21,8 @@ export class Router extends React.Component {
             case Page.MENU: return <Menu />;
             case Page.SINGLE_PLAYER: return <SinglePlayer />;
             case Page.SETTINGS: return <Settings />;
+            case Page.LOBBY: return <Lobby />;
+            case Page.CONNECT: return <Connect />;
         }
     }
 }
