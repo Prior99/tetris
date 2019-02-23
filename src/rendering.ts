@@ -15,6 +15,8 @@ import {
 } from "./sprites";
 import { Sprite } from "./sprite";
 import { Constructable, SpriteManager } from "./sprite-manager";
+import { Lighting } from "./lighting";
+import { Graphics } from "./graphics";
 
 function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
     switch (cellColor) {
@@ -29,37 +31,10 @@ function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undef
 }
 
 @component
-export class Rendering {
-    @inject private gameState: GameState;
-    @inject private config: Config;
-    @inject private sprites: SpriteManager;
+export class Rendering extends Graphics {
+    @inject private lighting: Lighting;
 
-    private canvas?: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
-
-    @initialize
-    protected async initialize() {
-        this.render();
-    }
-
-    public get pixelSize() {
-        const rect = document.body.getBoundingClientRect();
-        const naturalSize = vec2(rect.height * this.config.visibleRatio, rect.height);
-        const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
-        const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
-        return adjustedSize;
-    }
-
-    private get cellPixelSize(): Vec2 {
-        const size = this.pixelSize.x / this.config.visibleSize.x;
-        return vec2(size, size);
-    }
-
-    public updateCanvas(canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d")!;
-        this.ctx.imageSmoothingEnabled = false;
-    }
+    @initialize protected async initialize() { this.render(); }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
         const { ctx } = this;
@@ -80,15 +55,6 @@ export class Rendering {
                 ctx.fillRect(pixelPosition.x, pixelPosition.y, this.cellPixelSize.x, -this.cellPixelSize.y);
                 break;
         }
-    }
-
-    private renderClear() {
-        if (!this.ctx) { return; }
-        this.ctx.clearRect(0, 0, this.pixelSize.x, this.pixelSize.y);
-    }
-
-    private translate(pos: Vec2): Vec2 {
-        return vec2(pos.x, this.config.visibleSize.y - pos.y).mult(this.cellPixelSize);
     }
 
     private renderDebug() {
@@ -131,8 +97,17 @@ export class Rendering {
         this.ctx.stroke();
     }
 
-    @bind private render() {
+    public rescale(size: Vec2) {
+        super.rescale(size);
+        this.lighting.rescale(size);
+    }
+
+    @bind public render() {
+        if (!this.ctx) {
+            return;
+        }
         this.renderClear();
+        this.ctx.globalCompositeOperation = "source-over";
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {
                 const pos = vec2(x, y);
@@ -142,6 +117,20 @@ export class Rendering {
         if (this.gameState.debug) {
             this.renderDebug();
         }
-        window.requestAnimationFrame(this.render);
+        this.lighting.render();
+        this.ctx.globalCompositeOperation = "soft-light";
+        if (this.lighting.canvas) {
+            this.ctx.drawImage(
+                this.lighting.canvas,
+                0,
+                0,
+                this.lighting.pixelSize.x,
+                this.lighting.pixelSize.y,
+                0,
+                0,
+                this.pixelSize.x,
+                this.pixelSize.y,
+            );
+        }
     }
 }

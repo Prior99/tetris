@@ -1,5 +1,5 @@
 import * as React from "react";
-import { inject, external } from "tsdi";
+import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "./config";
 import { GameState } from "./game-state";
@@ -20,22 +20,35 @@ export class GameCanvas extends React.Component {
     constructor(props: {}) {
         super(props);
         window.addEventListener("resize", this.rescale);
+
+    }
+
+    @initialize protected initialize() {
+        const renderLoop = () => {
+            this.rendering.render();
+            window.requestAnimationFrame(renderLoop);
+        };
+        renderLoop();
     }
 
     @bind private rescale() {
         const { canvas } = this;
         if (!canvas) { return; }
-        const { pixelSize } =  this.rendering;
-        canvas.style.width = `${pixelSize.x}px`;
-        canvas.style.height = `${pixelSize.y}px`;
-        canvas.width = pixelSize.x;
-        canvas.height = pixelSize.y;
+        const rect = document.body.getBoundingClientRect();
+        const naturalSize = vec2(rect.height * this.config.visibleRatio, rect.height);
+        const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
+        const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
+
+        this.rendering.rescale(adjustedSize);
+
+        canvas.style.width = `${adjustedSize.x}px`;
+        canvas.style.height = `${adjustedSize.y}px`;
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
-        this.rescale();
         this.rendering.updateCanvas(canvas);
+        this.rescale();
         this.gameState.start();
         this.input.enable();
     }
