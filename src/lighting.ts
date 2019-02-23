@@ -28,10 +28,15 @@ export class Lighting extends Graphics {
         ).mult(this.scaleFactor);
         if (cellColor !== CellColor.EMPTY) {
             const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
+            const { totalDuration } = this.sprites.sprite(SpriteTetriminoLight);
+            const time = this.gameState.timeSinceLastHit < totalDuration
+                ? this.gameState.timeSinceLastHit
+                : totalDuration - 0.001;
             this.renderSprite(
                 SpriteTetriminoLight,
                 position.sub(margin),
                 this.lightSprite.dimensions.mult(this.scaleFactor),
+                time,
             );
         }
     }

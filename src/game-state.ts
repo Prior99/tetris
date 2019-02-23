@@ -41,6 +41,7 @@ export class GameState {
     private timeout?: number;
     private comboCount = 0;
     private timeStarted?: Date;
+    private lastHit?: Date;
 
     @initialize
     protected initialize() {
@@ -173,7 +174,13 @@ export class GameState {
                 this.comboCount = 0;
             }
         }
+        this.lastHit = new Date();
         this.newTetrimino();
+    }
+
+    public get timeSinceLastHit() {
+        if (!this.lastHit) { return Number.POSITIVE_INFINITY; }
+        return differenceInMilliseconds(new Date(), this.lastHit) / 1000;
     }
 
     public awardScore(action: ScoreAction) {

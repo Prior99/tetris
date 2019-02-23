@@ -49,12 +49,12 @@ export abstract class Graphics {
         return this.cellPixelSize.div(this.config.tetriminoPixelSize);
     }
 
-    public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2) {
+    public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2, time?: number) {
         this.sprites.sprite(sprite).render(
             position,
             dimensions,
             this.ctx,
-            this.gameState.seconds,
+            typeof time === "number" ? time : this.gameState.seconds,
         );
     }
 }
