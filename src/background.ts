@@ -41,7 +41,7 @@ export class Background extends Graphics {
         const renderSize = dimensions.mult(this.scaleFactor);
         for (let y = 0; y < this.pixelSize.y; y += renderSize.y) {
             for (let x = 0; x < this.pixelSize.x; x += renderSize.x) {
-                this.sprite.render(vec2(x, y), renderSize, this.ctx);
+                this.renderSprite(this.spriteClass, vec2(x, y), renderSize);
             }
         }
         this.lastLevelRendered = this.gameState.level;

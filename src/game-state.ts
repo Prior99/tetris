@@ -40,6 +40,7 @@ export class GameState {
     private running = false;
     private timeout?: number;
     private comboCount = 0;
+    private timeStarted?: Date;
 
     @initialize
     protected initialize() {
@@ -48,12 +49,17 @@ export class GameState {
         this.newTetrimino();
     }
 
+    public get seconds() {
+        if (!this.timeStarted) { return 0; }
+        return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
+    }
+
     public get speed() { return speed(this.level); }
 
     private processMatrix() {
         const now = new Date();
         const diff = differenceInMilliseconds(now, this.lastTick) / 1000;
-        if (diff > this.speed) {
+        if (diff > this.speed || this.current.hardDrops) {
             this.lastTick = now;
             if (this.current.tetrimino.hasHitFloor()) { this.commitTetrimino(); }
             this.moveTetrimino();
@@ -195,6 +201,7 @@ export class GameState {
     public start() {
         this.running = true;
         this.update();
+        this.timeStarted = new Date();
     }
 
     public stop() {

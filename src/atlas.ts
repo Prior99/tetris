@@ -11,16 +11,18 @@ export interface Dimensions {
 export interface Rect extends Offset, Dimensions {
 }
 
+export interface Frame {
+    filename: string;
+    frame: Rect;
+    rotated: boolean;
+    trimmed: boolean;
+    spriteSourceSize: Rect;
+    sourceSize: Dimensions;
+    duration: number;
+}
+
 export interface Atlas {
-    frames: {
-        filename: string;
-        frame: Rect;
-        rotated: boolean;
-        trimmed: boolean;
-        spriteSourceSize: Rect;
-        sourceSize: Dimensions;
-        duration: number;
-    }[];
+    frames: Frame[];
     meta: {
         app: string;
         version: string;

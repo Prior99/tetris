@@ -28,7 +28,11 @@ export class Lighting extends Graphics {
         ).mult(this.scaleFactor);
         if (cellColor !== CellColor.EMPTY) {
             const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
-            this.lightSprite.render(position.sub(margin), this.lightSprite.dimensions.mult(this.scaleFactor), this.ctx);
+            this.renderSprite(
+                SpriteTetriminoLight,
+                position.sub(margin),
+                this.lightSprite.dimensions.mult(this.scaleFactor),
+            );
         }
     }
 

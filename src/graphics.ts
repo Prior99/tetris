@@ -3,6 +3,8 @@ import { GameState } from "./game-state";
 import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
 import { SpriteManager } from "./sprite-manager";
+import { Constructable } from "./constructable";
+import { Sprite } from "./sprite";
 
 @component
 export abstract class Graphics {
@@ -45,5 +47,14 @@ export abstract class Graphics {
 
     public get scaleFactor() {
         return this.cellPixelSize.div(this.config.tetriminoPixelSize);
+    }
+
+    public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2) {
+        this.sprites.sprite(sprite).render(
+            position,
+            dimensions,
+            this.ctx,
+            this.gameState.seconds,
+        );
     }
 }

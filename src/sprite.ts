@@ -1,5 +1,5 @@
 import { external, inject } from "tsdi";
-import { Atlas } from "./atlas";
+import { Atlas, Frame } from "./atlas";
 import { vec2, Vec2 } from "./vec2";
 import { ImageManager } from "./image-manager";
 
@@ -12,8 +12,29 @@ export class Sprite {
         return this.images.image(this.atlas.meta.image);
     }
 
-    public render(position: Vec2, dimensions: Vec2, ctx: CanvasRenderingContext2D) {
-        const [ frame ] = this.atlas.frames;
+    public get totalDuration(): number {
+        return this.atlas.frames.map(frame => frame.duration).reduce((sum: number, duration) => sum + duration) / 1000;
+    }
+
+    public offsetInAnimation(time: number): number {
+        return time % this.totalDuration;
+    }
+
+    public frame(time: number): Frame | undefined {
+        let offset = this.offsetInAnimation(time);
+        let index = 0;
+        let frame: Frame | undefined = undefined;
+        while (offset > 0) {
+            frame = this.atlas.frames[index];
+            offset -= frame.duration / 1000;
+            index++;
+        }
+        return frame;
+    }
+
+    public render(position: Vec2, dimensions: Vec2, ctx: CanvasRenderingContext2D, time: number) {
+        const frame = this.frame(time);
+        if (!frame) { return; }
         ctx.drawImage(
             this.image,
             frame.frame.x,

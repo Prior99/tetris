@@ -49,7 +49,7 @@ export class Rendering extends Graphics {
         if (!ctx) { return; }
         if (cellColor !== CellColor.EMPTY) {
             const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
-            this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx);
+            this.renderSprite(spriteForCellColor(cellColor)!, position, this.cellPixelSize);
         }
     }
 
