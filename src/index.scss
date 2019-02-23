@@ -1,7 +1,10 @@
+@import "colors.scss";
+
 :global {
     body {
         height: 95vh;
         margin: 0;
+        background: $black;
     }
 
     #root {

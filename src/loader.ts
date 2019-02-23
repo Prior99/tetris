@@ -18,7 +18,7 @@ const allAudios: Constructable<Audio>[] =
 
 export enum LoadStatus {
     PENDING = "pending",
-    IN_PROGRESS = "in progress",
+    IN_PROGRESS = "in-progress",
     DONE = "done",
 }
 

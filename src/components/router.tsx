@@ -10,9 +10,7 @@ export class Router extends React.Component {
     @inject private loader: Loader;
 
     public render() {
-        if (this.loader.done) {
-            return <Game />;
-        }
+        if (this.loader.done) { return <Game />; }
         return <LoaderScreen />;
     }
 }

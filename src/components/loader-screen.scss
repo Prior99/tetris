@@ -1,0 +1,46 @@
+@import "colors.scss";
+
+.loader {
+    background-color: $black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .wrapper {
+        display: flex;
+        max-width: 200px;
+        flex-wrap: wrap;
+    }
+
+    @mixin box {
+        width: 10px;
+        height: 10px;
+        margin: 10px;
+        flex-shrink: 0;
+    }
+
+    $pendingColor: rgb(64, 64, 64);
+    $doneColor: rgb(255, 255, 255);
+
+    .pending {
+        @include box;
+        background-color: $pendingColor;
+    }
+
+    .in-progress {
+        @keyframes pulse {
+            0% { background-color: $pendingColor; }
+            50% { background-color: $doneColor; }
+            100% { background-color: $pendingColor; }
+        }
+        @include box;
+        animation: pulse 2s infinite;
+    }
+
+    .done {
+        @include box;
+        background-color: $doneColor;
+    }
+}
