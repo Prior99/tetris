@@ -1,7 +1,6 @@
 import { component } from "tsdi";
 import { Sprite } from "./sprite";
-
-export type Constructable<T> = new() => T;
+import { Constructable } from "./constructable";
 
 @component
 export class SpriteManager {

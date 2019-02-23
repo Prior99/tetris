@@ -9,8 +9,7 @@ import {
     AudioMusic160Bpm,
     AudioMusic170Bpm,
 } from "./audios";
-
-export type Constructable<T> = new() => T;
+import { Constructable } from "./constructable";
 
 export enum MusicSpeed {
     BPM_120,

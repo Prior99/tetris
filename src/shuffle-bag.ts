@@ -9,6 +9,7 @@ import {
     TetriminoT,
     TetriminoZ,
 } from "./tetriminos";
+import { Constructable } from "./constructable";
 
 function shuffle<T>(array: T[]): T[] {
     const result: T[] = [];
@@ -22,7 +23,7 @@ function shuffle<T>(array: T[]): T[] {
 
 @component
 export class ShuffleBag {
-    private sequence: Tetrimino[] = [];
+    private sequence: Constructable<Tetrimino>[] = [];
 
     constructor() {
         this.refill();
@@ -31,22 +32,22 @@ export class ShuffleBag {
     public take(): Tetrimino {
         const nextTetrimino = this.sequence.shift()!;
         if (this.sequence.length <= 7) { this.refill(); }
-        return nextTetrimino;
+        return new nextTetrimino();
     }
 
-    public get nextFive(): Tetrimino[] {
+    public get nextFive(): Constructable<Tetrimino>[] {
         return this.sequence.slice(0, 5);
     }
 
     private refill() {
         this.sequence.push(...shuffle([
-            new TetriminoI(),
-            new TetriminoJ(),
-            new TetriminoL(),
-            new TetriminoO(),
-            new TetriminoS(),
-            new TetriminoT(),
-            new TetriminoZ(),
+            TetriminoI,
+            TetriminoJ,
+            TetriminoL,
+            TetriminoO,
+            TetriminoS,
+            TetriminoT,
+            TetriminoZ,
         ]));
     }
 }

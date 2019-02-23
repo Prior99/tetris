@@ -37,7 +37,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(2, -1)))
                 ) {
-                    this.rotation = Rotation.DEG_270;
+                    this.setRotation(Rotation.DEG_270);
                 }
                 return;
             case Rotation.DEG_90:
@@ -48,7 +48,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(2, 1))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_0;
+                    this.setRotation(Rotation.DEG_0);
                 }
                 return;
             case Rotation.DEG_180:
@@ -59,7 +59,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-2, 1)))
                 ) {
-                    this.rotation = Rotation.DEG_90;
+                    this.setRotation(Rotation.DEG_90);
                 }
                 return;
             case Rotation.DEG_270:
@@ -70,7 +70,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-2, -1))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_180;
+                    this.setRotation(Rotation.DEG_180);
                 }
                 return;
         }
@@ -87,7 +87,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-2, -1))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_90;
+                    this.setRotation(Rotation.DEG_90);
                 }
                 return;
             case Rotation.DEG_90:
@@ -98,7 +98,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(2, 1)))
                 ) {
-                    this.rotation = Rotation.DEG_180;
+                    this.setRotation(Rotation.DEG_180);
                 }
                 return;
             case Rotation.DEG_180:
@@ -109,7 +109,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(2, 1))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_270;
+                    this.setRotation(Rotation.DEG_270);
                 }
                 return;
             case Rotation.DEG_270:
@@ -120,7 +120,7 @@ export class TetriminoI extends Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-2, -1)))
                 ) {
-                    this.rotation = Rotation.DEG_0;
+                    this.setRotation(Rotation.DEG_0);
                 }
                 return;
         }

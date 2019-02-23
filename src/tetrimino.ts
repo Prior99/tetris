@@ -1,4 +1,4 @@
-import { external, inject } from "tsdi";
+import { external, inject, initialize } from "tsdi";
 import { vec2, Vec2 } from "./vec2";
 import { Matrix } from "./matrix";
 import { Playfield } from "./playfield";
@@ -14,18 +14,26 @@ export enum Rotation {
 @external
 export class Tetrimino {
     @inject private playfield: Playfield;
+    private ghostPosition: Vec2;
 
     constructor(
         public matrix: Matrix,
         public offset: Vec2,
         public rotation = Rotation.DEG_0,
-    ) {
+    ) {}
+
+    @initialize protected initialize() {
         switch (this.rotation) {
             case Rotation.DEG_0: break;
             case Rotation.DEG_90: this.matrix = this.matrix.rotateRight(); break;
             case Rotation.DEG_180: this.matrix = this.matrix.rotateRight().rotateRight(); break;
             case Rotation.DEG_270: this.matrix = this.matrix.rotateLeft(); break;
         }
+        this.refreshGhostPosition();
+    }
+
+    protected refreshGhostPosition() {
+        this.ghostPosition = this.calculateHardDropOffset().offset;
     }
 
     protected attemptRotation(matrix: Matrix, offset: Vec2): boolean {
@@ -33,6 +41,11 @@ export class Tetrimino {
         this.offset = offset;
         this.matrix = matrix;
         return true;
+    }
+
+    public setRotation(rotation: Rotation) {
+        this.rotation = rotation;
+        this.refreshGhostPosition();
     }
 
     public rotateLeft() {
@@ -46,7 +59,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_270;
+                    this.setRotation(Rotation.DEG_270);
                 }
                 return;
             case Rotation.DEG_90:
@@ -57,7 +70,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_0;
+                    this.setRotation(Rotation.DEG_0);
                 }
                 return;
             case Rotation.DEG_180:
@@ -68,7 +81,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_90;
+                    this.setRotation(Rotation.DEG_90);
                 }
                 return;
             case Rotation.DEG_270:
@@ -79,7 +92,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_180;
+                    this.setRotation(Rotation.DEG_180);
                 }
                 return;
         }
@@ -96,7 +109,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_90;
+                    this.setRotation(Rotation.DEG_90);
                 }
                 return;
             case Rotation.DEG_90:
@@ -107,7 +120,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_180;
+                    this.setRotation(Rotation.DEG_180);
                 }
                 return;
             case Rotation.DEG_180:
@@ -118,7 +131,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, -2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, -2)))
                 ) {
-                    this.rotation = Rotation.DEG_270;
+                    this.setRotation(Rotation.DEG_270);
                 }
                 return;
             case Rotation.DEG_270:
@@ -129,7 +142,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
                 ) {
-                    this.rotation = Rotation.DEG_0;
+                    this.setRotation(Rotation.DEG_0);
                 }
                 return;
         }
@@ -139,6 +152,7 @@ export class Tetrimino {
         const newOffset = this.offset.add(vec2(-1, 0));
         if (this.playfield.collides(this.matrix, newOffset)) { return; }
         this.offset = newOffset;
+        this.refreshGhostPosition();
     }
 
     public moveDown() {
@@ -151,9 +165,11 @@ export class Tetrimino {
         const newOffset = this.offset.add(vec2(1, 0));
         if (this.playfield.collides(this.matrix, newOffset)) { return; }
         this.offset = newOffset;
+        this.ghostPosition = this.calculateHardDropOffset().offset;
+        this.refreshGhostPosition();
     }
 
-    public get hardDropOffset() {
+    public calculateHardDropOffset() {
         let offset = this.offset;
         let count = 0;
         while (!this.playfield.collides(this.matrix, offset.add(vec2(0, -1)))) {
@@ -164,7 +180,7 @@ export class Tetrimino {
     }
 
     public hardDrop() {
-        const { offset, count } = this.hardDropOffset;
+        const { offset, count } = this.calculateHardDropOffset();
         this.offset = offset;
         return count;
     }
@@ -175,7 +191,7 @@ export class Tetrimino {
 
     public overlayedOnMatrixWithGhost() {
         return this.playfield
-            .overlay(this.matrix.recolor(CellColor.GHOST), this.hardDropOffset.offset)
+            .overlay(this.matrix.recolor(CellColor.GHOST), this.ghostPosition)
             .overlay(this.matrix, this.offset);
     }
 

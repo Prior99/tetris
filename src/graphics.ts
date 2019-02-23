@@ -2,7 +2,7 @@ import { component, inject, initialize } from "tsdi";
 import { GameState } from "./game-state";
 import { Config } from "./config";
 import { vec2, Vec2 } from "./vec2";
-import { Constructable, SpriteManager } from "./sprite-manager";
+import { SpriteManager } from "./sprite-manager";
 
 @component
 export abstract class Graphics {

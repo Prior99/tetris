@@ -1,7 +1,6 @@
 import { component } from "tsdi";
 import { Audio } from "./audio";
-
-export type Constructable<T> = new() => T;
+import { Constructable } from "./constructable";
 
 @component
 export class AudioManager {

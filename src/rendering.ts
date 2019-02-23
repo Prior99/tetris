@@ -15,10 +15,11 @@ import {
     SpriteTetriminoGhost,
 } from "./sprites";
 import { Sprite } from "./sprite";
-import { Constructable, SpriteManager } from "./sprite-manager";
+import { SpriteManager } from "./sprite-manager";
 import { Lighting } from "./lighting";
 import { Background } from "./background";
 import { Graphics } from "./graphics";
+import { Constructable } from "./constructable";
 
 function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
     switch (cellColor) {
