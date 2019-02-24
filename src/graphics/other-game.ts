@@ -1,9 +1,8 @@
-import { external, inject, initialize } from "tsdi";
+import { external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
 import { CellColor, Matrix } from "game";
 import {
-    Sprite,
     SpriteTetriminoOther,
 } from "sprites";
 import { Graphics } from "./graphics";

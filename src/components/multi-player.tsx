@@ -3,7 +3,6 @@ import { Networking, RemoteUsers, NetworkGame } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { OwnGameCanvas } from "./own-game-canvas";
-import { OtherGameCanvas } from "./other-game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
 import { Sounds } from "audio";

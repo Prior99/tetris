@@ -1,7 +1,7 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
-import { ChatMessage as ChatMessageInterface, Chat, RemoteUsers, NetworkGame } from "networking";
+import { RemoteUsers, NetworkGame } from "networking";
 import { OtherGameCanvas } from "./other-game-canvas";
 import * as css from "./remote-game.scss";
 
@@ -12,7 +12,10 @@ export class RemoteGame extends React.Component<{ userId: string }> {
 
     public render() {
         return (
-            <OtherGameCanvas matrix={this.networkGame.byUser(this.props.userId)!} />
+            <section className={css.remoteGame}>
+                <p>{this.users.byId(this.props.userId)!.name}</p>
+                <OtherGameCanvas matrix={this.networkGame.byUser(this.props.userId)!} />
+            </section>
         );
     }
 }

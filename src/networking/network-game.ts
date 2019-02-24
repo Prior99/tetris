@@ -1,6 +1,6 @@
 import { component, inject } from "tsdi";
 import { RemoteUsers } from "./remote-users";
-import { GameState, ShuffleBag, Playfield, Matrix } from "game";
+import { Matrix } from "game";
 import { Config } from "config";
 
 @component

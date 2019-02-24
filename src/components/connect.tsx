@@ -2,7 +2,7 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
-import { Networking, NetworkingMode } from "networking";
+import { Networking } from "networking";
 import { bind } from "lodash-decorators";
 import { UI, Page } from "ui";
 import * as css from "./connect.scss";

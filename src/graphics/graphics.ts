@@ -1,5 +1,4 @@
 import { component, inject } from "tsdi";
-import { GameState } from "game";
 import { Config } from "config";
 import { vec2, Vec2 } from "utils";
 import { Constructable } from "types";
