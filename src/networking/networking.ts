@@ -7,7 +7,7 @@ import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
 import { generateName } from "names";
 import { UI, Page } from "ui";
-import { Matrix } from "game";
+import { Matrix, Playfield } from "game";
 import { Chat } from "./chat";
 import { Config } from "config";
 
@@ -24,6 +24,7 @@ export class Networking {
     @inject private ui: UI;
     @inject private networkGame: NetworkGame;
     @inject private config: Config;
+    @inject private playfield: Playfield;
 
     private peer: Peer;
     private connection: Peer.DataConnection;
@@ -58,7 +59,6 @@ export class Networking {
     }
 
     @bind private handleMessage(connectionId: string, message: Message) {
-        console.log(connectionId, message); // tslint:disable-line
         this.forwardMessage(connectionId, message);
         switch (message.message) {
             case MessageType.CHAT_MESSAGE: {
@@ -75,7 +75,7 @@ export class Networking {
             }
             case MessageType.START: {
                 this.ui.page = Page.MULTI_PLAYER;
-                this.networkGame.start(message.seed);
+                this.startGame(message.seed);
                 break;
             }
             case MessageType.UPDATE_PLAYFIELD: {
@@ -171,7 +171,12 @@ export class Networking {
             seed,
         });
         this.ui.page = Page.MULTI_PLAYER;
+        this.startGame(seed);
+    }
+
+    private startGame(seed: string) {
         this.networkGame.start(seed);
+        this.playfieldLoop();
     }
 
     public updateMatrix(matrix: Matrix) {
@@ -180,5 +185,10 @@ export class Networking {
             userId: this.id,
             matrix: matrix.toBase64(),
         });
+    }
+
+    public playfieldLoop() {
+        this.updateMatrix(this.playfield);
+        setTimeout(() => this.playfieldLoop(), this.config.networkSpeed * 1000);
     }
 }
