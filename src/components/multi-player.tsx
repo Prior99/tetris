@@ -1,23 +1,28 @@
 import * as React from "react";
+import { Networking, RemoteUsers, NetworkGame } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { GameCanvas } from "./game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
 import { Sounds } from "audio";
+import { RemoteGame } from "./remote-game";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
 
 @external @observer
-export class SinglePlayer extends React.Component {
+export class MultiPlayer extends React.Component {
     @inject private sounds: Sounds;
+    @inject private networking: Networking;
+    @inject private users: RemoteUsers;
+    @inject private networkGame: NetworkGame;
     @inject private shuffleBag: ShuffleBag;
     @inject private gameState: GameState;
     @inject private input: Input;
 
     @initialize protected initialize() {
         this.sounds.startGame();
-        this.shuffleBag.seed();
+        this.shuffleBag.seed(this.networkGame.seed);
         this.gameState.start();
         this.input.enable();
     }
@@ -28,6 +33,7 @@ export class SinglePlayer extends React.Component {
                 <div className={css.wrapper}>
                     <GameCanvas />
                     <Info />
+                    { this.users.all.map(user => <RemoteGame userId={user.id} />) }
                 </div>
             </section>
         );

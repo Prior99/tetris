@@ -12,7 +12,8 @@ export class Matrix {
 
     constructor(matrix: Matrix);
     constructor(dimensions: Vec2, initialization?: CellColor[]);
-    constructor(arg1: Matrix | Vec2, initialization?: CellColor[]) {
+    constructor(dimensions: Vec2, base64: string);
+    constructor(arg1: Matrix | Vec2, initialization?: CellColor[] | string) {
         if (Matrix.isMatrix(arg1)) {
             this.dimensions = arg1.dimensions;
             this.state = new Uint8Array(this.size);
@@ -22,8 +23,16 @@ export class Matrix {
             this.dimensions = arg1;
             this.state = new Uint8Array(this.size);
             if (initialization) {
-                if (initialization.length !== this.size) { throw new Error("Wrong size."); }
-                initialization.forEach((cellColor, index) => this.state[index] = cellColor);
+                if (typeof initialization === "string") {
+                    const binaryString = atob(initialization);
+                    if (binaryString.length !== this.size) { throw new Error("Wrong size."); }
+                    for (let index = 0; index < binaryString.length; ++index) {
+                        this.state[index] = binaryString.charCodeAt(index);
+                    }
+                } else {
+                    if (initialization.length !== this.size) { throw new Error("Wrong size."); }
+                    initialization.forEach((cellColor, index) => this.state[index] = cellColor);
+                }
             }
         }
     }
@@ -184,5 +193,9 @@ export class Matrix {
             }
         }
         return result;
+    }
+
+    public toBase64(): string {
+        return btoa(String.fromCharCode(...this.state));
     }
 }

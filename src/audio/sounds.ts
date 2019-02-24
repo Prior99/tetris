@@ -106,7 +106,7 @@ export class Sounds {
     }
 
     public startMenu() {
-        this.filterNode.frequency.value = 2000;
+        this.filterNode.frequency.value = 1000;
     }
 
     public startGame() {

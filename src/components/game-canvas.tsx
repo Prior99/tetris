@@ -2,25 +2,20 @@ import * as React from "react";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
-import { GameState } from "game";
 import { Rendering } from "graphics";
 import * as css from "./game-canvas.scss";
-import { Input } from "input";
 import { vec2 } from "utils";
 
 @external
 export class GameCanvas extends React.Component {
     @inject private config: Config;
-    @inject private gameState: GameState;
     @inject private rendering: Rendering;
-    @inject private input: Input;
 
     private canvas?: HTMLCanvasElement;
 
     constructor(props: {}) {
         super(props);
         window.addEventListener("resize", this.rescale);
-
     }
 
     @initialize protected initialize() {
@@ -49,8 +44,6 @@ export class GameCanvas extends React.Component {
         this.canvas = canvas;
         this.rendering.updateCanvas(canvas);
         this.rescale();
-        this.gameState.start();
-        this.input.enable();
     }
 
     public render() {

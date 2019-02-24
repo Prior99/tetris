@@ -16,11 +16,12 @@ export enum Page {
     SINGLE_PLAYER = "single-player",
     LOBBY = "lobby",
     CONNECT = "connect",
+    MULTI_PLAYER = "multi-player",
 }
 
 @component
 export class UI {
-    @observable private volume = { music: 0, sounds: 0 };
+    @observable private volume = { music: 0.5, sounds: 0.6 };
     @observable public page = Page.MENU;
 
     @initialize protected initialize() {

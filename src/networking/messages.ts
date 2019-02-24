@@ -4,13 +4,8 @@ export enum MessageType {
     WELCOME,
     USER_CONNECTED,
     USER_DISCONNECTED,
-    INPUT_LEFT,
-    INPUT_RIGHT,
-    INPUT_ROTATE_LEFT,
-    INPUT_ROTATE_RIGHT,
-    INPUT_SOFT_DROP,
-    INPUT_HARD_DROP,
     CHAT_MESSAGE,
+    UPDATE_PLAYFIELD,
 }
 
 export interface RemoteUser {
@@ -49,34 +44,10 @@ export interface MessageUserDisconnected {
     userId: string;
 }
 
-export interface MessageInputLeft {
-    message: MessageType.INPUT_LEFT;
+export interface MessageUpdatePlayfield {
+    message: MessageType.UPDATE_PLAYFIELD;
     userId: string;
-}
-
-export interface MessageInputRight {
-    message: MessageType.INPUT_RIGHT;
-    userId: string;
-}
-
-export interface MessageInputRotateRight {
-    message: MessageType.INPUT_ROTATE_RIGHT;
-    userId: string;
-}
-
-export interface MessageInputRotateRight {
-    message: MessageType.INPUT_ROTATE_RIGHT;
-    userId: string;
-}
-
-export interface MessageInputHardDrop {
-    message: MessageType.INPUT_HARD_DROP;
-    userId: string;
-}
-
-export interface MessageInputSoftDrop {
-    message: MessageType.INPUT_SOFT_DROP;
-    userId: string;
+    matrix: string;
 }
 
 export interface MessageChatMessage {
@@ -88,10 +59,5 @@ export type Message = MessageHello |
     MessageStart |
     MessageWelcome |
     MessageUserConnected |
-    MessageInputLeft |
-    MessageInputRight |
-    MessageInputRotateRight |
-    MessageInputRotateRight |
-    MessageInputHardDrop |
-    MessageInputSoftDrop |
+    MessageUpdatePlayfield |
     MessageChatMessage;

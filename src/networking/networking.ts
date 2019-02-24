@@ -4,8 +4,12 @@ import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
+import { NetworkGame } from "./network-game";
 import { generateName } from "names";
+import { UI, Page } from "ui";
+import { Matrix } from "game";
 import { Chat } from "./chat";
+import { Config } from "config";
 
 export enum NetworkingMode {
     CLIENT = "client",
@@ -17,6 +21,9 @@ export enum NetworkingMode {
 export class Networking {
     @inject private users: RemoteUsers;
     @inject private chat: Chat;
+    @inject private ui: UI;
+    @inject private networkGame: NetworkGame;
+    @inject private config: Config;
 
     private peer: Peer;
     private connection: Peer.DataConnection;
@@ -64,6 +71,16 @@ export class Networking {
             }
             case MessageType.USER_CONNECTED: {
                 this.users.add(message.user);
+                break;
+            }
+            case MessageType.START: {
+                this.ui.page = Page.MULTI_PLAYER;
+                this.networkGame.start(message.seed);
+                break;
+            }
+            case MessageType.UPDATE_PLAYFIELD: {
+                this.ui.page = Page.MULTI_PLAYER;
+                this.networkGame.update(message.userId, new Matrix(this.config.logicalSize, message.matrix));
                 break;
             }
         }
@@ -141,6 +158,27 @@ export class Networking {
         this.send({
             message: MessageType.CHAT_MESSAGE,
             chatMessage,
+        });
+    }
+
+    public start() {
+        if (this.mode !== NetworkingMode.HOST) {
+            return;
+        }
+        const seed = `${Math.random()}`.replace(/\./, "");
+        this.send({
+            message: MessageType.START,
+            seed,
+        });
+        this.ui.page = Page.MULTI_PLAYER;
+        this.networkGame.start(seed);
+    }
+
+    public updateMatrix(matrix: Matrix) {
+        this.send({
+            message: MessageType.UPDATE_PLAYFIELD,
+            userId: this.id,
+            matrix: matrix.toBase64(),
         });
     }
 }

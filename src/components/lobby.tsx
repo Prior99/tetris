@@ -28,6 +28,10 @@ export class Lobby extends React.Component {
         this.chatText = "";
     }
 
+    @bind private handleStart() {
+        this.networking.start();
+    }
+
     public render() {
         return (
             <section className={css.lobby}>
@@ -50,6 +54,7 @@ export class Lobby extends React.Component {
                         <input value={this.chatText} onChange={this.handleChatTextChange} />
                         <button onClick={this.handleChatSend}>Send</button>
                     </p>
+                    <button style={{ width: "100%" }} onClick={this.handleStart}>Start</button>
                     <a onClick={this.handleBack}>Back</a>
                 </div>
             </section>
