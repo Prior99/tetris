@@ -40,6 +40,7 @@ export class Networking {
         switch (message.message) {
             case MessageType.CHAT_MESSAGE: {
                 this.chat.add(message.chatMessage);
+                this.broadcast(message);
                 break;
             }
             case MessageType.WELCOME: {
@@ -53,7 +54,8 @@ export class Networking {
         }
     }
 
-    public broardcast(message: Message) {
+    public broadcast(message: Message) {
+        if (this.mode !== NetworkingMode.HOST) { return; }
         this.connections.forEach(connection => this.sendTo(connection, message));
     }
 
