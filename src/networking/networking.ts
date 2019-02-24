@@ -74,12 +74,10 @@ export class Networking {
                 break;
             }
             case MessageType.START: {
-                this.ui.page = Page.MULTI_PLAYER;
                 this.startGame(message.seed);
                 break;
             }
             case MessageType.UPDATE_PLAYFIELD: {
-                this.ui.page = Page.MULTI_PLAYER;
                 this.networkGame.update(message.userId, new Matrix(this.config.logicalSize, message.matrix));
                 break;
             }
@@ -170,13 +168,13 @@ export class Networking {
             message: MessageType.START,
             seed,
         });
-        this.ui.page = Page.MULTI_PLAYER;
         this.startGame(seed);
     }
 
     private startGame(seed: string) {
         this.networkGame.start(seed);
         this.playfieldLoop();
+        this.ui.page = Page.MULTI_PLAYER;
     }
 
     public updateMatrix(matrix: Matrix) {

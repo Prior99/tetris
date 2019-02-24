@@ -1,7 +1,7 @@
 import { component, inject, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
-import { CellColor } from "game";
+import { CellColor, GameState } from "game";
 import {
     Sprite,
     SpriteTetriminoI,
@@ -32,9 +32,10 @@ function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undef
 }
 
 @component
-export class Rendering extends Graphics {
+export class OwnGame extends Graphics {
     @inject private lighting: Lighting;
     @inject private background: Background;
+    @inject private gameState: GameState;
 
     @initialize protected async initialize() {
         this.background.render();

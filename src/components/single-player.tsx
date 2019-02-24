@@ -1,7 +1,7 @@
 import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { GameCanvas } from "./game-canvas";
+import { OwnGameCanvas } from "./own-game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
 import { Sounds } from "audio";
@@ -26,7 +26,7 @@ export class SinglePlayer extends React.Component {
         return (
             <section className={css.game}>
                 <div className={css.wrapper}>
-                    <GameCanvas />
+                    <OwnGameCanvas />
                     <Info />
                 </div>
             </section>

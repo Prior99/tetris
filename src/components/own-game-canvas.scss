@@ -1,0 +1,14 @@
+@import "colors.scss";
+
+.gameCanvas {
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px inset lighten($black, 10%);
+
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -o-crisp-edges;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}

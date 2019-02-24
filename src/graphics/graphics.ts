@@ -4,10 +4,10 @@ import { Config } from "config";
 import { vec2, Vec2 } from "utils";
 import { Constructable } from "types";
 import { SpriteManager, Sprite } from "sprites";
+import { differenceInMilliseconds } from "date-fns";
 
 @component
 export abstract class Graphics {
-    @inject protected gameState: GameState;
     @inject protected config: Config;
     @inject protected sprites: SpriteManager;
 
@@ -15,10 +15,21 @@ export abstract class Graphics {
     public ctx: CanvasRenderingContext2D;
     public pixelSize = vec2(0, 0);
 
+    private timeStarted?: Date;
+
+    constructor() {
+        this.timeStarted = new Date();
+    }
+
     public updateCanvas(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
         this.ctx.imageSmoothingEnabled = false;
+    }
+
+    public get seconds() {
+        if (!this.timeStarted) { return 0; }
+        return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
     }
 
     protected get cellPixelSize(): Vec2 {
@@ -53,7 +64,7 @@ export abstract class Graphics {
             position,
             dimensions,
             this.ctx,
-            typeof time === "number" ? time : this.gameState.seconds,
+            typeof time === "number" ? time : this.seconds,
         );
     }
 }

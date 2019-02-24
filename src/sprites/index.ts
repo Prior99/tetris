@@ -11,4 +11,5 @@ export * from "./sprite-tetrimino-o";
 export * from "./sprite-tetrimino-s";
 export * from "./sprite-tetrimino-t";
 export * from "./sprite-tetrimino-z";
+export * from "./sprite-tetrimino-other";
 export * from "./sprite";

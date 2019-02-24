@@ -24,6 +24,10 @@ export class NetworkGame {
     }
 
     public update(userId: string, matrix: Matrix) {
-        this.playfields.set(userId, matrix);
+        this.playfields.get(userId)!.update(matrix);
+    }
+
+    public byUser(userId: string) {
+        return this.playfields.get(userId);
     }
 }

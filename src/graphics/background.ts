@@ -1,11 +1,14 @@
-import { component, initialize } from "tsdi";
+import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
+import { GameState } from "game";
 import { vec2, Vec2 } from "utils";
 import { SpriteFloorWhiteTiles, SpriteFloorWood }  from "sprites";
 import { Graphics } from "./graphics";
 
 @component
 export class Background extends Graphics {
+    @inject private gameState: GameState;
+
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
 

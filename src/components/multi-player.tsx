@@ -2,7 +2,8 @@ import * as React from "react";
 import { Networking, RemoteUsers, NetworkGame } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { GameCanvas } from "./game-canvas";
+import { OwnGameCanvas } from "./own-game-canvas";
+import { OtherGameCanvas } from "./other-game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
 import { Sounds } from "audio";
@@ -31,9 +32,13 @@ export class MultiPlayer extends React.Component {
         return (
             <section className={css.game}>
                 <div className={css.wrapper}>
-                    <GameCanvas />
+                    <OwnGameCanvas />
                     <Info />
-                    { this.users.all.map(user => <RemoteGame userId={user.id} />) }
+                    {
+                        this.users.all
+                            .filter(user => user.id !== this.networking.id)
+                            .map(user => <RemoteGame key={user.id} userId={user.id} />)
+                    }
                 </div>
             </section>
         );

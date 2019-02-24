@@ -1,12 +1,14 @@
-import { component, initialize } from "tsdi";
+import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
-import { CellColor } from "game";
+import { CellColor, GameState } from "game";
 import { Graphics } from "./graphics";
 import { SpriteTetriminoLight } from "sprites";
 
 @component
 export class Lighting extends Graphics {
+    @inject private gameState: GameState;
+
     @initialize
     protected async initialize() {
         this.updateCanvas(document.createElement("canvas"));

@@ -2,14 +2,14 @@ import * as React from "react";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
-import { Rendering } from "graphics";
-import * as css from "./game-canvas.scss";
+import { OwnGame } from "graphics";
+import * as css from "./own-game-canvas.scss";
 import { vec2 } from "utils";
 
 @external
-export class GameCanvas extends React.Component {
+export class OwnGameCanvas extends React.Component {
     @inject private config: Config;
-    @inject private rendering: Rendering;
+    @inject private ownGame: OwnGame;
 
     private canvas?: HTMLCanvasElement;
 
@@ -20,7 +20,7 @@ export class GameCanvas extends React.Component {
 
     @initialize protected initialize() {
         const renderLoop = () => {
-            this.rendering.render();
+            this.ownGame.render();
             window.requestAnimationFrame(renderLoop);
         };
         renderLoop();
@@ -34,7 +34,7 @@ export class GameCanvas extends React.Component {
         const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
         const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
 
-        this.rendering.rescale(adjustedSize);
+        this.ownGame.rescale(adjustedSize);
 
         canvas.style.width = `${adjustedSize.x}px`;
         canvas.style.height = `${adjustedSize.y}px`;
@@ -42,7 +42,7 @@ export class GameCanvas extends React.Component {
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
-        this.rendering.updateCanvas(canvas);
+        this.ownGame.updateCanvas(canvas);
         this.rescale();
     }
 

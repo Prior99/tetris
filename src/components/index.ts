@@ -1,4 +1,5 @@
-export * from "./game-canvas";
+export * from "./own-game-canvas";
+export * from "./other-game-canvas";
 export * from "./single-player";
 export * from "./settings";
 export * from "./info";
