@@ -3,4 +3,8 @@
 
 .lobby {
     @extend .menu;
+
+    .chat {
+        padding-left: 20px;
+    }
 }

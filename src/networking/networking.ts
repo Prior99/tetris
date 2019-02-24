@@ -1,6 +1,6 @@
 import Peer from "peerjs";
 import { observable } from "mobx";
-import { component, initialize, inject } from "tsdi";
+import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
@@ -20,27 +20,42 @@ export class Networking {
 
     private peer: Peer;
     private connection: Peer.DataConnection;
-    private connections: Peer.DataConnection[] = [];
+    private connections = new Map<string, Peer.DataConnection>();
 
     @observable public id: string;
     @observable public remoteId: string;
     @observable public name = generateName();
     @observable public mode = NetworkingMode.DISCONNECTED;
 
-    @initialize protected initialize() {
-        this.peer = new Peer(null as any, { debug: 3 });
-        this.peer.on("open", () => {
-            this.id = this.peer.id;
-            this.peer.on("connection", this.handleConnect);
+    protected initialize(): Promise<undefined> {
+        return new Promise(resolve => {
+            this.peer = new Peer(null as any, { debug: 3 });
+            this.peer.on("open", () => {
+                this.id = this.peer.id;
+                this.peer.on("connection", this.handleConnect);
+                resolve();
+            });
         });
     }
 
-   @bind private handleMessage(connectionId: string, message: Message) {
+    private forwardMessage(originId: string, message: Message) {
+        if (this.mode !== NetworkingMode.HOST) {
+            return;
+        }
+        if ([MessageType.HELLO, MessageType.WELCOME].includes(message.message)) {
+            return;
+        }
+        Array.from(this.connections.entries())
+            .filter(([id, connection]) => id !== originId)
+            .forEach(([id, connection]) => this.sendTo(connection, message));
+    }
+
+    @bind private handleMessage(connectionId: string, message: Message) {
         console.log(connectionId, message); // tslint:disable-line
+        this.forwardMessage(connectionId, message);
         switch (message.message) {
             case MessageType.CHAT_MESSAGE: {
                 this.chat.add(message.chatMessage);
-                this.broadcast(message);
                 break;
             }
             case MessageType.WELCOME: {
@@ -54,8 +69,11 @@ export class Networking {
         }
     }
 
-    public broadcast(message: Message) {
-        if (this.mode !== NetworkingMode.HOST) { return; }
+    public send(message: Message) {
+        if (this.mode === NetworkingMode.CLIENT) {
+            this.sendTo(this.connection, message);
+            return;
+        }
         this.connections.forEach(connection => this.sendTo(connection, message));
     }
 
@@ -75,18 +93,18 @@ export class Networking {
                     message: MessageType.WELCOME,
                     users: this.users.all,
                 });
-                this.broardcast({
+                this.send({
                     message: MessageType.USER_CONNECTED,
                     user: message.user,
                 });
-                this.connections.push(connection);
-            } else {
-                if (connectionId) {
-                    this.handleMessage(connectionId, message);
-                } else {
-                    console.error(`Received message without previous HELLO: ${json}`);
-                }
+                this.connections.set(connectionId, connection);
+                return;
             }
+            if (connectionId) {
+                this.handleMessage(connectionId, message);
+                return;
+            }
+            console.error(`Received message without previous HELLO: ${json}`);
         });
     }
 
@@ -108,8 +126,8 @@ export class Networking {
         });
     }
 
-    public host() {
-        this.initialize();
+    public async host() {
+        await this.initialize();
         this.mode = NetworkingMode.HOST;
         this.users.add({
             id: this.id,
@@ -118,11 +136,11 @@ export class Networking {
     }
 
     public sendChatMessage(text: string) {
-        if (this.mode === NetworkingMode.CLIENT) {
-            this.connection.send({
-                message: MessageType.CHAT_MESSAGE,
-                chatMessage: { text, userId: this.id, date: new Date() },
-            });
-        }
+        const chatMessage = { text, userId: this.id, date: new Date() };
+        this.chat.add(chatMessage);
+        this.send({
+            message: MessageType.CHAT_MESSAGE,
+            chatMessage,
+        });
     }
 }

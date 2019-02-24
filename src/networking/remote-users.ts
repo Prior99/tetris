@@ -13,4 +13,8 @@ export class RemoteUsers {
     public get all() {
         return Array.from(this.users.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
+
+    public byId(id: string) {
+        return this.users.get(id);
+    }
 }
