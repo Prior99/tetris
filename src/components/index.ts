@@ -7,3 +7,4 @@ export * from "./loader-screen";
 export * from "./router";
 export * from "./connect";
 export * from "./chat-message";
+export * from "./tetrimino-preview";

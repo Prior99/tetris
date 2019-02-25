@@ -7,6 +7,7 @@ import * as css from "./single-player.scss";
 import { Sounds } from "audio";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
+import { TetriminoPreviews } from "./tetrimino-previews";
 
 @external @observer
 export class SinglePlayer extends React.Component {
@@ -28,6 +29,7 @@ export class SinglePlayer extends React.Component {
                 <div className={css.wrapper}>
                     <OwnGameCanvas />
                     <Info />
+                    <TetriminoPreviews />
                 </div>
             </section>
         );

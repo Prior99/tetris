@@ -24,7 +24,7 @@ export class Sprite {
         let offset = this.offsetInAnimation(time);
         let index = 0;
         let frame: Frame | undefined = undefined;
-        while (offset > 0) {
+        while (offset >= 0) {
             frame = this.atlas.frames[index];
             offset -= frame.duration / 1000;
             index++;

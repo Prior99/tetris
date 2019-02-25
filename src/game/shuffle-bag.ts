@@ -1,4 +1,5 @@
 import { component } from "tsdi";
+import { action, observable, computed } from "mobx";
 import * as Random from "random-seed";
 import {
     Tetrimino,
@@ -14,7 +15,7 @@ import { Constructable } from "types";
 
 @component
 export class ShuffleBag {
-    private sequence: Constructable<Tetrimino>[] = [];
+    @observable private sequence: Tetrimino[] = [];
     private random: Random.RandomSeed;
 
     public seed(seed = `${Math.random}`.replace(/\./, "")) {
@@ -31,27 +32,27 @@ export class ShuffleBag {
         return result;
     }
 
-    public take(): Tetrimino {
+    @action public take(): Tetrimino {
         if (!this.random) { throw new Error("Can't take from unitialized bag."); }
         const nextTetrimino = this.sequence.shift()!;
         if (this.sequence.length <= 7) { this.refill(); }
-        return new nextTetrimino();
+        return nextTetrimino;
     }
 
-    public get nextFive(): Constructable<Tetrimino>[] {
+    @computed public get nextFive(): Tetrimino[] {
         if (!this.random) { throw new Error("Can't peek into from unitialized bag."); }
         return this.sequence.slice(0, 5);
     }
 
     private refill() {
         this.sequence.push(...this.shuffle([
-            TetriminoI,
-            TetriminoJ,
-            TetriminoL,
-            TetriminoO,
-            TetriminoS,
-            TetriminoT,
-            TetriminoZ,
+            new TetriminoI(),
+            new TetriminoJ(),
+            new TetriminoL(),
+            new TetriminoO(),
+            new TetriminoS(),
+            new TetriminoT(),
+            new TetriminoZ(),
         ]));
     }
 }
