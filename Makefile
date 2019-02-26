@@ -22,6 +22,9 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/floor-white-tiles.ase --data assets/floor-white-tiles.json --sheet assets/floor-white-tiles.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-tetris.ase --data assets/floor-tetris.json --sheet assets/floor-tetris.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-stars.ase --data assets/floor-stars.json --sheet assets/floor-stars.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-love.ase --data assets/floor-love.json --sheet assets/floor-love.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-bricks.ase --data assets/floor-bricks.json --sheet assets/floor-bricks.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-carpet.ase --data assets/floor-carpet.json --sheet assets/floor-carpet.png
 
 .PHONY: build
 build: node_modules assets

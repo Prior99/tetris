@@ -2,7 +2,15 @@ import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { GameState } from "game";
 import { vec2, Vec2 } from "utils";
-import { SpriteFloorWhiteTiles, SpriteFloorWood, SpriteFloorTetris, SpriteFloorStars }  from "sprites";
+import {
+    SpriteFloorLove,
+    SpriteFloorBricks,
+    SpriteFloorCarpet,
+    SpriteFloorWhiteTiles,
+    SpriteFloorWood,
+    SpriteFloorTetris,
+    SpriteFloorStars,
+}  from "sprites";
 import { Graphics } from "./graphics";
 
 @component
@@ -19,9 +27,11 @@ export class Background extends Graphics {
 
     protected get spriteClass() {
         const { level } = this.gameState;
-        if (level < 1) { return SpriteFloorTetris; }
-        if (level < 2) { return SpriteFloorStars; }
-        if (level < 3) { return SpriteFloorWood; }
+        if (level < 1) { return SpriteFloorBricks; }
+        if (level < 2) { return SpriteFloorTetris; }
+        if (level < 4) { return SpriteFloorStars; }
+        if (level < 6) { return SpriteFloorLove; }
+        if (level < 8) { return SpriteFloorWood; }
         return SpriteFloorWhiteTiles;
     }
 
