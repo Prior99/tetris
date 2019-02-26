@@ -9,7 +9,7 @@ import { Constructable } from "types";
 import { Config } from "./config";
 
 const allSprites: Constructable<Sprite>[] =
-    without(["ImageManager", "SpriteFloor", "SpriteManager", "Sprite"], Object.keys(sprites))
+    without(["ImageManager", "SpriteFloor", "SpriteManager", "Sprite", "TintedSprite"], Object.keys(sprites))
     .map(key => sprites[key]);
 
 const allAudios: Constructable<Audio>[] =

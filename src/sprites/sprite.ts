@@ -4,11 +4,11 @@ import { vec2, Vec2 } from "utils";
 import { ImageManager } from "./image-manager";
 
 export class Sprite {
-    @inject private images: ImageManager;
+    @inject protected images: ImageManager;
 
     constructor (public atlas: Atlas) {}
 
-    public get image(): HTMLImageElement {
+    public get image(): CanvasImageSource {
         return this.images.image(this.atlas.meta.image);
     }
 

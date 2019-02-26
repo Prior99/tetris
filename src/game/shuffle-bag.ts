@@ -36,6 +36,7 @@ export class ShuffleBag {
         if (!this.random) { throw new Error("Can't take from unitialized bag."); }
         const nextTetrimino = this.sequence.shift()!;
         if (this.sequence.length <= 7) { this.refill(); }
+        nextTetrimino.refreshGhostPosition();
         return nextTetrimino;
     }
 

@@ -52,6 +52,10 @@ export class Vec2 {
     public mod(other: Vec2): Vec2 {
         return vec2(this.x % other.x, this.y % other.y);
     }
+
+    distance(other: Vec2): number {
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    }
 }
 
 export function vec2(x: number, y: number): Vec2 {

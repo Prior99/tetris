@@ -7,6 +7,7 @@ import { Config } from "config";
 import { speed } from "./speed";
 import { Tetrimino } from "./tetriminos";
 import { Playfield } from "./playfield";
+import { vec2, Vec2 } from "utils";
 import {
     Sounds,
     musicSpeedForLevel,
@@ -38,6 +39,8 @@ export class GameState {
         softDrops: number;
         hardDrops: number;
     };
+    public lastHitPosition?: Vec2;
+
     private running = false;
     private timeout?: any;
     private comboCount = 0;
@@ -151,7 +154,8 @@ export class GameState {
 
     private commitTetrimino() {
         this.sounds.play(AudioHit);
-        this.playfield.update(this.current.tetrimino.overlayedOnMatrix());
+        const { tetrimino } = this.current;
+        this.playfield.update(tetrimino.overlayedOnMatrix());
         const { matrix, count } = this.playfield.removeHorizontals();
         if (count > 0) {
             this.comboCount++;
@@ -176,6 +180,7 @@ export class GameState {
             }
         }
         this.lastHit = new Date();
+        this.lastHitPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));
         this.newTetrimino();
     }
 

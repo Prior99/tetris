@@ -29,10 +29,9 @@ export class Tetrimino {
             case Rotation.DEG_180: this.matrix = this.matrix.rotateRight().rotateRight(); break;
             case Rotation.DEG_270: this.matrix = this.matrix.rotateLeft(); break;
         }
-        this.refreshGhostPosition();
     }
 
-    protected refreshGhostPosition() {
+    public refreshGhostPosition() {
         this.ghostPosition = this.calculateHardDropOffset().offset;
     }
 
