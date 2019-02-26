@@ -1,5 +1,7 @@
 export * from "./sprite-floor-white-tiles";
 export * from "./sprite-floor-wood";
+export * from "./sprite-floor-stars";
+export * from "./sprite-floor-tetris";
 export * from "./sprite-floor";
 export * from "./sprite-manager";
 export * from "./sprite-tetrimino-ghost";

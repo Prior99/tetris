@@ -20,6 +20,8 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-light.ase --data assets/tetrimino-light.json --sheet assets/tetrimino-light.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-wood.ase --data assets/floor-wood.json --sheet assets/floor-wood.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-white-tiles.ase --data assets/floor-white-tiles.json --sheet assets/floor-white-tiles.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-tetris.ase --data assets/floor-tetris.json --sheet assets/floor-tetris.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-stars.ase --data assets/floor-stars.json --sheet assets/floor-stars.png
 
 .PHONY: build
 build: node_modules assets
