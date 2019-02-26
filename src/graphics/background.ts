@@ -5,7 +5,6 @@ import { vec2, Vec2 } from "utils";
 import {
     SpriteFloorLove,
     SpriteFloorBricks,
-    SpriteFloorCarpet,
     SpriteFloorWhiteTiles,
     SpriteFloorWood,
     SpriteFloorTetris,

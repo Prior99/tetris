@@ -11,7 +11,6 @@ import {
     TetriminoT,
     TetriminoZ,
 } from "./tetriminos";
-import { Constructable } from "types";
 
 @component
 export class ShuffleBag {

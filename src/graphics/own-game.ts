@@ -2,21 +2,9 @@ import { component, inject, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
 import { CellColor, GameState } from "game";
-import {
-    Sprite,
-    SpriteTetriminoI,
-    SpriteTetriminoJ,
-    SpriteTetriminoL,
-    SpriteTetriminoO,
-    SpriteTetriminoS,
-    SpriteTetriminoT,
-    SpriteTetriminoZ,
-    SpriteTetriminoGhost,
-} from "sprites";
 import { Lighting } from "./lighting";
 import { Background } from "./background";
 import { Graphics } from "./graphics";
-import { Constructable } from "types";
 import { spriteForCellColor } from "./sprite-for-cell-color";
 
 @component

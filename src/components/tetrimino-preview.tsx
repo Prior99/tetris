@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { inject, external, initialize } from "tsdi";
+import { inject, external } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { spriteForCellColor } from "graphics";
@@ -25,8 +25,6 @@ export class TetriminoPreview extends React.Component<{ matrix: Matrix }> {
     @bind private rescale() {
         const { canvas } = this;
         if (!canvas) { return; }
-        const rect = canvas.getBoundingClientRect();
-
         const dimensions = this.props.matrix.dimensions.mult(this.config.tetriminoPixelSize);
         canvas.width = dimensions.x;
         canvas.height = dimensions.y;
