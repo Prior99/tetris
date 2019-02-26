@@ -7,6 +7,14 @@ import {
     SpriteTetriminoS,
     SpriteTetriminoT,
     SpriteTetriminoZ,
+    SpriteTetriminoLightI,
+    SpriteTetriminoLightJ,
+    SpriteTetriminoLightL,
+    SpriteTetriminoLightO,
+    SpriteTetriminoLightS,
+    SpriteTetriminoLightT,
+    SpriteTetriminoLightZ,
+    SpriteTetriminoLightGhost,
     SpriteTetriminoGhost,
     Sprite,
 } from "sprites";
@@ -23,5 +31,18 @@ export function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> 
         case CellColor.TETRIMINO_T: return SpriteTetriminoT;
         case CellColor.TETRIMINO_Z: return SpriteTetriminoZ;
         case CellColor.GHOST: return SpriteTetriminoGhost;
+    }
+}
+
+export function lightSpriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
+    switch (cellColor) {
+        case CellColor.TETRIMINO_I: return SpriteTetriminoLightI;
+        case CellColor.TETRIMINO_J: return SpriteTetriminoLightJ;
+        case CellColor.TETRIMINO_L: return SpriteTetriminoLightL;
+        case CellColor.TETRIMINO_O: return SpriteTetriminoLightO;
+        case CellColor.TETRIMINO_S: return SpriteTetriminoLightS;
+        case CellColor.TETRIMINO_T: return SpriteTetriminoLightT;
+        case CellColor.TETRIMINO_Z: return SpriteTetriminoLightZ;
+        case CellColor.GHOST: return SpriteTetriminoLightGhost;
     }
 }
