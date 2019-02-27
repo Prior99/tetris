@@ -3,7 +3,7 @@
 .gameCanvas {
     height: 100%;
     box-sizing: border-box;
-    border: 1px inset lighten($black, 10%);
+    border-radius: 5px;
 
     image-rendering: optimizeSpeed;
     image-rendering: -moz-crisp-edges;

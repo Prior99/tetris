@@ -27,8 +27,8 @@ export class SinglePlayer extends React.Component {
         return (
             <section className={css.game}>
                 <div className={css.wrapper}>
-                    <OwnGameCanvas />
                     <Info />
+                    <OwnGameCanvas />
                     <TetriminoPreviews />
                 </div>
             </section>

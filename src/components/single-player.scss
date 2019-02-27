@@ -1,3 +1,5 @@
+@import "colors.scss";
+
 .game {
     display: flex;
     justify-content: center;
@@ -8,5 +10,8 @@
     .wrapper {
         display: flex;
         justify-content: center;
+        border: 2px solid $white;
+        border-radius: 5px;
+        background: $white;
     }
 }

@@ -1,4 +1,8 @@
+@import "colors.scss";
+
 .tetriminoPreviews {
     display: flex;
     flex-direction: column;
+    background: $white;
+    padding: 10px;
 }
