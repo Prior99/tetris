@@ -1,7 +1,5 @@
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-const extractCSS = new ExtractTextPlugin('bundle.css');
+const { HotModuleReplacementPlugin } = require("webpack");
 
 module.exports = {
     mode: "development",
@@ -42,44 +40,45 @@ module.exports = {
                 },
             }, {
                 test: /\.css$/,
-                loader: extractCSS.extract({
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: { sourceMap: true },
-                        }, {
-                            loader: "resolve-url-loader",
-                        },
-                    ],
-                }),
+                use: [
+                    {
+                        loader: "style-loader",
+                    }, {
+                        loader: "css-loader",
+                        options: { sourceMap: true },
+                    }, {
+                        loader: "resolve-url-loader",
+                    },
+                ],
             }, {
                 test: /\.scss$/,
-                loader: extractCSS.extract({
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: {
-                                modules: true,
-                                importLoaders: 1,
-                                sourceMap: true
-                            },
-                        }, {
-                            loader: "resolve-url-loader"
-                        }, {
-                            loader: "sass-loader",
-                            options: { sourceMap: true },
+                use: [
+                    {
+                        loader: "style-loader",
+                    }, {
+                        loader: "css-loader",
+                        options: {
+                            modules: true,
+                            importLoaders: 1,
+                            sourceMap: true
                         },
-                    ],
-                }),
+                    }, {
+                        loader: "resolve-url-loader"
+                    }, {
+                        loader: "sass-loader",
+                        options: { sourceMap: true },
+                    },
+                ]
             },
         ],
     },
     devtool: "source-map",
     devServer: {
         port: 6100,
-        historyApiFallback: true
+        historyApiFallback: true,
+        hot: true,
     },
     plugins: [
-        extractCSS,
+        new HotModuleReplacementPlugin(),
     ],
 };
