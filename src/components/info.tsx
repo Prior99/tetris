@@ -1,6 +1,7 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
 import { GameState } from "game";
+import { IncomingGabage } from "./incoming-garbage";
 import { observer } from "mobx-react";
 import * as css from "./info.scss";
 
@@ -42,6 +43,18 @@ export class Info extends React.Component {
                         {this.gameState.level}
                     </div>
                 </div>
+                {
+                    this.gameState.incomingGarbage.length > 0 ? (
+                        <div className={css.garbage}>
+                            <div className={css.label}>
+                                Incoming
+                            </div>
+                            <div className={css.value}>
+                                {this.gameState.incomingGarbage.map(garbage => <IncomingGabage garbage={garbage} />)}
+                            </div>
+                        </div>
+                    ) : <></>
+                }
             </div>
         );
     }

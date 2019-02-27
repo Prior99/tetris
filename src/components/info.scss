@@ -46,4 +46,11 @@
             font-size: 20pt;
         }
     }
+
+    .garbage {
+        @extend .infoBlock;
+
+        height: auto;
+        padding-bottom: 10px;
+    }
 }

@@ -61,8 +61,8 @@ export class GameState {
     private timeout?: any;
     private comboCount = 0;
     private lastHit?: Date;
-    public outgoingGarbage: Garbage[] = [];
-    public incomingGarbage: Garbage[] = [];
+    @observable public outgoingGarbage: Garbage[] = [];
+    @observable public incomingGarbage: Garbage[] = [];
 
     public reset() {
         this.playfield.reset();
@@ -235,7 +235,10 @@ export class GameState {
             }
             this.scoreLineCount(count);
             const clearedGarbageLines = this.cancelIncomingGarbage(count);
-            this.outgoingGarbage.push({ date: new Date(), lines: calculateGarbage(count) + clearedGarbageLines });
+            const lines = calculateGarbage(count) + clearedGarbageLines;
+            if (lines > 0) {
+                this.outgoingGarbage.push({ date: new Date(), lines });
+            }
         } else {
             const { level, comboCount } = this;
             if (this.comboCount >= 2) {

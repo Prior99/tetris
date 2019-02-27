@@ -1,0 +1,18 @@
+@import "colors.scss";
+
+.garbage {
+    margin-bottom: 7px;
+
+    .label {
+        font-family: antipasto;
+        font-size: 12pt;
+    }
+
+    .garbageProgress {
+        width: 100%;
+
+        .progressInner {
+            border-bottom: 2px solid $white;
+        }
+    }
+}
