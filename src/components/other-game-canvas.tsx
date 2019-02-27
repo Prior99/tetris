@@ -3,18 +3,19 @@ import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OtherGame } from "graphics";
-import * as css from "./own-game-canvas.scss";
+import * as css from "./other-game-canvas.scss";
 import { vec2 } from "utils";
+import { RemoteGameState } from "networking";
 import { Matrix } from "game";
 
 @external
-export class OtherGameCanvas extends React.Component<{ matrix: Matrix }> {
+export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: RemoteGameState }> {
     @inject private config: Config;
 
     private canvas?: HTMLCanvasElement;
     private renderer: OtherGame;
 
-    constructor(props: { matrix: Matrix }) {
+    constructor(props: { matrix: Matrix, state: RemoteGameState }) {
         super(props);
         window.addEventListener("resize", this.rescale);
         this.renderer = new OtherGame(props.matrix);
@@ -50,7 +51,30 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix }> {
 
     public render() {
         return (
-            <canvas ref={this.canvasRef} className={css.gameCanvas} />
+            <div className={css.canvasWrapper}>
+                {
+                    this.props.state.toppedOut ? (
+                        <div className={css.gameOver}>
+                            <div className={css.gameOverText}>Game over</div>
+                            <div className={css.gameOverStats}>
+                                <div className={css.info}>
+                                    <div className={css.label}>Score</div>
+                                    <div className={css.value}>{this.props.state.score}</div>
+                                </div>
+                                <div className={css.info}>
+                                    <div className={css.label}>Lines</div>
+                                    <div className={css.value}>{this.props.state.lines}</div>
+                                </div>
+                                <div className={css.info}>
+                                    <div className={css.label}>Level</div>
+                                    <div className={css.value}>{this.props.state.level}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : <></>
+                }
+                <canvas ref={this.canvasRef} className={css.gameCanvas} />
+            </div>
         );
     }
 }

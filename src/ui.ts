@@ -19,10 +19,16 @@ export enum Page {
     MULTI_PLAYER = "multi-player",
 }
 
+export enum GameMode {
+    SINGLE_PLAYER = "single-player",
+    MULTI_PLAYER = "multi-player",
+}
+
 @component
 export class UI {
     @observable private volume = { music: 0.5, sounds: 0.6 };
     @observable public page = Page.MENU;
+    @observable public gameMode: GameMode;
 
     @initialize protected initialize() {
         const json = localStorage.getItem(localStorageIdentifier);

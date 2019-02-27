@@ -7,6 +7,7 @@ import * as css from "./single-player.scss";
 import { Sounds } from "audio";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
+import { UI, GameMode } from "ui";
 import { TetriminoPreviews } from "./tetrimino-previews";
 
 @external @observer
@@ -15,12 +16,14 @@ export class SinglePlayer extends React.Component {
     @inject private shuffleBag: ShuffleBag;
     @inject private gameState: GameState;
     @inject private input: Input;
+    @inject private ui: UI;
 
     @initialize protected initialize() {
         this.sounds.startGame();
         this.shuffleBag.seed();
         this.gameState.start();
         this.input.enable();
+        this.ui.gameMode = GameMode.SINGLE_PLAYER;
     }
 
     public render() {

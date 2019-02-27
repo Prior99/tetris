@@ -6,7 +6,7 @@ export enum MessageType {
     USER_DISCONNECTED,
     CHAT_MESSAGE,
     UPDATE_PLAYFIELD,
-    TOP_OUT,
+    RESTART,
 }
 
 export interface RemoteUser {
@@ -45,15 +45,23 @@ export interface MessageUserDisconnected {
     userId: string;
 }
 
+export interface MessageRestart {
+    message: MessageType.RESTART;
+}
+
 export interface MessageUpdatePlayfield {
     message: MessageType.UPDATE_PLAYFIELD;
     userId: string;
     matrix: string;
+    state: RemoteGameState;
 }
 
-export interface MessageTopOut {
-    message: MessageType.TOP_OUT;
-    userId: string;
+export interface RemoteGameState {
+    score: number;
+    lines: number;
+    level: number;
+    milliseconds: number;
+    toppedOut: boolean;
 }
 
 export interface MessageChatMessage {
@@ -67,4 +75,4 @@ export type Message = MessageHello |
     MessageUserConnected |
     MessageUpdatePlayfield |
     MessageChatMessage |
-    MessageTopOut;
+    MessageRestart;

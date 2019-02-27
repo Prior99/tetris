@@ -9,6 +9,6 @@ export class Playfield extends Matrix {
     }
 
     public reset() {
-        this.update(new Matrix(this.config!.logicalSize))
+        this.update(new Matrix(this.config!.logicalSize));
     }
 }

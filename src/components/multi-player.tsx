@@ -9,6 +9,7 @@ import { Sounds } from "audio";
 import { RemoteGame } from "./remote-game";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
+import { UI, GameMode } from "ui";
 import { TetriminoPreviews } from "./tetrimino-previews";
 
 @external @observer
@@ -20,12 +21,14 @@ export class MultiPlayer extends React.Component {
     @inject private shuffleBag: ShuffleBag;
     @inject private gameState: GameState;
     @inject private input: Input;
+    @inject private ui: UI;
 
     @initialize protected initialize() {
-        this.sounds.startGame();
         this.shuffleBag.seed(this.networkGame.seed);
+        this.sounds.startGame();
         this.gameState.start();
         this.input.enable();
+        this.ui.gameMode = GameMode.MULTI_PLAYER;
     }
 
     public render() {

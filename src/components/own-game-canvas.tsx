@@ -5,6 +5,8 @@ import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OwnGame } from "graphics";
 import { GameState } from "game";
+import { UI, GameMode } from "ui";
+import { Networking, NetworkingMode, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
 import { vec2 } from "utils";
 
@@ -13,6 +15,9 @@ export class OwnGameCanvas extends React.Component {
     @inject private config: Config;
     @inject private ownGame: OwnGame;
     @inject private gameState: GameState;
+    @inject private ui: UI;
+    @inject private networking: Networking;
+    @inject private networkGame: NetworkGame;
 
     private canvas?: HTMLCanvasElement;
 
@@ -50,8 +55,18 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleReset() {
-        this.gameState.reset();
-        this.gameState.start();
+        if (this.ui.gameMode === GameMode.SINGLE_PLAYER || this.networking.mode === NetworkingMode.HOST) {
+            this.gameState.reset();
+            this.gameState.start();
+        }
+        this.networking.restart();
+    }
+
+    public get canRestart() {
+        return this.ui.gameMode === GameMode.SINGLE_PLAYER || (
+            this.networking.mode === NetworkingMode.HOST &&
+            this.networkGame.allStates.every(({ toppedOut }) => toppedOut)
+        );
     }
 
     public render() {
@@ -61,7 +76,11 @@ export class OwnGameCanvas extends React.Component {
                     this.gameState.toppedOut ? (
                         <div className={css.gameOver}>
                             <div className={css.gameOverText}>Game over</div>
-                            <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
+                            {
+                                this.canRestart ? (
+                                    <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
+                                    ) : <></>
+                            }
                         </div>
                     ) : <></>
                 }

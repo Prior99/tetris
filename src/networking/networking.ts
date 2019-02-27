@@ -1,13 +1,14 @@
 import Peer from "peerjs";
+import { differenceInMilliseconds } from "date-fns";
 import { observable } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
-import { Message, MessageType } from "./messages";
+import { Message, MessageType, RemoteGameState } from "./messages";
 import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
 import { generateName } from "names";
 import { UI, Page } from "ui";
-import { Matrix, Playfield } from "game";
+import { Matrix, Playfield, GameState } from "game";
 import { Chat } from "./chat";
 import { Config } from "config";
 
@@ -25,6 +26,7 @@ export class Networking {
     @inject private networkGame: NetworkGame;
     @inject private config: Config;
     @inject private playfield: Playfield;
+    @inject private gameState: GameState;
 
     private peer: Peer;
     private connection: Peer.DataConnection;
@@ -79,6 +81,14 @@ export class Networking {
             }
             case MessageType.UPDATE_PLAYFIELD: {
                 this.networkGame.update(message.userId, new Matrix(this.config.logicalSize, message.matrix));
+                this.networkGame.updateState(message.userId, message.state);
+                break;
+            }
+            case MessageType.RESTART: {
+                this.gameState.reset();
+                this.playfield.reset();
+                this.gameState.start();
+                this.networkGame.reset();
                 break;
             }
         }
@@ -171,22 +181,35 @@ export class Networking {
         this.startGame(seed);
     }
 
+    public restart() {
+        this.send({ message: MessageType.RESTART });
+    }
+
     private startGame(seed: string) {
         this.networkGame.start(seed);
         this.playfieldLoop();
         this.ui.page = Page.MULTI_PLAYER;
     }
 
-    public updateMatrix(matrix: Matrix) {
+    public updateMatrix(matrix: Matrix, state: RemoteGameState) {
         this.send({
             message: MessageType.UPDATE_PLAYFIELD,
             userId: this.id,
             matrix: matrix.toBase64(),
+            state,
         });
     }
 
     public playfieldLoop() {
-        this.updateMatrix(this.playfield);
+        const state = {
+            score: this.gameState.score,
+            lines: this.gameState.lines,
+            level: this.gameState.level,
+            milliseconds: differenceInMilliseconds(new Date(), this.gameState.timeStarted!),
+            toppedOut: this.gameState.toppedOut,
+        };
+        this.networkGame.updateState(this.id, state);
+        this.updateMatrix(this.playfield, state);
         setTimeout(() => this.playfieldLoop(), this.config.networkSpeed * 1000);
     }
 }

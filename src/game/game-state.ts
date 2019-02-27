@@ -41,17 +41,12 @@ export class GameState {
         hardDrops: number;
     };
     public lastHitPosition?: Vec2;
+    public timeStarted?: Date;
 
     private running = false;
     private timeout?: any;
     private comboCount = 0;
-    private timeStarted?: Date;
     private lastHit?: Date;
-
-    @initialize
-    protected initialize() {
-        this.reset();
-    }
 
     public reset() {
         this.playfield.reset();
@@ -237,6 +232,7 @@ export class GameState {
     public get temporaryState() { return this.current!.tetrimino.overlayedOnMatrixWithGhost(); }
 
     public start() {
+        this.reset();
         this.running = true;
         this.update();
         this.timeStarted = new Date();
