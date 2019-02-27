@@ -32,9 +32,13 @@ export class Menu extends React.Component {
             <section className={css.menu}>
                 <div className={css.wrapper}>
                     <h1>Fretris</h1>
-                    <a onClick={this.handleSinglePlayer}>Singleplayer</a>
-                    <a onClick={this.handleSettings}>Settings</a>
-                    <a onClick={this.handleMultiplayer}>Multiplayer</a>
+                    <div className={css.content}>
+                        <ul>
+                            <li><a onClick={this.handleSinglePlayer}>Singleplayer</a></li>
+                            <li><a onClick={this.handleSettings}>Settings</a></li>
+                            <li><a onClick={this.handleMultiplayer}>Multiplayer</a></li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         );

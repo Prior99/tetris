@@ -41,13 +41,22 @@ export class Connect extends React.Component {
             <section className={css.connect}>
                 <div className={css.wrapper}>
                     <h1>Connect</h1>
-                    <p>Change name: <input value={this.networking.name} onChange={this.handleNameChange} /></p>
-                    <p>
-                        Join: <input value={this.otherId} onChange={this.handleOtherIdChange} />
-                        <button onClick={this.handleConnect}>Join</button>
-                    </p>
-                    <p><button style={{ width: "100%" }} onClick={this.handleHost}>Host</button></p>
-                    <a onClick={this.handleBack}>Back</a>
+                    <div className={css.content}>
+                        <p>Change name</p>
+                        <input
+                            className={css.inputFullWidth}
+                            value={this.networking.name}
+                            onChange={this.handleNameChange}
+                        />
+                        <p>Join</p>
+                        <p className={css.inputFullWidth}>
+                            <input value={this.otherId} onChange={this.handleOtherIdChange} />
+                            <button onClick={this.handleConnect}>Join</button>
+                        </p>
+                        <p>Host</p>
+                        <p><button style={{ width: "100%" }} onClick={this.handleHost}>Host</button></p>
+                        <a onClick={this.handleBack}>Back</a>
+                    </div>
                 </div>
             </section>
         );

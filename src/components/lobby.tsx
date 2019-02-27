@@ -35,27 +35,52 @@ export class Lobby extends React.Component {
     public render() {
         return (
             <section className={css.lobby}>
-                <div className={css.wrapper}>
-                    <h1>Lobby</h1>
-                    {
-                        this.networking.mode === NetworkingMode.CLIENT
-                            ?  <p>Connected to <b>{this.networking.remoteId}</b></p>
-                            :  <p>Hosting as <b>{this.networking.id}</b></p>
-                    }
-                    <p>Users</p>
-                    <ul>
-                        {this.users.all.map(user => <li key={user.id}>{user.name}</li>)}
-                    </ul>
-                    <p>Chat</p>
-                    <ul className={css.chat}>
-                        {this.chat.messages.map((message, index) => <ChatMessage key={index} message={message} />)}
-                    </ul>
-                    <p>
-                        <input value={this.chatText} onChange={this.handleChatTextChange} />
-                        <button onClick={this.handleChatSend}>Send</button>
-                    </p>
-                    <button style={{ width: "100%" }} onClick={this.handleStart}>Start</button>
-                    <a onClick={this.handleBack}>Back</a>
+                <div className={css.outer}>
+                    <div className={css.leftColumn}>
+                        <div className={css.wrapper}>
+                            <h1>Lobby</h1>
+                            <div className={css.content}>
+                                <div className={css.id}>
+                                    {
+                                        this.networking.mode === NetworkingMode.CLIENT
+                                            ? this.networking.remoteId
+                                            : this.networking.id
+                                    }
+                                </div>
+                                {
+                                    this.networking.mode === NetworkingMode.HOST ? (
+                                        <button style={{ width: "100%" }} onClick={this.handleStart}>Start</button>
+                                    ) : <></>
+                                }
+                                <a onClick={this.handleBack}>Back</a>
+                            </div>
+                        </div>
+                        <div className={css.wrapper}>
+                            <h1>Users</h1>
+                            <div className={css.content}>
+                                <ul className={css.users}>
+                                    {this.users.all.map(user => <li key={user.id}>{user.name}</li>)}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={css.wrapper}>
+                        <h1>Chat</h1>
+                        <div className={css.content}>
+                            <ul className={css.chat}>
+                                <li>Your chat history starts here.</li>
+                                {
+                                    this.chat.messages.map((message, index) => {
+                                        return <ChatMessage key={index} message={message} />;
+                                    })
+                                }
+                            </ul>
+                            <p className={css.inputFullWidth}>
+                                <input value={this.chatText} onChange={this.handleChatTextChange} />
+                                <button onClick={this.handleChatSend}>Send</button>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
         );

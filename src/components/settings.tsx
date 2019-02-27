@@ -41,11 +41,25 @@ export class Settings extends React.Component {
             <section className={css.settings}>
                 <div className={css.wrapper}>
                     <h1>Settings</h1>
-                    <p>Music</p>
-                    <input type="range" min={1} max={100} value={this.volumeMusic} onChange={this.handleVolumeMusic}/>
-                    <p>Sounds</p>
-                    <input type="range" min={1} max={100} value={this.volumeSounds} onChange={this.handleVolumeSounds}/>
-                    <a onClick={this.handleBack}>Back</a>
+                    <div className={css.content}>
+                        <p>Music</p>
+                        <input
+                            type="range"
+                            min={1}
+                            max={100}
+                            value={this.volumeMusic}
+                            onChange={this.handleVolumeMusic}
+                        />
+                        <p>Sounds</p>
+                        <input
+                            type="range"
+                            min={1}
+                            max={100}
+                            value={this.volumeSounds}
+                            onChange={this.handleVolumeSounds}
+                        />
+                        <a onClick={this.handleBack}>Back</a>
+                    </div>
                 </div>
             </section>
         );

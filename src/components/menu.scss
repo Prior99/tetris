@@ -9,30 +9,58 @@
     width: 100%;
 
     .wrapper {
+        background: $white;
+        min-width: 300px;
+        color: $black;
+        border-radius: 5px;
+        margin: 5px;
+
+        .content {
+            padding: 5px 10px;
+        }
+
         h1 {
-            color: $white;
             width: 100%;
-            border-bottom: 1px solid $white;
+            padding-left: 10px;
+            border-bottom: 1px solid $black;
+            margin: 5px 0;
         }
 
         p {
             margin: 10px 0;
-            color: $white;
+
+            &.inputFullWidth {
+                display: flex;
+                width: 100%;
+
+                input {
+                    flex-grow: 1;
+                }
+
+                button {
+                    flex-shrink: 1;
+                    margin: 0 0 0 5px;
+                }
+            }
         }
 
         a {
             font-weight: bold;
             margin: 10px 0;
             display: block;
-            color: $white;
             cursor: pointer;
         }
 
         input {
-            background: lighten($black, 10%);
+            background: lighten($black, 20%);
             border: none;
             color: $white;
-            padding: 2px;
+            padding: 2px 5px;
+            box-sizing: border-box;
+
+            &.inputFullWidth {
+                width: 100%;
+            }
         }
 
         button {
@@ -40,11 +68,18 @@
             border: none;
             color: $white;
             padding: 2px;
-            margin: 0 5px;
         }
 
         ul {
-            color: $white;
+            padding-left: 20px;
+
+            li {
+                list-style: none;
+            }
+
+            li:hover {
+                list-style: square;
+            }
         }
     }
 }
