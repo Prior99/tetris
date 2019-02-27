@@ -6,6 +6,7 @@ export enum MessageType {
     USER_DISCONNECTED,
     CHAT_MESSAGE,
     UPDATE_PLAYFIELD,
+    TOP_OUT,
 }
 
 export interface RemoteUser {
@@ -50,6 +51,11 @@ export interface MessageUpdatePlayfield {
     matrix: string;
 }
 
+export interface MessageTopOut {
+    message: MessageType.TOP_OUT;
+    userId: string;
+}
+
 export interface MessageChatMessage {
     message: MessageType.CHAT_MESSAGE;
     chatMessage: ChatMessage;
@@ -60,4 +66,5 @@ export type Message = MessageHello |
     MessageWelcome |
     MessageUserConnected |
     MessageUpdatePlayfield |
-    MessageChatMessage;
+    MessageChatMessage |
+    MessageTopOut;

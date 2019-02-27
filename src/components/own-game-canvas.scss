@@ -1,14 +1,46 @@
 @import "colors.scss";
 
-.gameCanvas {
-    height: 100%;
-    box-sizing: border-box;
-    border-radius: 5px;
 
-    image-rendering: optimizeSpeed;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: -o-crisp-edges;
-    image-rendering: pixelated;
-    -ms-interpolation-mode: nearest-neighbor;
+.canvasWrapper {
+    position: relative;
+
+    .gameCanvas {
+        height: 100%;
+        box-sizing: border-box;
+        border-radius: 5px;
+
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -o-crisp-edges;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+    }
+
+    .gameOver {
+        font-family: antipasto;
+        color: white;
+        width: 100%;
+        height: 100%;
+        background: rgba($black, 0.5);
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        flex-direction: column;
+
+        .gameOverText {
+            display: block;
+            font-size: 40pt;
+        }
+
+        .restart {
+            display: block;
+            font-size: 20pt;
+            cursor: pointer;
+        }
+    }
 }
