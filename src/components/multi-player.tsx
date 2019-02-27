@@ -4,11 +4,12 @@ import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { OwnGameCanvas } from "./own-game-canvas";
 import { Info } from "./info";
-import * as css from "./single-player.scss";
+import * as css from "./multi-player.scss";
 import { Sounds } from "audio";
 import { RemoteGame } from "./remote-game";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
+import { TetriminoPreviews } from "./tetrimino-previews";
 
 @external @observer
 export class MultiPlayer extends React.Component {
@@ -29,10 +30,13 @@ export class MultiPlayer extends React.Component {
 
     public render() {
         return (
-            <section className={css.game}>
+            <section className={css.multiPlayer}>
                 <div className={css.wrapper}>
-                    <OwnGameCanvas />
                     <Info />
+                    <OwnGameCanvas />
+                    <TetriminoPreviews />
+                </div>
+                <div className={css.others}>
                     {
                         this.users.all
                             .filter(user => user.id !== this.networking.id)

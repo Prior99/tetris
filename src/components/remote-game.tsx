@@ -13,7 +13,7 @@ export class RemoteGame extends React.Component<{ userId: string }> {
     public render() {
         return (
             <section className={css.remoteGame}>
-                <p>{this.users.byId(this.props.userId)!.name}</p>
+                <div className={css.headline}>{this.users.byId(this.props.userId)!.name}</div>
                 <OtherGameCanvas matrix={this.networkGame.byUser(this.props.userId)!} />
             </section>
         );
