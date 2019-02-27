@@ -235,7 +235,7 @@ export class GameState {
             }
             this.scoreLineCount(count);
             const clearedGarbageLines = this.cancelIncomingGarbage(count);
-            const lines = calculateGarbage(count) + clearedGarbageLines;
+            const lines = calculateGarbage(count) + Math.floor(clearedGarbageLines / 2);
             if (lines > 0) {
                 this.outgoingGarbage.push({ date: new Date(), lines });
             }

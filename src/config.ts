@@ -12,7 +12,7 @@ export class Config {
     public inputRotateRepeatTimeout = 10 / 60;
     public tetriminoPixelSize = 32;
     public loadStride = 2;
-    public garbageTimeout = 5;
+    public garbageTimeout = 4;
 
     public get visibleRatio() {
         return this.visibleSize.x / this.visibleSize.y;
