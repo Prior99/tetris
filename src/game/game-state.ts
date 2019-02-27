@@ -1,4 +1,4 @@
-import { component, inject, initialize } from "tsdi";
+import { component, inject } from "tsdi";
 import { computed, observable } from "mobx";
 import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
@@ -21,6 +21,20 @@ import {
     AudioLevelUp,
 } from "audio";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
+
+export interface Garbage {
+    lines: number;
+    date: Date;
+}
+
+function calculateGarbage(lines: number): number {
+    switch (lines) {
+        case 1: return 0;
+        case 2: return 1;
+        case 3: return 2;
+        default: return lines;
+    }
+}
 
 @component
 export class GameState {
@@ -47,6 +61,8 @@ export class GameState {
     private timeout?: any;
     private comboCount = 0;
     private lastHit?: Date;
+    public outgoingGarbage: Garbage[] = [];
+    public incomingGarbage: Garbage[] = [];
 
     public reset() {
         this.playfield.reset();
@@ -86,9 +102,22 @@ export class GameState {
         }
     }
 
+    private isGarbageTimeout(garbage: Garbage): boolean {
+        return differenceInMilliseconds(new Date(), garbage.date) > this.config.garbageTimeout * 1000;
+    }
+
+    private processGarbage() {
+        this.incomingGarbage.forEach(garbage => {
+            if (!this.isGarbageTimeout(garbage)) { return; }
+            this.playfield.addGarbageLines(garbage.lines);
+        });
+        this.incomingGarbage = this.incomingGarbage.filter(garbage => !this.isGarbageTimeout(garbage));
+    }
+
     @bind private update() {
         if (!this.running) { return; }
         this.processMatrix();
+        this.processGarbage();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
         if (this.debug) {
             console.log(this.temporaryState.toString()); // tslint:disable-line
@@ -172,6 +201,23 @@ export class GameState {
         }
     }
 
+    private cancelIncomingGarbage(count: number): number {
+        let cancelled = 0;
+        while (count > 0) {
+            if (this.incomingGarbage.length === 0) { return cancelled; }
+            const incoming = this.incomingGarbage[this.incomingGarbage.length - 1];
+            cancelled += incoming.lines;
+            if (incoming.lines > count) {
+                incoming.lines -= count;
+                break;
+            } else {
+                this.incomingGarbage.pop();
+                count -= incoming.lines;
+            }
+        }
+        return cancelled;
+    }
+
     private commitTetrimino() {
         this.sounds.play(AudioHit);
         const { tetrimino } = this.current!;
@@ -188,6 +234,8 @@ export class GameState {
                 this.playScoreSound(count);
             }
             this.scoreLineCount(count);
+            const clearedGarbageLines = this.cancelIncomingGarbage(count);
+            this.outgoingGarbage.push({ date: new Date(), lines: calculateGarbage(count) + clearedGarbageLines });
         } else {
             const { level, comboCount } = this;
             if (this.comboCount >= 2) {

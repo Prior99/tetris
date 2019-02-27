@@ -167,4 +167,17 @@ describe("Matrix", () => {
             ]));
         });
     });
+
+    describe("moveUp", () => {
+        it("moves the lines up", () => {
+            expect(matrixA.moveUp(4)).toEqual(new Matrix(vec2(4, 6), [
+                0, 1, 2, 2,
+                1, 1, 2, 2,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+            ]));
+        });
+    });
 });

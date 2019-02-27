@@ -45,7 +45,7 @@ export class Matrix {
         return this.state[pos.x + (this.dimensions.y - pos.y - 1) * this.dimensions.x];
     }
 
-    private put(pos: Vec2, cellColor: CellColor) {
+    protected put(pos: Vec2, cellColor: CellColor) {
         this.state[pos.x + (this.dimensions.y - pos.y - 1) * this.dimensions.x] = cellColor;
     }
 
@@ -197,5 +197,19 @@ export class Matrix {
 
     public toBase64(): string {
         return btoa(String.fromCharCode(...this.state));
+    }
+
+    public moveUp(lines: number) {
+        const result = new Matrix(this);
+        for (let y = result.dimensions.y - 1; y >= 0; --y) {
+            for (let x = 0; x < result.dimensions.x; ++x) {
+                if (y + lines < 0) {
+                    result.put(vec2(x, y), CellColor.EMPTY);
+                } else {
+                    result.put(vec2(x, y), this.at(vec2(x, y - lines)));
+                }
+            }
+        }
+        return result;
     }
 }

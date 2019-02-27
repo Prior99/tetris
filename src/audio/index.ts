@@ -13,5 +13,6 @@ export * from "./audio-score-1";
 export * from "./audio-score-2";
 export * from "./audio-score-3";
 export * from "./audio-score-4";
+export * from "./audio-alert";
 export * from "./audio";
 export * from "./sounds";

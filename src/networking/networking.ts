@@ -8,7 +8,7 @@ import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
 import { generateName } from "names";
 import { UI, Page } from "ui";
-import { Matrix, Playfield, GameState } from "game";
+import { Matrix, Playfield, GameState, Garbage } from "game";
 import { Chat } from "./chat";
 import { Config } from "config";
 
@@ -89,6 +89,12 @@ export class Networking {
                 this.playfield.reset();
                 this.gameState.start();
                 this.networkGame.reset();
+                break;
+            }
+            case MessageType.GARBAGE: {
+                if (this.id === message.targetId) {
+                    this.gameState.incomingGarbage.push(message.garbage);
+                }
                 break;
             }
         }
@@ -200,6 +206,17 @@ export class Networking {
         });
     }
 
+    public updateGarbage() {
+        this.gameState.outgoingGarbage.forEach(garbage => {
+            this.send({
+                message: MessageType.GARBAGE,
+                targetId: this.randomOtherUser().id,
+                garbage,
+            });
+        });
+        this.gameState.outgoingGarbage = [];
+    }
+
     public playfieldLoop() {
         const state = {
             score: this.gameState.score,
@@ -210,6 +227,15 @@ export class Networking {
         };
         this.networkGame.updateState(this.id, state);
         this.updateMatrix(this.playfield, state);
+        this.updateGarbage();
         setTimeout(() => this.playfieldLoop(), this.config.networkSpeed * 1000);
+    }
+
+    public get otherUsers() {
+        return this.users.all.filter(user => user.id !== this.id);
+    }
+
+    public randomOtherUser() {
+        return this.otherUsers[Math.floor(Math.random() * this.otherUsers.length)];
     }
 }

@@ -15,7 +15,7 @@ export class Lighting extends Graphics {
     }
 
     private renderCell(position: Vec2, cellColor: CellColor) {
-        if (cellColor === CellColor.EMPTY) {
+        if (cellColor === CellColor.EMPTY || cellColor === CellColor.GARBAGE) {
             return;
         }
         const spriteClass = lightSpriteForCellColor(cellColor)!;

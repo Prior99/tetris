@@ -1,3 +1,5 @@
+import { Garbage } from "game";
+
 export enum MessageType {
     HELLO,
     START,
@@ -7,6 +9,7 @@ export enum MessageType {
     CHAT_MESSAGE,
     UPDATE_PLAYFIELD,
     RESTART,
+    GARBAGE,
 }
 
 export interface RemoteUser {
@@ -45,6 +48,12 @@ export interface MessageUserDisconnected {
     userId: string;
 }
 
+export interface MessageGarbage {
+    message: MessageType.GARBAGE;
+    garbage: Garbage;
+    targetId: string;
+}
+
 export interface MessageRestart {
     message: MessageType.RESTART;
 }
@@ -75,4 +84,5 @@ export type Message = MessageHello |
     MessageUserConnected |
     MessageUpdatePlayfield |
     MessageChatMessage |
-    MessageRestart;
+    MessageRestart |
+    MessageGarbage;
