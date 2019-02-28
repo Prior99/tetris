@@ -25,6 +25,7 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/floor-love.ase --data assets/floor-love.json --sheet assets/floor-love.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-bricks.ase --data assets/floor-bricks.json --sheet assets/floor-bricks.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-carpet.ase --data assets/floor-carpet.json --sheet assets/floor-carpet.png
+	aseprite ${ASEPRITE_FLAGS} ase/effect-line-cleared.ase --data assets/effect-line-cleared.json --sheet assets/effect-line-cleared.png
 
 .PHONY: build
 build: node_modules assets

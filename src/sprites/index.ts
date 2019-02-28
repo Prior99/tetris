@@ -24,5 +24,6 @@ export * from "./sprite-tetrimino-light-t";
 export * from "./sprite-tetrimino-light-z";
 export * from "./sprite-tetrimino-light-ghost";
 export * from "./sprite-tetrimino-other";
+export * from "./sprite-effect-line-cleared";
 export * from "./sprite";
 export * from "./tinted-sprite";

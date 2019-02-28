@@ -21,6 +21,7 @@ import {
     AudioLevelUp,
 } from "audio";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
+import { Effects, EffectType } from "./effects";
 
 export interface Garbage {
     lines: number;
@@ -42,6 +43,7 @@ export class GameState {
     @inject private shuffleBag: ShuffleBag;
     @inject private playfield: Playfield;
     @inject private sounds: Sounds;
+    @inject private events: Effects;
 
     public initialized?: Date;
     public lastTick?: Date;
@@ -223,7 +225,8 @@ export class GameState {
         this.sounds.play(AudioHit);
         const { tetrimino } = this.current!;
         this.playfield.update(tetrimino.overlayedOnMatrix());
-        const { matrix, count } = this.playfield.removeHorizontals();
+        const { matrix, offsets } = this.playfield.removeHorizontals();
+        const count = offsets.length;
         if (count > 0) {
             this.comboCount++;
             this.playfield.update(matrix);
@@ -240,6 +243,7 @@ export class GameState {
             if (lines > 0) {
                 this.outgoingGarbage.push({ date: new Date(), lines });
             }
+            offsets.forEach(y => this.events.report({ effect: EffectType.LINE_CLEARED, y }));
         } else {
             const { level, comboCount } = this;
             if (this.comboCount >= 2) {

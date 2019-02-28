@@ -117,16 +117,17 @@ export class Matrix {
         return result;
     }
 
-    public removeHorizontals(): { matrix: Matrix, count: number } {
+    public removeHorizontals(): { matrix: Matrix, offsets: number[] } {
         const matrix = new Matrix(this);
         const { fullHorizontals } = matrix;
+        const offsets = [...fullHorizontals];
         const count = fullHorizontals.length;
         while (fullHorizontals.length > 0) {
             const current = fullHorizontals.shift();
             matrix.removeHorizontal(current!);
             fullHorizontals.forEach((y, index) => fullHorizontals[index] = y - 1);
         }
-        return { matrix, count };
+        return { matrix, offsets };
     }
 
     public get fullHorizontals(): number[] {

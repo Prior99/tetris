@@ -6,3 +6,4 @@ export * from "./scoring";
 export * from "./shuffle-bag";
 export * from "./speed";
 export * from "./tetriminos";
+export * from "./effects";
