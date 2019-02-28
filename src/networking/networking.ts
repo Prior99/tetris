@@ -8,7 +8,7 @@ import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
 import { generateName } from "names";
 import { UI, Page } from "ui";
-import { Matrix, Playfield, GameState, Garbage, ShuffleBag } from "game";
+import { Matrix, Playfield, GameState, ShuffleBag } from "game";
 import { Chat } from "./chat";
 import { Config } from "config";
 
