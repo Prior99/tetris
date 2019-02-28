@@ -33,15 +33,15 @@ export class Lighting extends Graphics {
             ? this.gameState.lastHitPosition.distance(position)
             : Number.POSITIVE_INFINITY;
         const time = this.gameState.timeSinceLastHit < totalDuration
-            ? Math.min(totalDuration - 0.2, this.gameState.timeSinceLastHit + distance / 5)
-            : totalDuration - 0.2;
+            ? Math.min(totalDuration - 0.2, this.gameState.timeSinceLastHit * 3 + distance / 2)
+            : totalDuration - 0.15;
         this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
     }
 
     @bind public render() {
         this.renderClear();
         this.ctx.globalCompositeOperation = "lighten";
-        this.ctx.fillStyle = "rgb(100, 100, 100)";
+        this.ctx.fillStyle = "rgb(25, 25, 25)";
         this.ctx.fillRect(0, 0, this.pixelSize.x, this.pixelSize.y);
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {
