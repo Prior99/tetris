@@ -6,12 +6,12 @@ export enum EffectType {
 }
 
 export interface EffectLineCleared {
-    effect: EffectType.LINE_CLEARED,
+    effect: EffectType.LINE_CLEARED;
     y: number;
 }
 
 export interface EffectLinesCleared {
-    effect: EffectType.LINES_CLEARED,
+    effect: EffectType.LINES_CLEARED;
     count: number;
 }
 

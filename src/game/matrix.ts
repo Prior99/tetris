@@ -121,7 +121,6 @@ export class Matrix {
         const matrix = new Matrix(this);
         const { fullHorizontals } = matrix;
         const offsets = [...fullHorizontals];
-        const count = fullHorizontals.length;
         while (fullHorizontals.length > 0) {
             const current = fullHorizontals.shift();
             matrix.removeHorizontal(current!);
