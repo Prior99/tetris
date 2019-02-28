@@ -3,6 +3,7 @@ import { vec2, Vec2 } from "utils";
 import { Matrix } from "../matrix";
 import { Playfield } from "../playfield";
 import { CellColor } from "../cell-color";
+import { Config } from "config";
 
 export enum Rotation {
     DEG_0 = 0,
@@ -14,6 +15,8 @@ export enum Rotation {
 @external
 export class Tetrimino {
     @inject private playfield: Playfield;
+    @inject private config: Config;
+
     private ghostPosition: Vec2;
 
     constructor(
@@ -94,6 +97,12 @@ export class Tetrimino {
                     this.setRotation(Rotation.DEG_180);
                 }
                 return;
+        }
+    }
+
+    public moveSafeUp() {
+        while (this.isStuck && this.offset.y <= this.config.visibleSize.y) {
+            this.offset = this.offset.add(vec2(0, 1));
         }
     }
 
@@ -196,5 +205,9 @@ export class Tetrimino {
 
     public hasHitFloor() {
         return this.playfield.collides(this.matrix, this.offset.add(vec2(0, -1)));
+    }
+
+    public get isStuck() {
+        return this.playfield.collides(this.matrix, this.offset);
     }
 }

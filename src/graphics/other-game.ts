@@ -2,9 +2,7 @@ import { external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
 import { CellColor, Matrix } from "game";
-import {
-    SpriteTetriminoOther,
-} from "sprites";
+import { SpriteTetriminoOther, SpriteTetriminoGhost } from "sprites";
 import { Graphics } from "./graphics";
 
 @external
@@ -16,11 +14,18 @@ export class OtherGame extends Graphics {
     }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
-        const { ctx } = this;
-        if (!ctx) { return; }
-        if (cellColor !== CellColor.EMPTY) {
-            const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
-            this.renderSprite(SpriteTetriminoOther, position, this.cellPixelSize);
+        if (!this.ctx) { return; }
+        const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
+        switch (cellColor) {
+            case CellColor.EMPTY: { break; }
+            case CellColor.GHOST: {
+                this.renderSprite(SpriteTetriminoGhost, position, this.cellPixelSize);
+                break;
+            }
+            default: {
+                this.renderSprite(SpriteTetriminoOther, position, this.cellPixelSize);
+                break;
+            }
         }
     }
 

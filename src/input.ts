@@ -118,6 +118,10 @@ export class Input {
                 this.gameState.debug = !this.gameState.debug;
                 break;
             }
+            case "g": {
+                this.gameState.outgoingGarbage.push({ date: new Date(), lines: 2 });
+                break;
+            }
         }
     }
 }

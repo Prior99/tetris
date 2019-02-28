@@ -8,7 +8,7 @@ import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
 import { generateName } from "names";
 import { UI, Page } from "ui";
-import { Matrix, Playfield, GameState, Garbage } from "game";
+import { Matrix, Playfield, GameState, Garbage, ShuffleBag } from "game";
 import { Chat } from "./chat";
 import { Config } from "config";
 
@@ -27,6 +27,7 @@ export class Networking {
     @inject private config: Config;
     @inject private playfield: Playfield;
     @inject private gameState: GameState;
+    @inject private shuffleBag: ShuffleBag;
 
     private peer: Peer;
     private connection: Peer.DataConnection;
@@ -89,6 +90,7 @@ export class Networking {
                 this.playfield.reset();
                 this.gameState.start();
                 this.networkGame.reset();
+                this.shuffleBag.reset(message.seed);
                 break;
             }
             case MessageType.GARBAGE: {
@@ -187,8 +189,8 @@ export class Networking {
         this.startGame(seed);
     }
 
-    public restart() {
-        this.send({ message: MessageType.RESTART });
+    public restart(seed: string) {
+        this.send({ message: MessageType.RESTART, seed });
     }
 
     private startGame(seed: string) {
@@ -208,9 +210,11 @@ export class Networking {
 
     public updateGarbage() {
         this.gameState.outgoingGarbage.forEach(garbage => {
+            const target = this.randomOtherAliveUser();
+            if (!target) { return; }
             this.send({
                 message: MessageType.GARBAGE,
-                targetId: this.randomOtherUser().id,
+                targetId: target.id,
                 garbage,
             });
         });
@@ -226,16 +230,20 @@ export class Networking {
             toppedOut: this.gameState.toppedOut,
         };
         this.networkGame.updateState(this.id, state);
-        this.updateMatrix(this.playfield, state);
+        this.updateMatrix(this.gameState.temporaryState, state);
         this.updateGarbage();
         setTimeout(() => this.playfieldLoop(), this.config.networkSpeed * 1000);
     }
 
-    public get otherUsers() {
-        return this.users.all.filter(user => user.id !== this.id);
+    public get otherAliveUsers() {
+        return this.users.all
+            .filter(user => user.id !== this.id)
+            .filter(user => !this.networkGame.stateForUser(user.id)!.toppedOut);
     }
 
-    public randomOtherUser() {
-        return this.otherUsers[Math.floor(Math.random() * this.otherUsers.length)];
+    public randomOtherAliveUser() {
+        const { otherAliveUsers } = this;
+        if (otherAliveUsers.length === 0) { return; }
+        return otherAliveUsers[Math.floor(Math.random() * otherAliveUsers.length)];
     }
 }

@@ -107,11 +107,12 @@ export class GameState {
     }
 
     private processGarbage() {
-        this.incomingGarbage.forEach(garbage => {
-            if (!this.isGarbageTimeout(garbage)) { return; }
-            this.playfield.addGarbageLines(garbage.lines);
-        });
+        const relevantGarbage = this.incomingGarbage.filter(garbage => this.isGarbageTimeout(garbage));
+        if (relevantGarbage.length === 0) { return; }
+        relevantGarbage.forEach(garbage => this.playfield.addGarbageLines(garbage.lines));
         this.incomingGarbage = this.incomingGarbage.filter(garbage => !this.isGarbageTimeout(garbage));
+        this.current!.tetrimino.refreshGhostPosition();
+        this.current!.tetrimino.moveSafeUp();
     }
 
     @bind private update() {
@@ -280,7 +281,12 @@ export class GameState {
         }
     }
 
-    public get temporaryState() { return this.current!.tetrimino.overlayedOnMatrixWithGhost(); }
+    public get temporaryState() {
+        if (!this.current) {
+            return this.playfield;
+        }
+        return this.current.tetrimino.overlayedOnMatrixWithGhost();
+    }
 
     public start() {
         this.reset();

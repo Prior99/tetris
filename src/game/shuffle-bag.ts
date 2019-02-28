@@ -55,4 +55,9 @@ export class ShuffleBag {
             new TetriminoZ(),
         ]));
     }
+
+    public reset(seed: string) {
+        this.sequence = [];
+        this.seed(seed);
+    }
 }

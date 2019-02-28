@@ -56,6 +56,7 @@ export interface MessageGarbage {
 
 export interface MessageRestart {
     message: MessageType.RESTART;
+    seed: string;
 }
 
 export interface MessageUpdatePlayfield {

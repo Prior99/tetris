@@ -4,7 +4,7 @@ import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OwnGame } from "graphics";
-import { GameState } from "game";
+import { GameState, ShuffleBag } from "game";
 import { UI, GameMode } from "ui";
 import { Networking, NetworkingMode, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
@@ -18,6 +18,7 @@ export class OwnGameCanvas extends React.Component {
     @inject private ui: UI;
     @inject private networking: Networking;
     @inject private networkGame: NetworkGame;
+    @inject private shuffleBag: ShuffleBag;
 
     private canvas?: HTMLCanvasElement;
 
@@ -55,11 +56,13 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleReset() {
+        const seed = `${Math.random}`.replace(/\./, "");
         if (this.ui.gameMode === GameMode.SINGLE_PLAYER || this.networking.mode === NetworkingMode.HOST) {
             this.gameState.reset();
             this.gameState.start();
+            this.shuffleBag.reset(seed);
         }
-        this.networking.restart();
+        this.networking.restart(seed);
     }
 
     public get canRestart() {
