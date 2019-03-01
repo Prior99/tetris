@@ -44,6 +44,7 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
+        if (!canvas) { return; }
         this.canvas = canvas;
         this.renderer.updateCanvas(canvas);
         this.rescale();
