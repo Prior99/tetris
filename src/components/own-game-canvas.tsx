@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { observable } from "mobx";
+import { observable, reaction } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
@@ -41,6 +41,7 @@ export class OwnGameCanvas extends React.Component {
         };
         this.leaderboardName = this.ui.name || "";
         renderLoop();
+        reaction(() => this.gameState.toppedOut, () => this.submitted = false);
     }
 
     @bind private rescale() {
@@ -110,7 +111,7 @@ export class OwnGameCanvas extends React.Component {
                             {
                                 this.canRestart ? (
                                     <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
-                                    ) : <></>
+                                ) : <></>
                             }
                             {
                                 this.submitted ? (
