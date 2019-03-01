@@ -93,7 +93,7 @@ export class Networking {
             }
             case MessageType.GARBAGE: {
                 if (this.id === message.targetId) {
-                    this.gameState.incomingGarbage.push(message.garbage);
+                    this.gameState.addIncomingGarbage(message.garbage);
                 }
                 break;
             }

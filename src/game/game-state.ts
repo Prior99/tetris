@@ -93,6 +93,7 @@ export class GameState {
     }
 
     public addIncomingGarbage(garbage: Garbage) {
+        garbage.date = new Date();
         this.incomingGarbage.push(garbage);
         this.sounds.play(AudioIncomingWarning);
     }
