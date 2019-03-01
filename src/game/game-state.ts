@@ -55,9 +55,11 @@ export class GameState {
         tetrimino: Tetrimino;
         softDrops: number;
         hardDrops: number;
+        usedHoldPiece: boolean;
     };
     public lastHitPosition?: Vec2;
     public timeStarted?: Date;
+    @observable public holdPiece?: Tetrimino;
 
     private running = false;
     private timeout?: any;
@@ -83,6 +85,7 @@ export class GameState {
         this.lastHit = undefined;
         this.initialized = new Date();
         this.lastTick = new Date();
+        this.holdPiece = undefined;
         this.newTetrimino();
     }
 
@@ -162,6 +165,23 @@ export class GameState {
         this.current!.hardDrops = this.current!.tetrimino.hardDrop();
     }
 
+    public inputHoldPiece() {
+        if (this.current!.usedHoldPiece) { return; }
+        const currentHoldPiece = this.holdPiece;
+        this.holdPiece = this.current!.tetrimino;
+        if (currentHoldPiece) {
+            currentHoldPiece.reset();
+            this.current = {
+                tetrimino: currentHoldPiece,
+                softDrops: 0,
+                hardDrops: 0,
+                usedHoldPiece: true,
+            };
+        } else {
+            this.newTetrimino();
+        }
+    }
+
     private moveTetrimino() { this.current!.tetrimino.moveDown(); }
 
     private newTetrimino() {
@@ -174,6 +194,7 @@ export class GameState {
             tetrimino,
             softDrops: 0,
             hardDrops: 0,
+            usedHoldPiece: false,
         };
     }
 

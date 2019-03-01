@@ -4,6 +4,7 @@ import { GameState } from "game";
 import { IncomingGabage } from "./incoming-garbage";
 import { observer } from "mobx-react";
 import * as css from "./info.scss";
+import { TetriminoPreview } from "./tetrimino-preview";
 
 function prefix(str: string, value: string, width: number): string {
     while (str.length < width) {
@@ -19,6 +20,13 @@ export class Info extends React.Component {
     public render() {
         return (
             <div className={css.info}>
+                <div className={css.holdPiece}>
+                    {
+                        this.gameState.holdPiece
+                            ? <TetriminoPreview size={0.7} matrix={this.gameState.holdPiece.matrix} />
+                            : <></>
+                    }
+                </div>
                 <div className={css.score}>
                     <div className={css.label}>
                         Score

@@ -18,12 +18,24 @@ export class Tetrimino {
     @inject private config: Config;
 
     private ghostPosition: Vec2;
+    private initial: {
+        matrix: Matrix;
+        offset: Vec2;
+        rotation: Rotation;
+    };
 
     constructor(
         public matrix: Matrix,
         public offset: Vec2,
         public rotation = Rotation.DEG_0,
-    ) {}
+    ) {
+        this.initial = { matrix, offset, rotation };
+    }
+
+    public reset() {
+        Object.assign(this, this.initial);
+        this.refreshGhostPosition();
+    }
 
     @initialize protected initialize() {
         switch (this.rotation) {

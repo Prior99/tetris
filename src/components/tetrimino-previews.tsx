@@ -12,7 +12,7 @@ export class TetriminoPreviews extends React.Component {
     public render() {
         return (
             <div className={css.tetriminoPreviews}>
-                {this.shuffleBag.nextFive.map(({ matrix }, index) => <TetriminoPreview key={index} matrix={matrix} />)}
+                {this.shuffleBag.preview.map(({ matrix }, index) => <TetriminoPreview key={index} matrix={matrix} />)}
             </div>
         );
     }

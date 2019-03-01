@@ -26,6 +26,7 @@ export class Input {
     @bind private handleKeyUp(evt: KeyboardEvent) {
         switch (evt.key) {
             case "ArrowUp":
+            case "x":
             case "w": {
                 if (this.rotateTimeout) {
                     clearTimeout(this.rotateTimeout);
@@ -63,6 +64,7 @@ export class Input {
     @bind private handleKeyDown(evt: KeyboardEvent) {
         switch (evt.key) {
             case "ArrowUp":
+            case "x":
             case "w": {
                 if (!this.rotateTimeout) {
                     this.gameState.inputRotateRight();
@@ -118,9 +120,9 @@ export class Input {
                 this.gameState.debug = !this.gameState.debug;
                 break;
             }
-            case "g": {
-                this.gameState.outgoingGarbage.push({ date: new Date(), lines: 2 });
-                break;
+            case "Shift":
+            case "c": {
+                this.gameState.inputHoldPiece();
             }
         }
     }

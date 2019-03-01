@@ -10,7 +10,7 @@ import { CellColor, Matrix } from "game";
 import { SpriteManager } from "sprites";
 
 @external @observer
-export class TetriminoPreview extends React.Component<{ matrix: Matrix }> {
+export class TetriminoPreview extends React.Component<{ matrix: Matrix, size?: number }> {
     @inject private sprites: SpriteManager;
     @inject private config: Config;
 
@@ -28,8 +28,9 @@ export class TetriminoPreview extends React.Component<{ matrix: Matrix }> {
         const dimensions = this.props.matrix.dimensions.mult(this.config.tetriminoPixelSize);
         canvas.width = dimensions.x;
         canvas.height = dimensions.y;
-        canvas.style.width = `${dimensions.x / 2}px`;
-        canvas.style.height = `${dimensions.y / 2}px`;
+        const factor = this.props.size ? this.props.size : 0.5;
+        canvas.style.width = `${dimensions.x * factor}px`;
+        canvas.style.height = `${dimensions.y * factor}px`;
     }
 
     private translate(pos: Vec2): Vec2 {
@@ -67,6 +68,7 @@ export class TetriminoPreview extends React.Component<{ matrix: Matrix }> {
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
+        if (!canvas) { return; }
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
         this.renderCanvas();
