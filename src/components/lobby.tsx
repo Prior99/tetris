@@ -64,21 +64,23 @@ export class Lobby extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className={css.wrapper}>
-                        <h1>Chat</h1>
-                        <div className={css.content}>
-                            <ul className={css.chat}>
-                                <li>Your chat history starts here.</li>
-                                {
-                                    this.chat.messages.map((message, index) => {
-                                        return <ChatMessage key={index} message={message} />;
-                                    })
-                                }
-                            </ul>
-                            <p className={css.inputFullWidth}>
-                                <input value={this.chatText} onChange={this.handleChatTextChange} />
-                                <button onClick={this.handleChatSend}>Send</button>
-                            </p>
+                    <div className={css.rightColumn}>
+                        <div className={css.wrapper}>
+                            <h1>Chat</h1>
+                            <div className={css.content}>
+                                <ul className={css.chat}>
+                                    <li>Your chat history starts here.</li>
+                                    {
+                                        this.chat.messages.map((message, index) => {
+                                            return <ChatMessage key={index} message={message} />;
+                                        })
+                                    }
+                                </ul>
+                                <p className={css.inputFullWidth}>
+                                    <input value={this.chatText} onChange={this.handleChatTextChange} />
+                                    <button onClick={this.handleChatSend}>Send</button>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

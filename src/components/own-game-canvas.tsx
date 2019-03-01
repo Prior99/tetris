@@ -39,7 +39,7 @@ export class OwnGameCanvas extends React.Component {
             this.ownGame.render();
             window.requestAnimationFrame(renderLoop);
         };
-        this.leaderboardName = this.networking.name || "";
+        this.leaderboardName = this.ui.name || "";
         renderLoop();
     }
 

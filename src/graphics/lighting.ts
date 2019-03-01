@@ -18,9 +18,7 @@ export class Lighting extends Graphics {
     }
 
     private renderCell(position: Vec2, cellColor: CellColor) {
-        if (cellColor === CellColor.EMPTY || cellColor === CellColor.GARBAGE) {
-            return;
-        }
+        if (cellColor === CellColor.EMPTY) { return; }
         const spriteClass = lightSpriteForCellColor(cellColor)!;
         const sprite = this.sprites.sprite(spriteClass);
         const margin = vec2(

@@ -6,7 +6,6 @@ import { bind } from "lodash-decorators";
 import { Message, MessageType, RemoteGameState } from "./messages";
 import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
-import { generateName } from "names";
 import { UI, Page } from "ui";
 import { Matrix, Playfield, GameState, ShuffleBag } from "game";
 import { Chat } from "./chat";
@@ -35,7 +34,6 @@ export class Networking {
 
     @observable public id: string;
     @observable public remoteId: string;
-    @observable public name = generateName();
     @observable public mode = NetworkingMode.DISCONNECTED;
 
     protected initialize(): Promise<undefined> {
@@ -148,7 +146,8 @@ export class Networking {
         this.connection = this.peer.connect(remoteId, { reliable: true });
         this.connection.on("open", () => {
             console.log("Connected to host."); // tslint:disable-line
-            const { name, id } = this;
+            const { id } = this;
+            const { name } = this.ui;
             this.connection.send(JSON.stringify({
                 message: MessageType.HELLO,
                 user: { id, name },
@@ -164,7 +163,7 @@ export class Networking {
         this.mode = NetworkingMode.HOST;
         this.users.add({
             id: this.id,
-            name: this.name,
+            name: this.ui.name,
         });
     }
 

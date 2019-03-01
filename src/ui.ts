@@ -1,4 +1,5 @@
 import { component, initialize } from "tsdi";
+import { generateName } from "names";
 import { observable } from "mobx";
 
 const localStorageIdentifier = "FRETRIS";
@@ -8,6 +9,7 @@ interface Settings {
     volumeMusic: number;
     volumeSounds: number;
     version: number;
+    name: string;
 }
 
 export enum Page {
@@ -28,6 +30,7 @@ export enum GameMode {
 @component
 export class UI {
     @observable private volume = { music: 0.5, sounds: 0.6 };
+    @observable private userName = generateName();
     @observable public page = Page.MENU;
     @observable public gameMode: GameMode;
 
@@ -44,11 +47,23 @@ export class UI {
                     music: settings.volumeMusic,
                     sounds: settings.volumeSounds,
                 };
+                if (settings.name) {
+                    this.name = settings.name;
+                }
             }
         } catch (err) {
             console.error(`Failed to parse settings: ${json}`);
             localStorage.removeItem(localStorageIdentifier);
         }
+    }
+
+    get name() {
+        return this.userName;
+    }
+
+    set name(name: string) {
+        this.userName = name;
+        this.save();
     }
 
     get volumeSounds() {
@@ -70,10 +85,11 @@ export class UI {
     }
 
     private save() {
-        const { volumeMusic, volumeSounds } = this;
+        const { volumeMusic, volumeSounds, name } = this;
         const json = JSON.stringify({
             volumeMusic,
             volumeSounds,
+            name,
             version: localStorageVersion,
         });
         localStorage.setItem(localStorageIdentifier, json);

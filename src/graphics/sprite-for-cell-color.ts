@@ -15,6 +15,7 @@ import {
     SpriteTetriminoLightT,
     SpriteTetriminoLightZ,
     SpriteTetriminoLightGhost,
+    SpriteTetriminoLightGarbage,
     SpriteTetriminoOther,
     SpriteTetriminoGhost,
     Sprite,
@@ -46,5 +47,6 @@ export function lightSpriteForCellColor(cellColor: CellColor): Constructable<Spr
         case CellColor.TETRIMINO_T: return SpriteTetriminoLightT;
         case CellColor.TETRIMINO_Z: return SpriteTetriminoLightZ;
         case CellColor.GHOST: return SpriteTetriminoLightGhost;
+        case CellColor.GARBAGE: return SpriteTetriminoLightGarbage;
     }
 }

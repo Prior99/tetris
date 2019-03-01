@@ -19,7 +19,7 @@ export class Connect extends React.Component {
     }
 
     @bind private handleNameChange(evt: React.SyntheticEvent<HTMLInputElement>) {
-        this.networking.name = evt.currentTarget.value;
+        this.ui.name = evt.currentTarget.value;
     }
 
     @bind private handleOtherIdChange(evt: React.SyntheticEvent<HTMLInputElement>) {
@@ -48,7 +48,7 @@ export class Connect extends React.Component {
                         <p className={css.inputFullWidth}>
                             <input
                                 className={css.inputFullWidth}
-                                value={this.networking.name}
+                                value={this.ui.name}
                                 onChange={this.handleNameChange}
                             />
                         </p>
