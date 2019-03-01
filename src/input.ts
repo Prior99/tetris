@@ -117,7 +117,8 @@ export class Input {
                 break;
             }
             case "p": {
-                this.gameState.debug = !this.gameState.debug;
+                // this.gameState.debug = !this.gameState.debug;
+                this.gameState.addIncomingGarbage({ lines: 1, date: new Date() });
                 break;
             }
             case "Shift":

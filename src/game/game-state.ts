@@ -12,7 +12,10 @@ import {
     Sounds,
     musicSpeedForLevel,
     AudioMoveDown,
-    AudioRotate,
+    AudioRotateLeft,
+    AudioRotateRight,
+    AudioIncomingWarning,
+    AudioIncomingCommitted,
     AudioHit,
     AudioScore1,
     AudioScore2,
@@ -89,6 +92,11 @@ export class GameState {
         this.newTetrimino();
     }
 
+    public addIncomingGarbage(garbage: Garbage) {
+        this.incomingGarbage.push(garbage);
+        this.sounds.play(AudioIncomingWarning);
+    }
+
     public get seconds() {
         if (!this.timeStarted) { return 0; }
         return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
@@ -114,6 +122,7 @@ export class GameState {
     private processGarbage() {
         const relevantGarbage = this.incomingGarbage.filter(garbage => this.isGarbageTimeout(garbage));
         if (relevantGarbage.length === 0) { return; }
+        this.sounds.play(AudioIncomingCommitted);
         relevantGarbage.forEach(garbage => this.playfield.addGarbageLines(garbage.lines));
         this.incomingGarbage = this.incomingGarbage.filter(garbage => !this.isGarbageTimeout(garbage));
         this.current!.tetrimino.refreshGhostPosition();
@@ -136,12 +145,12 @@ export class GameState {
     }
 
     public inputRotateRight() {
-        this.sounds.play(AudioRotate);
+        this.sounds.play(AudioRotateRight);
         this.current!.tetrimino.rotateRight();
     }
 
     public inputRotateLeft() {
-        this.sounds.play(AudioRotate);
+        this.sounds.play(AudioRotateLeft);
         this.current!.tetrimino.rotateLeft();
     }
 
