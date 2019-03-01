@@ -18,6 +18,7 @@
         color: $white;
         padding: 2px 5px;
         box-sizing: border-box;
+        font-family: hackregular;
 
         &.inputFullWidth {
             width: 100%;
@@ -29,5 +30,6 @@
         border: none;
         color: $white;
         padding: 2px;
+        font-family: hackregular;
     }
 }
