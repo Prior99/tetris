@@ -17,4 +17,13 @@ export class Config {
     public get visibleRatio() {
         return this.visibleSize.x / this.visibleSize.y;
     }
+
+    public firebaseConfig = {
+        apiKey: "AIzaSyA2--0iNx2_fiFEB3WBQkK6oSvizGE7tBI",
+        authDomain: "fretris.firebaseapp.com",
+        databaseURL: "https://fretris.firebaseio.com",
+        projectId: "fretris",
+        storageBucket: "",
+        messagingSenderId: "822732820309",
+    };
 }

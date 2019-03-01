@@ -1,14 +1,16 @@
 import * as React from "react";
 import { observer } from "mobx-react";
+import { observable } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OwnGame } from "graphics";
 import { GameState, ShuffleBag } from "game";
-import { UI, GameMode } from "ui";
+import { UI, GameMode, Page } from "ui";
 import { Networking, NetworkingMode, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
 import { vec2 } from "utils";
+import { Leaderboard } from "leaderboard";
 
 @external @observer
 export class OwnGameCanvas extends React.Component {
@@ -19,6 +21,11 @@ export class OwnGameCanvas extends React.Component {
     @inject private networking: Networking;
     @inject private networkGame: NetworkGame;
     @inject private shuffleBag: ShuffleBag;
+    @inject private leaderboard: Leaderboard;
+
+    @observable private submitScoreVisible = false;
+    @observable private leaderboardName = "";
+    @observable private submitted = false;
 
     private canvas?: HTMLCanvasElement;
 
@@ -32,6 +39,7 @@ export class OwnGameCanvas extends React.Component {
             this.ownGame.render();
             window.requestAnimationFrame(renderLoop);
         };
+        this.leaderboardName = this.networking.name || "";
         renderLoop();
     }
 
@@ -50,6 +58,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
+        if (!canvas) { return; }
         this.canvas = canvas;
         this.ownGame.updateCanvas(canvas);
         this.rescale();
@@ -63,6 +72,25 @@ export class OwnGameCanvas extends React.Component {
             this.shuffleBag.reset(seed);
         }
         this.networking.restart(seed);
+        this.submitted = false;
+    }
+
+    @bind private handleSubmitScore() {
+        this.submitScoreVisible = true;
+    }
+
+    @bind private handleLeaderboardSubmit() {
+        this.submitScoreVisible = false;
+        this.leaderboard.submitScore(this.leaderboardName, this.gameState.score);
+        this.submitted = true;
+    }
+
+    @bind private handleBack() {
+        this.ui.page = Page.MENU;
+    }
+
+    @bind private handleLeaderboardNameChange(evt: React.SyntheticEvent<HTMLInputElement>) {
+        this.leaderboardName = evt.currentTarget.value;
     }
 
     public get canRestart() {
@@ -84,6 +112,28 @@ export class OwnGameCanvas extends React.Component {
                                     <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
                                     ) : <></>
                             }
+                            {
+                                this.submitted ? (
+                                    <></>
+                                ) : (
+                                    <div className={css.submitScore}>
+                                        {
+                                            !this.submitScoreVisible ? (
+                                                <a onClick={this.handleSubmitScore}>Submit score</a>
+                                            ) : (
+                                                <div className={css.submitScoreForm}>
+                                                    <input
+                                                        value={this.leaderboardName}
+                                                        onChange={this.handleLeaderboardNameChange}
+                                                    />
+                                                    <button onClick={this.handleLeaderboardSubmit}>Submit</button>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                )
+                            }
+                            <div className={css.back}><a onClick={this.handleBack}>Back</a></div>
                         </div>
                     ) : <></>
                 }

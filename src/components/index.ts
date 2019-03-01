@@ -8,3 +8,4 @@ export * from "./router";
 export * from "./connect";
 export * from "./chat-message";
 export * from "./tetrimino-preview";
+export * from "./leaderboard-view";

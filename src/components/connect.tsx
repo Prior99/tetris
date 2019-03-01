@@ -42,12 +42,16 @@ export class Connect extends React.Component {
                 <div className={css.wrapper}>
                     <h1>Connect</h1>
                     <div className={css.content}>
-                        <p>Change name</p>
-                        <input
-                            className={css.inputFullWidth}
-                            value={this.networking.name}
-                            onChange={this.handleNameChange}
-                        />
+                        <p className={css.inputFullWidth}>
+                            Change name
+                        </p>
+                        <p className={css.inputFullWidth}>
+                            <input
+                                className={css.inputFullWidth}
+                                value={this.networking.name}
+                                onChange={this.handleNameChange}
+                            />
+                        </p>
                         <p>Join</p>
                         <p className={css.inputFullWidth}>
                             <input value={this.otherId} onChange={this.handleOtherIdChange} />

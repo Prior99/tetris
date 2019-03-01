@@ -17,6 +17,7 @@ export enum Page {
     LOBBY = "lobby",
     CONNECT = "connect",
     MULTI_PLAYER = "multi-player",
+    LEADERBOARD = "leaderboard",
 }
 
 export enum GameMode {

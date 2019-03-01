@@ -1,0 +1,14 @@
+@import "colors.scss";
+@import "./menu.scss";
+
+.leaderboard {
+    @extend .menu;
+
+    .score {
+        font-weight: bold;
+        width: 80px;
+        text-align: right;
+        margin-right: 5px;
+        display: inline-block;
+    }
+}

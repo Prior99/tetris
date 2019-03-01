@@ -27,6 +27,10 @@ export class Menu extends React.Component {
         this.ui.page = Page.CONNECT;
     }
 
+    @bind private handleLeaderboard() {
+        this.ui.page = Page.LEADERBOARD;
+    }
+
     public render() {
         return (
             <section className={css.menu}>
@@ -37,6 +41,7 @@ export class Menu extends React.Component {
                             <li><a onClick={this.handleSinglePlayer}>Singleplayer</a></li>
                             <li><a onClick={this.handleSettings}>Settings</a></li>
                             <li><a onClick={this.handleMultiplayer}>Multiplayer</a></li>
+                            <li><a onClick={this.handleLeaderboard}>Leaderboard</a></li>
                         </ul>
                     </div>
                 </div>
