@@ -91,6 +91,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleBack() {
+        this.handleReset();
         this.ui.page = Page.MENU;
     }
 
