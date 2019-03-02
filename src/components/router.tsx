@@ -1,7 +1,7 @@
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import * as React from "react";
-import { Loader } from "loader";
+import { Loader } from "resources";
 import { SinglePlayer } from "./single-player";
 import { Settings } from "./settings";
 import { Menu } from "./menu";

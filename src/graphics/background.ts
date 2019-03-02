@@ -3,13 +3,13 @@ import { bind } from "lodash-decorators";
 import { GameState } from "game";
 import { vec2, Vec2 } from "utils";
 import {
-    SpriteFloorLove,
-    SpriteFloorBricks,
-    SpriteFloorWhiteTiles,
-    SpriteFloorWood,
-    SpriteFloorTetris,
-    SpriteFloorStars,
-}  from "sprites";
+   SpriteFloorLove,
+   SpriteFloorBricks,
+   SpriteFloorWhiteTiles,
+   SpriteFloorWood,
+   SpriteFloorTetris,
+   SpriteFloorStars,
+} from "resources";
 import { Graphics } from "./graphics";
 
 @component
@@ -32,13 +32,13 @@ export class Background extends Graphics {
         if (level < 6) { return SpriteFloorLove; }
         if (level < 8) { return SpriteFloorWood; }
         return SpriteFloorWhiteTiles;
-    }
+   }
 
-    protected get sprite() {
-        return this.sprites.sprite(this.spriteClass);
-    }
+   protected get sprite() {
+       return this.sprites.sprite(this.spriteClass);
+   }
 
-    private get shouldRender() {
+   private get shouldRender() {
         return this.lastLevelRendered !== this.gameState.level || (
             !this.lastResizeRendered || !this.lastResizeRendered.equals(this.pixelSize)
         );

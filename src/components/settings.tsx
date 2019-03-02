@@ -2,7 +2,7 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { UI, Page } from "ui";
-import { Sounds, AudioHit } from "audio";
+import { Sounds, AudioHit } from "resources";
 import { bind } from "lodash-decorators";
 import * as css from "./settings.scss";
 

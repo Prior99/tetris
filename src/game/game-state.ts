@@ -21,7 +21,7 @@ import {
     AudioScore3,
     AudioScore4,
     AudioLevelUp,
-} from "audio";
+} from "resources";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
 import { Effects, EffectType } from "./effects";
 

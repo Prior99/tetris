@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { UI, Page } from "ui";
 import { bind } from "lodash-decorators";
 import * as css from "./menu.scss";
-import { Sounds } from "audio";
+import { Sounds } from "resources";
 
 @external @observer
 export class Menu extends React.Component {

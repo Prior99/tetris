@@ -1,12 +1,12 @@
 import { component, initialize, inject } from "tsdi";
 import { without } from "ramda";
 import { observable } from "mobx";
-import { SpriteManager, Sprite } from "sprites";
-import { AudioManager, Audio } from "audio";
+import { SpriteManager, Sprite } from "./sprites";
+import { AudioManager, Audio } from "./audio";
 import * as sprites from "./sprites";
-import * as audios from "audio";
+import * as audios from "./audio";
 import { Constructable } from "types";
-import { Config } from "./config";
+import { Config } from "config";
 
 const allSprites: Constructable<Sprite>[] =
     without(["ImageManager", "SpriteFloor", "SpriteManager", "Sprite", "TintedSprite"], Object.keys(sprites))

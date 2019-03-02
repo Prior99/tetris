@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { OwnGameCanvas } from "./own-game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
-import { Sounds } from "audio";
+import { Sounds } from "resources";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";
 import { UI, GameMode } from "ui";

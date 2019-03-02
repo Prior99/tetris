@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import { OwnGameCanvas } from "./own-game-canvas";
 import { Info } from "./info";
 import * as css from "./multi-player.scss";
-import { Sounds } from "audio";
+import { Sounds } from "resources";
 import { RemoteGame } from "./remote-game";
 import { GameState, ShuffleBag } from "game";
 import { Input } from "input";

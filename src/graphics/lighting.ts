@@ -4,7 +4,7 @@ import { vec2, Vec2 } from "utils";
 import { EffectInfo, Effects, EffectType, CellColor, GameState, EffectLineCleared } from "game";
 import { Graphics } from "./graphics";
 import { lightSpriteForCellColor } from "./sprite-for-cell-color";
-import { SpriteEffectLineCleared } from "sprites";
+import { SpriteEffectLineCleared } from "resources";
 import { differenceInMilliseconds } from "date-fns";
 
 @component

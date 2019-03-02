@@ -1,58 +1,58 @@
 { "frames": [
         {
             "filename": "floor-wood 0.ase",
-            "frame": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 1.ase",
-            "frame": { "x": 32, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 32, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 2.ase",
-            "frame": { "x": 64, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 64, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 3.ase",
-            "frame": { "x": 96, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 96, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 4.ase",
-            "frame": { "x": 128, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 128, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 5.ase",
-            "frame": { "x": 160, "y": 0, "w": 32, "h": 32 },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
-            "sourceSize": { "w": 32, "h": 32 },
-            "duration": 100
-        },
+           "frame": { "x": 160, "y": 0, "w": 32, "h": 32 },
+           "rotated": false,
+           "trimmed": false,
+           "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+           "sourceSize": { "w": 32, "h": 32 },
+           "duration": 100
+       },
         {
             "filename": "floor-wood 6.ase",
             "frame": { "x": 192, "y": 0, "w": 32, "h": 32 },

@@ -7,14 +7,14 @@ import { spriteForCellColor } from "graphics";
 import * as css from "./tetrimino-preview.scss";
 import { vec2, Vec2 } from "utils";
 import { CellColor, Matrix } from "game";
-import { SpriteManager } from "sprites";
+import { SpriteManager } from "resources";
 
 @external @observer
 export class TetriminoPreview extends React.Component<{ matrix: Matrix, size?: number }> {
-    @inject private sprites: SpriteManager;
-    @inject private config: Config;
+   @inject private sprites: SpriteManager;
+   @inject private config: Config;
 
-    private canvas?: HTMLCanvasElement;
+   private canvas?: HTMLCanvasElement;
     private ctx?: CanvasRenderingContext2D;
 
     constructor(props: { matrix: Matrix }) {
@@ -51,14 +51,14 @@ export class TetriminoPreview extends React.Component<{ matrix: Matrix, size?: n
     }
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
-        if (cellColor === CellColor.EMPTY) { return; }
-        const { ctx } = this;
-        if (!ctx) { return; }
-        const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
-        this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx, 0);
-    }
+       if (cellColor === CellColor.EMPTY) { return; }
+       const { ctx } = this;
+       if (!ctx) { return; }
+       const position = pixelPosition.sub(vec2(0, this.cellPixelSize.y));
+       this.sprites.sprite(spriteForCellColor(cellColor)!).render(position, this.cellPixelSize, ctx, 0);
+   }
 
-    private renderCanvas() {
+   private renderCanvas() {
         this.rescale();
         if (!this.ctx) { return; }
         const { matrix } = this.props;

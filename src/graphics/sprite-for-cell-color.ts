@@ -19,7 +19,7 @@ import {
     SpriteTetriminoOther,
     SpriteTetriminoGhost,
     Sprite,
-} from "sprites";
+} from "resources";
 
 import { Constructable } from "types";
 
