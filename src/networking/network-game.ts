@@ -1,6 +1,5 @@
 import { component, inject } from "tsdi";
 import { equals } from "ramda";
-import { observable, computed } from "mobx";
 import { RemoteUsers } from "./remote-users";
 import { Matrix } from "game";
 import { RemoteGameState } from "./messages";
@@ -11,8 +10,8 @@ export class NetworkGame {
     @inject private users: RemoteUsers;
     @inject private config: Config;
 
-    /* @observable */ public seed: string;
-    /* @observable */ private states = new Map<string, RemoteGameState>();
+    public seed: string;
+    private states = new Map<string, RemoteGameState>();
 
     private playfields = new Map<string, Matrix>();
 
@@ -34,11 +33,11 @@ export class NetworkGame {
         });
     }
 
-    @computed public get allStates() {
+    public get allStates() {
         return Array.from(this.states.values());
     }
 
-    @computed public get all() {
+    public get all() {
         return Array.from(this.playfields.values());
     }
 
@@ -66,7 +65,7 @@ export class NetworkGame {
         });
     }
 
-    @computed public get allToppedOut() {
+    public get allToppedOut() {
         return this.allStates.every(({ toppedOut }) => toppedOut);
     }
 }

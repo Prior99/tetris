@@ -1,5 +1,4 @@
 import { component } from "tsdi";
-import { action, observable, computed } from "mobx";
 import * as Random from "random-seed";
 import {
     Tetrimino,
@@ -14,7 +13,7 @@ import {
 
 @component
 export class ShuffleBag {
-    @observable private sequence: Tetrimino[] = [];
+    private sequence: Tetrimino[] = [];
     private random: Random.RandomSeed;
 
     public seed(seed = `${Math.random}`.replace(/\./, "")) {
@@ -31,7 +30,7 @@ export class ShuffleBag {
         return result;
     }
 
-    @action public take(): Tetrimino {
+    public take(): Tetrimino {
         if (!this.random) { throw new Error("Can't take from unitialized bag."); }
         const nextTetrimino = this.sequence.shift()!;
         if (this.sequence.length <= 7) { this.refill(); }
@@ -39,7 +38,7 @@ export class ShuffleBag {
         return nextTetrimino;
     }
 
-    @computed public get preview(): Tetrimino[] {
+    public get preview(): Tetrimino[] {
         if (!this.random) { throw new Error("Can't peek into from unitialized bag."); }
         return this.sequence.slice(0, 6);
     }

@@ -1,6 +1,5 @@
 import Peer from "peerjs";
 import { differenceInMilliseconds } from "date-fns";
-import { observable, computed } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType, RemoteGameState } from "./messages";
@@ -32,9 +31,9 @@ export class Networking {
     private connection: Peer.DataConnection;
     private connections = new Map<string, Peer.DataConnection>();
 
-    @observable public id: string;
-    @observable public remoteId: string;
-    @observable public mode = NetworkingMode.DISCONNECTED;
+    public id: string;
+    public remoteId: string;
+    public mode = NetworkingMode.DISCONNECTED;
 
     protected initialize(): Promise<undefined> {
         return new Promise(resolve => {
@@ -59,7 +58,7 @@ export class Networking {
             .forEach(([id, connection]) => this.sendTo(connection, message));
     }
 
-    @computed public get isHost() {
+    public get isHost() {
         return this.mode === NetworkingMode.HOST;
     }
 

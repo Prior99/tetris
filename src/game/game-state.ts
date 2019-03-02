@@ -1,5 +1,4 @@
 import { component, inject } from "tsdi";
-import { computed, observable } from "mobx";
 import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
 import { ShuffleBag } from "./shuffle-bag";
@@ -64,12 +63,12 @@ export class GameState {
     private comboCount = 0;
     private lastHit?: Date;
 
-    @observable public lines = 0;
-    @observable public score = 0;
-    @observable public toppedOut = false;
-    @observable public holdPiece?: Tetrimino;
-    @observable public outgoingGarbage: Garbage[] = [];
-    @observable public incomingGarbage: Garbage[] = [];
+    public lines = 0;
+    public score = 0;
+    public toppedOut = false;
+    public holdPiece?: Tetrimino;
+    public outgoingGarbage: Garbage[] = [];
+    public incomingGarbage: Garbage[] = [];
 
     public reset() {
         this.playfield.reset();
@@ -97,12 +96,12 @@ export class GameState {
         this.sounds.play(AudioIncomingWarning);
     }
 
-    @computed public get seconds() {
+    public get seconds() {
         if (!this.timeStarted) { return 0; }
         return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
     }
 
-    @computed public get speed() { return speed(this.level); }
+    public get speed() { return speed(this.level); }
 
     private processMatrix() {
         if (this.toppedOut) { return; }
@@ -136,7 +135,7 @@ export class GameState {
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
     }
 
-    @computed public get level() {
+    public get level() {
         return Math.floor(this.lines / 10);
     }
 
@@ -286,7 +285,7 @@ export class GameState {
         this.newTetrimino();
     }
 
-    @computed public get timeSinceLastHit() {
+    public get timeSinceLastHit() {
         if (!this.lastHit) { return Number.POSITIVE_INFINITY; }
         return differenceInMilliseconds(new Date(), this.lastHit) / 1000;
     }
@@ -311,7 +310,7 @@ export class GameState {
         }
     }
 
-    @computed public get temporaryState() {
+    public get temporaryState() {
         if (!this.current) {
             return this.playfield;
         }

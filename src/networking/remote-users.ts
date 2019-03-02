@@ -1,10 +1,9 @@
 import { component } from "tsdi";
-import { observable } from "mobx";
 import { RemoteUser } from "./messages";
 
 @component
 export class RemoteUsers {
-    @observable public users = new Map<string, RemoteUser>();
+    public users = new Map<string, RemoteUser>();
 
     public add(...users: RemoteUser[]) {
         users.forEach(user => this.users.set(user.id, user));
