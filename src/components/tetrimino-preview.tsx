@@ -22,6 +22,10 @@ export class TetriminoPreview extends React.Component<{ matrix: Matrix, size?: n
         window.addEventListener("resize", this.rescale);
     }
 
+    public componentWillUnmount() {
+        window.removeEventListener("rescale", this.rescale);
+    }
+
     @bind private rescale() {
         const { canvas } = this;
         if (!canvas) { return; }

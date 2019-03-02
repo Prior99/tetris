@@ -9,6 +9,8 @@ import { Graphics } from "./graphics";
 export class OtherGame extends Graphics {
     constructor(private matrix: Matrix) { super(); }
 
+    private lastRenderedMatrix?: Matrix;
+
     @initialize protected async initialize() {
         this.render();
     }
@@ -41,6 +43,8 @@ export class OtherGame extends Graphics {
 
     @bind public render() {
         if (!this.ctx) { return; }
+        if (this.lastRenderedMatrix && this.lastRenderedMatrix.equals(this.matrix)) { return; }
+        this.lastRenderedMatrix = new Matrix(this.matrix);
         this.renderClear();
         this.renderCells();
     }

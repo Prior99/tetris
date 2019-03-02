@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { observable, reaction } from "mobx";
+import { computed, observable, reaction } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
@@ -32,6 +32,10 @@ export class OwnGameCanvas extends React.Component {
     constructor(props: {}) {
         super(props);
         window.addEventListener("resize", this.rescale);
+    }
+
+    public componentWillUnmount() {
+        window.removeEventListener("resize", this.rescale);
     }
 
     @initialize protected initialize() {
@@ -94,7 +98,7 @@ export class OwnGameCanvas extends React.Component {
         this.leaderboardName = evt.currentTarget.value;
     }
 
-    public get canRestart() {
+    @computed public get canRestart() {
         return this.ui.gameMode === GameMode.SINGLE_PLAYER || (
             this.networking.mode === NetworkingMode.HOST &&
             this.networkGame.allStates.every(({ toppedOut }) => toppedOut)

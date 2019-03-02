@@ -29,6 +29,10 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
         renderLoop();
     }
 
+    public componentWillUnmount() {
+        window.removeEventListener("resize", this.rescale);
+    }
+
     @bind private rescale() {
         const { canvas } = this;
         if (!canvas) { return; }
