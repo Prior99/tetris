@@ -205,17 +205,17 @@ export class Tetrimino {
         return count;
     }
 
-    public overlayedOnMatrix() {
+    public get overlayedOnMatrix() {
         return this.playfield.overlay(this.matrix, this.offset);
     }
 
-    public overlayedOnMatrixWithGhost() {
+    public get overlayedOnMatrixWithGhost() {
         return this.playfield
             .overlay(this.matrix.recolor(CellColor.GHOST), this.ghostPosition)
             .overlay(this.matrix, this.offset);
     }
 
-    public hasHitFloor() {
+    public get hasHitFloor() {
         return this.playfield.collides(this.matrix, this.offset.add(vec2(0, -1)));
     }
 

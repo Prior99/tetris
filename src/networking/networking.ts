@@ -1,6 +1,6 @@
 import Peer from "peerjs";
 import { differenceInMilliseconds } from "date-fns";
-import { observable } from "mobx";
+import { observable, computed } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType, RemoteGameState } from "./messages";
@@ -59,6 +59,10 @@ export class Networking {
             .forEach(([id, connection]) => this.sendTo(connection, message));
     }
 
+    @computed public get isHost() {
+        return this.mode === NetworkingMode.HOST;
+    }
+
     @bind private handleMessage(connectionId: string, message: Message) {
         this.forwardMessage(connectionId, message);
         switch (message.message) {
@@ -89,6 +93,7 @@ export class Networking {
                 this.gameState.start();
                 this.networkGame.reset();
                 this.shuffleBag.reset(message.seed);
+                this.ui.reset();
                 break;
             }
             case MessageType.GARBAGE: {
@@ -208,6 +213,7 @@ export class Networking {
     }
 
     public updateGarbage() {
+        if (this.gameState.outgoingGarbage.length === 0) { return; }
         this.gameState.outgoingGarbage.forEach(garbage => {
             const target = this.randomOtherAliveUser();
             if (!target) { return; }

@@ -50,10 +50,6 @@ export class GameState {
 
     public initialized?: Date;
     public lastTick?: Date;
-    @observable public lines = 0;
-    @observable public score = 0;
-    @observable public toppedOut = false;
-    public debug = false;
     public current?: {
         tetrimino: Tetrimino;
         softDrops: number;
@@ -62,12 +58,16 @@ export class GameState {
     };
     public lastHitPosition?: Vec2;
     public timeStarted?: Date;
-    @observable public holdPiece?: Tetrimino;
 
     private running = false;
     private timeout?: any;
     private comboCount = 0;
     private lastHit?: Date;
+
+    @observable public lines = 0;
+    @observable public score = 0;
+    @observable public toppedOut = false;
+    @observable public holdPiece?: Tetrimino;
     @observable public outgoingGarbage: Garbage[] = [];
     @observable public incomingGarbage: Garbage[] = [];
 
@@ -78,7 +78,6 @@ export class GameState {
         this.lines = 0;
         this.score = 0;
         this.toppedOut = false;
-        this.debug = false;
         this.current = undefined;
         this.lastHitPosition = undefined;
         this.running = false;
@@ -98,12 +97,12 @@ export class GameState {
         this.sounds.play(AudioIncomingWarning);
     }
 
-    public get seconds() {
+    @computed public get seconds() {
         if (!this.timeStarted) { return 0; }
         return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
     }
 
-    public get speed() { return speed(this.level); }
+    @computed public get speed() { return speed(this.level); }
 
     private processMatrix() {
         if (this.toppedOut) { return; }
@@ -111,7 +110,7 @@ export class GameState {
         const diff = differenceInMilliseconds(now, this.lastTick!) / 1000;
         if (diff > this.speed || this.current!.hardDrops) {
             this.lastTick = now;
-            if (this.current!.tetrimino.hasHitFloor()) { this.commitTetrimino(); }
+            if (this.current!.tetrimino.hasHitFloor) { this.commitTetrimino(); }
             this.moveTetrimino();
         }
     }
@@ -135,14 +134,10 @@ export class GameState {
         this.processMatrix();
         this.processGarbage();
         this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
-        if (this.debug) {
-            console.log(this.temporaryState.toString()); // tslint:disable-line
-        }
     }
 
     @computed public get level() {
-        const linesPerLevel = this.debug ? 2 : 10;
-        return Math.floor(this.lines / linesPerLevel);
+        return Math.floor(this.lines / 10);
     }
 
     public inputRotateRight() {
@@ -196,7 +191,7 @@ export class GameState {
 
     private newTetrimino() {
         const tetrimino = this.shuffleBag.take();
-        if (tetrimino.hasHitFloor()) {
+        if (tetrimino.hasHitFloor) {
             this.toppedOut = true;
             return;
         }
@@ -255,7 +250,7 @@ export class GameState {
     private commitTetrimino() {
         this.sounds.play(AudioHit);
         const { tetrimino } = this.current!;
-        this.playfield.update(tetrimino.overlayedOnMatrix());
+        this.playfield.update(tetrimino.overlayedOnMatrix);
         const { matrix, offsets } = this.playfield.removeHorizontals();
         const count = offsets.length;
         if (count > 0) {
@@ -291,7 +286,7 @@ export class GameState {
         this.newTetrimino();
     }
 
-    public get timeSinceLastHit() {
+    @computed public get timeSinceLastHit() {
         if (!this.lastHit) { return Number.POSITIVE_INFINITY; }
         return differenceInMilliseconds(new Date(), this.lastHit) / 1000;
     }
@@ -316,11 +311,11 @@ export class GameState {
         }
     }
 
-    public get temporaryState() {
+    @computed public get temporaryState() {
         if (!this.current) {
             return this.playfield;
         }
-        return this.current.tetrimino.overlayedOnMatrixWithGhost();
+        return this.current.tetrimino.overlayedOnMatrixWithGhost;
     }
 
     public start() {

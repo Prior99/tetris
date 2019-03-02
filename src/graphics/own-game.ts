@@ -27,46 +27,6 @@ export class OwnGame extends Graphics {
         }
     }
 
-    private renderDebug() {
-        if (!this.ctx) { return; }
-        // Render grid.
-        this.ctx.strokeStyle = "grey";
-        this.ctx.fillStyle = "grey";
-        this.ctx.font = "12px Arial";
-        for (let y = 0; y < this.config.visibleSize.y; ++y) {
-            const origin = this.translate(vec2(0, y));
-            const destination = this.translate(vec2(this.config.visibleSize.x, y));
-            this.ctx.beginPath();
-            this.ctx.moveTo(origin.x, origin.y);
-            this.ctx.lineTo(destination.x, destination.y);
-            this.ctx.stroke();
-            this.ctx.fillText(`${y}`, origin.x, origin.y);
-        }
-        for (let x = 0; x < this.config.visibleSize.x; ++x) {
-            const origin = this.translate(vec2(x, 0));
-            const destination = this.translate(vec2(x, this.config.visibleSize.y));
-            this.ctx.beginPath();
-            this.ctx.moveTo(origin.x, origin.y);
-            this.ctx.lineTo(destination.x, destination.y);
-            this.ctx.stroke();
-            this.ctx.fillText(`${x}`, origin.x, origin.y);
-        }
-
-        // Render Tetrimino.
-        const pos = this.translate(this.gameState.current!.tetrimino.offset);
-        const dimensions = this.gameState.current!.tetrimino.matrix.dimensions.mult(this.cellPixelSize);
-        this.ctx.strokeStyle = "red";
-        this.ctx.strokeRect(pos.x, pos.y, dimensions.x, -dimensions.y);
-        this.ctx.beginPath();
-        this.ctx.moveTo(pos.x - 10, pos.y - 10);
-        this.ctx.lineTo(pos.x + 10, pos.y + 10);
-        this.ctx.stroke();
-        this.ctx.beginPath();
-        this.ctx.moveTo(pos.x + 10, pos.y - 10);
-        this.ctx.lineTo(pos.x - 10, pos.y + 10);
-        this.ctx.stroke();
-    }
-
     public rescale(size: Vec2) {
         super.rescale(size);
         this.lighting.rescale(size);
@@ -125,6 +85,5 @@ export class OwnGame extends Graphics {
         this.renderBackground();
         this.renderCells();
         this.renderLighting();
-        if (this.gameState.debug) { this.renderDebug(); }
     }
 }

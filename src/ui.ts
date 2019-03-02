@@ -1,6 +1,6 @@
 import { component, initialize } from "tsdi";
 import { generateName } from "names";
-import { observable } from "mobx";
+import { observable, computed } from "mobx";
 
 const localStorageIdentifier = "FRETRIS";
 const localStorageVersion = 1;
@@ -33,6 +33,7 @@ export class UI {
     @observable private userName = generateName();
     @observable public page = Page.MENU;
     @observable public gameMode: GameMode;
+    @observable public leaderboardSubmitted = false;
 
     @initialize protected initialize() {
         const json = localStorage.getItem(localStorageIdentifier);
@@ -55,6 +56,14 @@ export class UI {
             console.error(`Failed to parse settings: ${json}`);
             localStorage.removeItem(localStorageIdentifier);
         }
+    }
+
+    public reset() {
+        this.leaderboardSubmitted = false;
+    }
+
+    @computed public get isSinglePlayer() {
+        return this.gameMode === GameMode.SINGLE_PLAYER;
     }
 
     get name() {

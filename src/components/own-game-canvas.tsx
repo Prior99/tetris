@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { computed, observable, reaction } from "mobx";
+import { computed, observable } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
@@ -25,7 +25,6 @@ export class OwnGameCanvas extends React.Component {
 
     @observable private submitScoreVisible = false;
     @observable private leaderboardName = "";
-    @observable private submitted = false;
 
     private canvas?: HTMLCanvasElement;
 
@@ -45,7 +44,6 @@ export class OwnGameCanvas extends React.Component {
         };
         this.leaderboardName = this.ui.name || "";
         renderLoop();
-        reaction(() => this.gameState.toppedOut, () => this.submitted = false);
     }
 
     @bind private rescale() {
@@ -71,13 +69,13 @@ export class OwnGameCanvas extends React.Component {
 
     @bind private handleReset() {
         const seed = `${Math.random}`.replace(/\./, "");
-        if (this.ui.gameMode === GameMode.SINGLE_PLAYER || this.networking.mode === NetworkingMode.HOST) {
+        if (this.ui.isSinglePlayer || this.networking.isHost) {
             this.gameState.reset();
             this.gameState.start();
             this.shuffleBag.reset(seed);
         }
         this.networking.restart(seed);
-        this.submitted = false;
+        this.ui.reset();
     }
 
     @bind private handleSubmitScore() {
@@ -87,7 +85,7 @@ export class OwnGameCanvas extends React.Component {
     @bind private handleLeaderboardSubmit() {
         this.submitScoreVisible = false;
         this.leaderboard.submitScore(this.leaderboardName, this.gameState.score);
-        this.submitted = true;
+        this.ui.leaderboardSubmitted = true;
     }
 
     @bind private handleBack() {
@@ -99,10 +97,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @computed public get canRestart() {
-        return this.ui.gameMode === GameMode.SINGLE_PLAYER || (
-            this.networking.mode === NetworkingMode.HOST &&
-            this.networkGame.allStates.every(({ toppedOut }) => toppedOut)
-        );
+        return this.ui.isSinglePlayer || (this.networking.isHost && this.networkGame.allToppedOut);
     }
 
     public render() {
@@ -118,7 +113,7 @@ export class OwnGameCanvas extends React.Component {
                                 ) : <></>
                             }
                             {
-                                this.submitted ? (
+                                this.ui.leaderboardSubmitted ? (
                                     <></>
                                 ) : (
                                     <div className={css.submitScore}>

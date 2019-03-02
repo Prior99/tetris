@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import DevTools from "mobx-react-devtools";
 import { TSDI } from "tsdi";
 import { FactoryAudioContext } from "factory-audio-context";
 import { Router } from "components";
@@ -12,7 +13,13 @@ async function main() {
     await tsdi.get(FactoryAudioContext).initialize();
 
     // Start React.
-    ReactDOM.render(<Router />, document.getElementById("root"));
+    ReactDOM.render(
+        <>
+            <DevTools />
+            <Router />
+        </>,
+        document.getElementById("root"),
+    );
 }
 
 main();
