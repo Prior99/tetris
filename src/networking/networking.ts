@@ -1,5 +1,5 @@
 import Peer from "peerjs";
-import { observable, computed } from "mobx";
+import { observable } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType, RemoteGameState } from "./messages";

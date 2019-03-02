@@ -1,8 +1,7 @@
 import { component, inject, initialize, external } from "tsdi";
-import { observable, computed } from "mobx";
+import { observable } from "mobx";
 import { bind } from "lodash-decorators";
 import { GameState, ShuffleBag, Matrix, Garbage } from "game";
-import { RemoteUsers, Networking, NetworkGame } from "networking";
 
 @component @external
 export class ObservableGame {

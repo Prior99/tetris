@@ -1,6 +1,5 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
-import { ShuffleBag } from "game";
 import { observer } from "mobx-react";
 import { TetriminoPreview } from "./tetrimino-preview";
 import * as css from "./tetrimino-previews.scss";
