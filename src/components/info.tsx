@@ -1,6 +1,6 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
-import { GameState } from "game";
+import { ObservableGame } from "observable-game";
 import { IncomingGabage } from "./incoming-garbage";
 import { observer } from "mobx-react";
 import * as css from "./info.scss";
@@ -15,15 +15,15 @@ function prefix(str: string, value: string, width: number): string {
 
 @external @observer
 export class Info extends React.Component {
-    @inject private gameState: GameState;
+    @inject private game: ObservableGame;
 
     public render() {
         return (
             <div className={css.info}>
                 <div className={css.holdPiece}>
                     {
-                        this.gameState.holdPiece
-                            ? <TetriminoPreview size={0.7} matrix={this.gameState.holdPiece.matrix} />
+                        this.game.holdPiece
+                            ? <TetriminoPreview size={0.7} matrix={this.game.holdPiece} />
                             : <></>
                     }
                 </div>
@@ -32,7 +32,7 @@ export class Info extends React.Component {
                         Score
                     </div>
                     <div className={css.value}>
-                        {prefix(`${this.gameState.score}`, "0", 8)}
+                        {prefix(`${this.game.score}`, "0", 8)}
                     </div>
                 </div>
                 <div className={css.lines}>
@@ -40,7 +40,7 @@ export class Info extends React.Component {
                         Lines
                     </div>
                     <div className={css.value}>
-                        {this.gameState.lines}
+                        {this.game.lines}
                     </div>
                 </div>
                 <div className={css.level}>
@@ -48,17 +48,17 @@ export class Info extends React.Component {
                         Level
                     </div>
                     <div className={css.value}>
-                        {this.gameState.level}
+                        {this.game.level}
                     </div>
                 </div>
                 {
-                    this.gameState.incomingGarbage.length > 0 ? (
+                    this.game.incomingGarbage.length > 0 ? (
                         <div className={css.garbage}>
                             <div className={css.label}>
                                 Incoming
                             </div>
                             <div className={css.value}>
-                                {this.gameState.incomingGarbage.map(garbage => <IncomingGabage garbage={garbage} />)}
+                                {this.game.incomingGarbage.map(garbage => <IncomingGabage garbage={garbage} />)}
                             </div>
                         </div>
                     ) : <></>

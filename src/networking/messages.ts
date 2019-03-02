@@ -70,7 +70,6 @@ export interface RemoteGameState {
     score: number;
     lines: number;
     level: number;
-    milliseconds: number;
     toppedOut: boolean;
 }
 

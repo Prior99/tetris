@@ -10,6 +10,7 @@ import { UI, GameMode, Page } from "ui";
 import { Networking, NetworkingMode, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
 import { vec2 } from "utils";
+import { ObservableGame } from "observable-game";
 import { Leaderboard } from "leaderboard";
 
 @external @observer
@@ -17,6 +18,7 @@ export class OwnGameCanvas extends React.Component {
     @inject private config: Config;
     @inject private ownGame: OwnGame;
     @inject private gameState: GameState;
+    @inject private game: ObservableGame;
     @inject private ui: UI;
     @inject private networking: Networking;
     @inject private networkGame: NetworkGame;
@@ -104,7 +106,7 @@ export class OwnGameCanvas extends React.Component {
         return (
             <div className={css.canvasWrapper}>
                 {
-                    this.gameState.toppedOut ? (
+                    this.game.toppedOut ? (
                         <div className={css.gameOver}>
                             <div className={css.gameOverText}>Game over</div>
                             {

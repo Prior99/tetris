@@ -1,5 +1,5 @@
 import Peer from "peerjs";
-import { differenceInMilliseconds } from "date-fns";
+import { observable, computed } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Message, MessageType, RemoteGameState } from "./messages";
@@ -31,9 +31,9 @@ export class Networking {
     private connection: Peer.DataConnection;
     private connections = new Map<string, Peer.DataConnection>();
 
-    public id: string;
-    public remoteId: string;
-    public mode = NetworkingMode.DISCONNECTED;
+    @observable public id: string;
+    @observable public remoteId: string;
+    @observable public mode = NetworkingMode.DISCONNECTED;
 
     protected initialize(): Promise<undefined> {
         return new Promise(resolve => {
@@ -113,14 +113,14 @@ export class Networking {
     }
 
     public sendTo(connection: Peer.DataConnection, message: Message) {
-        connection.send(JSON.stringify(message));
+        connection.send(message);
     }
 
     @bind private handleConnect(connection: Peer.DataConnection) {
         console.log("Client connected."); // tslint:disable-line
         let connectionId: string;
         connection.on("data", json => {
-            const message: Message = JSON.parse(json);
+            const message: Message = json;
             if (message.message === MessageType.HELLO) {
                 connectionId = message.user.id;
                 this.users.add(message.user);
@@ -152,12 +152,12 @@ export class Networking {
             console.log("Connected to host."); // tslint:disable-line
             const { id } = this;
             const { name } = this.ui;
-            this.connection.send(JSON.stringify({
+            this.connection.send({
                 message: MessageType.HELLO,
                 user: { id, name },
-            }));
+            });
             this.connection.on("data", json => {
-                this.handleMessage(remoteId, JSON.parse(json));
+                this.handleMessage(remoteId, json);
             });
         });
     }
@@ -230,7 +230,6 @@ export class Networking {
             score: this.gameState.score,
             lines: this.gameState.lines,
             level: this.gameState.level,
-            milliseconds: differenceInMilliseconds(new Date(), this.gameState.timeStarted!),
             toppedOut: this.gameState.toppedOut,
         };
         this.networkGame.updateState(this.id, state);
