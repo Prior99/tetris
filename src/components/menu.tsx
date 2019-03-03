@@ -2,7 +2,7 @@ import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { UI } from "ui";
-import { Page } from "types";
+import { Page, SoundsMode } from "types";
 import { bind } from "lodash-decorators";
 import * as css from "./menu.scss";
 import { Sounds } from "sounds";
@@ -13,7 +13,7 @@ export class Menu extends React.Component {
     @inject private sounds: Sounds;
 
     @initialize protected initialize() {
-        this.sounds.startMenu();
+        this.sounds.setMode(SoundsMode.MENU);
     }
 
     @bind private handleSinglePlayer() {

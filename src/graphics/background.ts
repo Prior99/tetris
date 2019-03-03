@@ -3,12 +3,12 @@ import { bind } from "lodash-decorators";
 import { Game } from "game";
 import { vec2, Vec2 } from "utils";
 import {
-   SpriteFloorLove,
-   SpriteFloorBricks,
-   SpriteFloorWhiteTiles,
-   SpriteFloorWood,
-   SpriteFloorTetris,
-   SpriteFloorStars,
+    SpriteFloorLove,
+    SpriteFloorBricks,
+    SpriteFloorWhiteTiles,
+    SpriteFloorWood,
+    SpriteFloorTetris,
+    SpriteFloorStars,
 } from "resources";
 import { Graphics } from "./graphics";
 
@@ -18,6 +18,7 @@ export class Background extends Graphics {
 
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
+    private lastSerialRendered?: string;
 
     @initialize
     protected async initialize() {
@@ -32,16 +33,17 @@ export class Background extends Graphics {
         if (level < 6) { return SpriteFloorLove; }
         if (level < 8) { return SpriteFloorWood; }
         return SpriteFloorWhiteTiles;
-   }
+    }
 
-   protected get sprite() {
-       return this.sprites.sprite(this.spriteClass);
-   }
+    protected get sprite() {
+        return this.sprites.sprite(this.spriteClass);
+    }
 
-   private get shouldRender() {
-        return this.lastLevelRendered !== this.game.level || (
-            !this.lastResizeRendered || !this.lastResizeRendered.equals(this.pixelSize)
-        );
+    private get shouldRender() {
+        const levelChanged = !this.lastLevelRendered || this.lastLevelRendered !== this.game.level;
+        const sizeChanged = !this.lastResizeRendered || !this.lastResizeRendered.equals(this.pixelSize);
+        const serialChanged = !this.lastSerialRendered || this.lastSerialRendered !== this.game.serial;
+        return levelChanged || sizeChanged || serialChanged;
     }
 
     @bind public render() {
@@ -55,5 +57,6 @@ export class Background extends Graphics {
         }
         this.lastLevelRendered = this.game.level;
         this.lastResizeRendered = this.pixelSize;
+        this.lastSerialRendered = this.game.serial;
     }
 }

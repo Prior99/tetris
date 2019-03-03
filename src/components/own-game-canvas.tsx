@@ -8,7 +8,7 @@ import { OwnGame } from "graphics";
 import { UI } from "ui";
 import { Networking, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
-import { vec2 } from "utils";
+import { vec2, randomSeed } from "utils";
 import { ObservableGame } from "observable-game";
 import { Leaderboard } from "leaderboard";
 import { Page } from "types";
@@ -68,10 +68,8 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleReset() {
-        const seed = `${Math.random}`.replace(/\./, "");
-        if (this.game.isSinglePlayer || this.networking.isHost) {
-            this.game.restart(seed);
-        }
+        const seed = randomSeed();
+        this.game.restart(seed);
         this.networking.restart(seed);
         this.ui.reset();
     }
@@ -87,7 +85,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleBack() {
-        this.handleReset();
+        this.game.stop();
         this.ui.page = Page.MENU;
     }
 
@@ -103,7 +101,7 @@ export class OwnGameCanvas extends React.Component {
         return (
             <div className={css.canvasWrapper}>
                 {
-                    this.game.toppedOut ? (
+                    this.game.gameOver ? (
                         <div className={css.gameOver}>
                             <div className={css.gameOverText}>Game over</div>
                             {

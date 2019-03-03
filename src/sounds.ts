@@ -9,7 +9,7 @@ import {
     AudioMusic160Bpm,
     AudioMusic170Bpm,
 } from "resources";
-import { Constructable } from "types";
+import { SoundsMode, Constructable } from "types";
 import { UI } from "ui";
 import { autorun } from "mobx";
 
@@ -107,12 +107,12 @@ export class Sounds {
         }
     }
 
-    public startMenu() {
-        this.filterNode.frequency.value = 1000;
-    }
-
-    public startGame() {
-        this.filterNode.frequency.value = 30000;
+    public setMode(mode: SoundsMode) {
+        if (mode === SoundsMode.GAME) {
+            this.filterNode.frequency.value = 1000;
+        } else {
+            this.filterNode.frequency.value = 30000;
+        }
     }
 
     public changeMusicSpeed(speed: MusicSpeed) {

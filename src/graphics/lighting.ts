@@ -5,7 +5,7 @@ import { Game } from "game";
 import { EffectLineCleared, EffectInfo, EffectType, CellColor } from "types";
 import { Graphics } from "./graphics";
 import { lightSpriteForCellColor } from "./sprite-for-cell-color";
-import { SpriteEffectLineCleared } from "resources";
+import { SpriteEffectLineCleared, Sprite } from "resources";
 import { differenceInMilliseconds } from "date-fns";
 
 @component
@@ -27,13 +27,19 @@ export class Lighting extends Graphics {
         ).mult(this.scaleFactor);
         const pixelPosition = this.translate(position).sub(vec2(0, this.cellPixelSize.y));
         const { totalDuration } = sprite;
+        const time = this.getTetriminoBloomAnimationTime(position, sprite);
+        this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
+    }
+
+    private getTetriminoBloomAnimationTime(position: Vec2, sprite: Sprite) {
+        const {timeSinceLastHit } = this.game;
+        if (!timeSinceLastHit || timeSinceLastHit > sprite.totalDuration) {
+            return sprite.totalDuration - 0.15;
+        }
         const distance = this.game.lastHitPosition
             ? this.game.lastHitPosition.distance(position)
             : Number.POSITIVE_INFINITY;
-        const time = this.game.timeSinceLastHit < totalDuration
-            ? Math.min(totalDuration - 0.2, this.game.timeSinceLastHit * 3 + distance / 2)
-            : totalDuration - 0.15;
-        this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
+        return Math.min(sprite.totalDuration - 0.2, timeSinceLastHit * 3 + distance / 2);
     }
 
     @bind public render() {

@@ -6,3 +6,4 @@ export * from "./effects";
 export * from "./page";
 export * from "./game-mode";
 export * from "./settings";
+export * from "./sounds-mode";

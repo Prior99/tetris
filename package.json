@@ -53,6 +53,7 @@
         "@types/ramda": "^0.25.50",
         "@types/random-seed": "^0.3.3",
         "@types/react": "^16.8.3",
+        "@types/uuid": "^3.4.4",
         "classnames": "^2.2.6",
         "css-loader": "^2.1.0",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -84,6 +85,7 @@
         "random-seed": "^0.3.0",
         "react": "^16.8.2",
         "react-dom": "^16.8.2",
-        "tsdi": "^0.20.3"
+        "tsdi": "^0.20.3",
+        "uuid": "^3.3.2"
     }
 }

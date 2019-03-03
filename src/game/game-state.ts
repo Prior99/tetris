@@ -1,5 +1,4 @@
-import { component, inject } from "tsdi";
-import { differenceInMilliseconds } from "date-fns";
+import { external, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { vec2, Vec2 } from "utils";
@@ -17,9 +16,9 @@ import {
     AudioLevelUp,
 } from "resources";
 import { musicSpeedForLevel, Sounds } from "sounds";
-import { Garbage } from "types";
+import { Garbage, EffectType } from "types";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
-import { Effects, EffectType } from "./effects";
+import { Effects } from "./effects";
 import { speed } from "./speed";
 import { Tetrimino } from "./tetriminos";
 import { Playfield } from "./playfield";
@@ -34,16 +33,11 @@ function calculateGarbage(lines: number): number {
     }
 }
 
-@component
+@external
 export class GameState {
     @inject private config: Config;
-    @inject private shuffleBag: ShuffleBag;
-    @inject private playfield: Playfield;
     @inject private sounds: Sounds;
-    @inject private events: Effects;
 
-    public initialized?: Date;
-    public lastTick?: Date;
     public current?: {
         tetrimino: Tetrimino;
         softDrops: number;
@@ -51,124 +45,108 @@ export class GameState {
         usedHoldPiece: boolean;
     };
     public lastHitPosition?: Vec2;
-    public timeStarted?: Date;
     public lines = 0;
     public score = 0;
     public toppedOut = false;
     public holdPiece?: Tetrimino;
     public outgoingGarbage: Garbage[] = [];
     public incomingGarbage: Garbage[] = [];
+    public comboCount = 0;
 
-    private running = false;
-    private timeout?: any;
-    private comboCount = 0;
-    private lastHit?: Date;
+    private timeLastHit = 0;
+    private timeLastMoveDown = 0;
+    private timeCurrent = 0;
 
-    public reset() {
-        this.playfield.reset();
-        this.initialized = undefined;
-        this.lastTick = undefined;
-        this.lines = 0;
-        this.score = 0;
-        this.toppedOut = false;
-        this.current = undefined;
-        this.lastHitPosition = undefined;
-        this.running = false;
-        this.timeout = undefined;
-        this.comboCount = 0;
-        this.timeStarted = undefined;
-        this.lastHit = undefined;
-        this.initialized = new Date();
-        this.lastTick = new Date();
-        this.holdPiece = undefined;
-        this.outgoingGarbage = [];
-        this.incomingGarbage = [];
+    constructor(
+        private shuffleBag: ShuffleBag,
+        private playfield: Playfield,
+        private events: Effects,
+    ) {
         this.newTetrimino();
     }
 
-    public addIncomingGarbage(garbage: Garbage) {
-        garbage.date = new Date();
-        this.incomingGarbage.push(garbage);
-        this.sounds.play(AudioIncomingWarning);
+    public tick(time: number) {
+        this.timeCurrent = time;
+        this.tickMatrix();
+        this.tickGarbage();
     }
 
-    public get seconds() {
-        if (!this.timeStarted) { return 0; }
-        return differenceInMilliseconds(new Date(), this.timeStarted) / 100;
-    }
-
-    public get speed() { return speed(this.level); }
-
-    private processMatrix() {
+    private tickMatrix() {
+        if (!this.current) { throw new Error("Ticked matrix but game was not initialized."); }
         if (this.toppedOut) { return; }
-        const now = new Date();
-        const diff = differenceInMilliseconds(now, this.lastTick!) / 1000;
-        if (diff > this.speed || this.current!.hardDrops) {
-            this.lastTick = now;
-            if (this.current!.tetrimino.hasHitFloor) { this.commitTetrimino(); }
+        if (this.timeCurrent - this.timeLastMoveDown > this.speed || this.current.hardDrops) {
+            this.timeLastMoveDown = this.timeCurrent;
+            if (this.current.tetrimino.hasHitFloor) { this.commitTetrimino(); }
             this.moveTetrimino();
         }
     }
 
-    private isGarbageTimeout(garbage: Garbage): boolean {
-        return differenceInMilliseconds(new Date(), garbage.date) > this.config.garbageTimeout * 1000;
-    }
-
-    private processGarbage() {
+    private tickGarbage() {
+        if (!this.current) { throw new Error("Ticked matrix but game was not initialized."); }
         const relevantGarbage = this.incomingGarbage.filter(garbage => this.isGarbageTimeout(garbage));
         if (relevantGarbage.length === 0) { return; }
         this.sounds.play(AudioIncomingCommitted);
         relevantGarbage.forEach(garbage => this.playfield.addGarbageLines(garbage.lines));
         this.incomingGarbage = this.incomingGarbage.filter(garbage => !this.isGarbageTimeout(garbage));
-        this.current!.tetrimino.refreshGhostPosition();
-        this.current!.tetrimino.moveSafeUp();
+        this.current.tetrimino.refreshGhostPosition();
+        this.current.tetrimino.moveSafeUp();
     }
 
-    @bind private update() {
-        if (!this.running) { return; }
-        this.processMatrix();
-        this.processGarbage();
-        this.timeout = setTimeout(this.update, this.config.tickSpeed * 1000);
+    private isGarbageTimeout(garbage: Garbage): boolean {
+        return this.timeCurrent - garbage.time > this.config.garbageTimeout;
     }
 
-    public get level() {
-        return Math.floor(this.lines / 10);
+    public addIncomingGarbage(garbage: Garbage) {
+        garbage.time = this.timeCurrent;
+        this.incomingGarbage.push(garbage);
+        this.sounds.play(AudioIncomingWarning);
     }
+
+    public get speed() { return speed(this.level); }
+
+    public get level() { return Math.floor(this.lines / 10); }
 
     public inputRotateRight() {
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.sounds.play(AudioRotateRight);
-        this.current!.tetrimino.rotateRight();
+        this.current.tetrimino.rotateRight();
     }
 
     public inputRotateLeft() {
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.sounds.play(AudioRotateLeft);
-        this.current!.tetrimino.rotateLeft();
+        this.current.tetrimino.rotateLeft();
     }
 
     public inputMoveLeft() {
-        this.current!.tetrimino.moveLeft();
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
+        this.current.tetrimino.moveLeft();
         this.sounds.play(AudioMoveDown);
     }
 
     public inputMoveRight() {
-        this.current!.tetrimino.moveRight();
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
+        this.current.tetrimino.moveRight();
         this.sounds.play(AudioMoveDown);
     }
 
     public inputMoveDown() {
-        this.current!.softDrops++;
-        this.current!.tetrimino.moveDown();
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
+        this.current.softDrops++;
+        this.current.tetrimino.moveDown();
         this.sounds.play(AudioMoveDown);
     }
 
     public inputHardDrop() {
-        this.current!.hardDrops = this.current!.tetrimino.hardDrop();
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
+        this.current.hardDrops = this.current.tetrimino.hardDrop();
     }
 
     public inputHoldPiece() {
-        if (this.current!.usedHoldPiece) { return; }
+        if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
+        if (this.current.usedHoldPiece) { return; }
         const currentHoldPiece = this.holdPiece;
-        this.holdPiece = this.current!.tetrimino;
+        this.holdPiece = this.current.tetrimino;
         if (currentHoldPiece) {
             currentHoldPiece.reset();
             this.current = {
@@ -182,7 +160,10 @@ export class GameState {
         }
     }
 
-    private moveTetrimino() { this.current!.tetrimino.moveDown(); }
+    private moveTetrimino() {
+        if (!this.current) { throw new Error("Tried to move tetrimino down on uninitialized game state."); }
+        this.current.tetrimino.moveDown();
+    }
 
     private newTetrimino() {
         const tetrimino = this.shuffleBag.take();
@@ -208,20 +189,11 @@ export class GameState {
     private playScoreSound(count: number) {
         switch (count) {
             default:
-            case 0:
-                break;
-            case 1:
-                this.sounds.play(AudioScore1);
-                break;
-            case 2:
-                this.sounds.play(AudioScore2);
-                break;
-            case 3:
-                this.sounds.play(AudioScore3);
-                break;
-            case 4:
-                this.sounds.play(AudioScore4);
-                break;
+            case 0: break;
+            case 1: this.sounds.play(AudioScore1); break;
+            case 2: this.sounds.play(AudioScore2); break;
+            case 3: this.sounds.play(AudioScore3); break;
+            case 4: this.sounds.play(AudioScore4); break;
         }
     }
 
@@ -243,8 +215,9 @@ export class GameState {
     }
 
     private commitTetrimino() {
+        if (!this.current) { throw new Error("Can't commit tetrimino on uninitialized game state."); }
         this.sounds.play(AudioHit);
-        const { tetrimino } = this.current!;
+        const { tetrimino } = this.current;
         this.playfield.update(tetrimino.overlayedOnMatrix);
         const { matrix, offsets } = this.playfield.removeHorizontals();
         const count = offsets.length;
@@ -262,7 +235,7 @@ export class GameState {
             const clearedGarbageLines = this.cancelIncomingGarbage(count);
             const lines = calculateGarbage(count) + Math.floor(clearedGarbageLines / 2);
             if (lines > 0) {
-                this.outgoingGarbage.push({ date: new Date(), lines });
+                this.outgoingGarbage.push({ time: this.timeCurrent, lines });
             }
             offsets.forEach(y => this.events.report({ effect: EffectType.LINE_CLEARED, y }));
         } else {
@@ -276,14 +249,13 @@ export class GameState {
                 this.comboCount = 0;
             }
         }
-        this.lastHit = new Date();
+        this.timeLastHit = this.timeCurrent;
         this.lastHitPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));
         this.newTetrimino();
     }
 
-    public get timeSinceLastHit() {
-        if (!this.lastHit) { return Number.POSITIVE_INFINITY; }
-        return differenceInMilliseconds(new Date(), this.lastHit) / 1000;
+    public get timeSinceLastHit(): number | undefined {
+        return this.timeCurrent - this.timeLastHit;
     }
 
     public awardScore(action: ScoreAction) {
@@ -291,6 +263,7 @@ export class GameState {
     }
 
     public scoreLineCount(count: number) {
+        if (!this.current) { throw new Error("Can't score on uninitialized game state."); }
         const { level } = this;
         switch (count) {
             case 1: this.awardScore({ action: ScoreActionType.SINGLE, level });
@@ -298,11 +271,11 @@ export class GameState {
             case 3: this.awardScore({ action: ScoreActionType.TRIPLE, level });
             case 4: this.awardScore({ action: ScoreActionType.TETRIS, level });
         }
-        if (this.current!.hardDrops) {
-            this.awardScore({ action: ScoreActionType.HARD_DROP, cells: this.current!.hardDrops });
+        if (this.current.hardDrops) {
+            this.awardScore({ action: ScoreActionType.HARD_DROP, cells: this.current.hardDrops });
         }
-        if (this.current!.softDrops) {
-            this.awardScore({ action: ScoreActionType.SOFT_DROP, cells: this.current!.softDrops });
+        if (this.current.softDrops) {
+            this.awardScore({ action: ScoreActionType.SOFT_DROP, cells: this.current.softDrops });
         }
     }
 
@@ -311,17 +284,5 @@ export class GameState {
             return this.playfield;
         }
         return this.current.tetrimino.overlayedOnMatrixWithGhost;
-    }
-
-    public start() {
-        this.reset();
-        this.running = true;
-        this.update();
-        this.timeStarted = new Date();
-    }
-
-    public stop() {
-        this.running = false;
-        if (typeof this.timeout === "number" && this.timeout > -1) { clearTimeout(this.timeout); }
     }
 }

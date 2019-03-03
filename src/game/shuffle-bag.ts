@@ -1,4 +1,3 @@
-import { component } from "tsdi";
 import * as Random from "random-seed";
 import {
     Tetrimino,
@@ -10,13 +9,14 @@ import {
     TetriminoT,
     TetriminoZ,
 } from "./tetriminos";
+import { randomSeed } from "utils";
+import { Playfield } from "./playfield";
 
-@component
 export class ShuffleBag {
     private sequence: Tetrimino[] = [];
     private random: Random.RandomSeed;
 
-    public seed(seed = `${Math.random}`.replace(/\./, "")) {
+    constructor(private playfield: Playfield, seed = randomSeed()) {
         this.random = Random.create(seed);
         this.refill();
     }
@@ -45,18 +45,13 @@ export class ShuffleBag {
 
     private refill() {
         this.sequence.push(...this.shuffle([
-            new TetriminoI(),
-            new TetriminoJ(),
-            new TetriminoL(),
-            new TetriminoO(),
-            new TetriminoS(),
-            new TetriminoT(),
-            new TetriminoZ(),
+            new TetriminoI(this.playfield),
+            new TetriminoJ(this.playfield),
+            new TetriminoL(this.playfield),
+            new TetriminoO(this.playfield),
+            new TetriminoS(this.playfield),
+            new TetriminoT(this.playfield),
+            new TetriminoZ(this.playfield),
         ]));
-    }
-
-    public reset(seed?: string) {
-        this.sequence = [];
-        this.seed(seed);
     }
 }

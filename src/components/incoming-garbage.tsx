@@ -4,11 +4,13 @@ import { Config } from "config";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { Garbage } from "types";
+import { ObservableGame } from "observable-game";
 import * as css from "./incoming-garbage.scss";
 
 @external @observer
 export class IncomingGabage extends React.Component<{ garbage: Garbage }> {
     @inject private config: Config;
+    @inject private game: ObservableGame;
     private interval: any;
 
     @initialize protected initialize() {
@@ -20,7 +22,7 @@ export class IncomingGabage extends React.Component<{ garbage: Garbage }> {
     }
 
     public get milliseconds() {
-        return differenceInMilliseconds(new Date(), this.props.garbage.date);
+        return this.game.seconds - this.props.garbage.time;
     }
 
     public get progress() {

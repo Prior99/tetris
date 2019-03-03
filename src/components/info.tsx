@@ -58,7 +58,11 @@ export class Info extends React.Component {
                                 Incoming
                             </div>
                             <div className={css.value}>
-                                {this.game.incomingGarbage.map(garbage => <IncomingGabage garbage={garbage} />)}
+                                {
+                                    this.game.incomingGarbage.map((garbage, index) => {
+                                        return <IncomingGabage key={index} garbage={garbage} />;
+                                    })
+                                }
                             </div>
                         </div>
                     ) : <></>

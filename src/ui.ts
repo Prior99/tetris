@@ -1,5 +1,5 @@
 import { component, initialize } from "tsdi";
-import { generateName } from "names";
+import { generateName } from "utils";
 import { observable } from "mobx";
 import { Page, Settings } from "types";
 

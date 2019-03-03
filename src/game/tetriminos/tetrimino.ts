@@ -13,7 +13,6 @@ export enum Rotation {
 
 @external
 export class Tetrimino {
-    @inject private playfield: Playfield;
     @inject private config: Config;
 
     private ghostPosition: Vec2;
@@ -26,6 +25,7 @@ export class Tetrimino {
     constructor(
         public matrix: Matrix,
         public offset: Vec2,
+        public playfield: Playfield,
         public rotation = Rotation.DEG_0,
     ) {
         this.initial = { matrix, offset, rotation };

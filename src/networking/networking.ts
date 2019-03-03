@@ -4,7 +4,7 @@ import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
 import { Game } from "game";
-import { Matrix } from "utils";
+import { Matrix, randomSeed } from "utils";
 import { Config } from "config";
 import { Page } from "types";
 import { Message, MessageType, RemoteGameState } from "./messages";
@@ -181,7 +181,7 @@ export class Networking {
         if (this.mode !== NetworkingMode.HOST) {
             return;
         }
-        const seed = `${Math.random()}`.replace(/\./, "");
+        const seed = randomSeed();
         this.send({
             message: MessageType.START,
             seed,

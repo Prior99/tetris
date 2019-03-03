@@ -1,11 +1,10 @@
-import { component, inject } from "tsdi";
+import { external, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { GameState } from "./game-state";
 
-@component
+@external
 export class Input {
-    @inject private gameState: GameState;
     @inject private config: Config;
 
     public moveLeftTimeout?: any;
@@ -13,7 +12,7 @@ export class Input {
     public moveDownTimeout?: any;
     public rotateTimeout?: any;
 
-    public enable() {
+    constructor(private gameState: GameState) {
         window.addEventListener("keyup", this.handleKeyUp);
         window.addEventListener("keydown", this.handleKeyDown);
     }
@@ -114,11 +113,6 @@ export class Input {
             }
             case " ": {
                 this.gameState.inputHardDrop();
-                break;
-            }
-            case "p": {
-                // this.gameState.debug = !this.gameState.debug;
-                this.gameState.addIncomingGarbage({ lines: 1, date: new Date() });
                 break;
             }
             case "Shift":

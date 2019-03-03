@@ -4,6 +4,7 @@ import { Config } from "config";
 import { CellColor } from "types";
 import { matrixInitializer } from "./matrix-initializer";
 import { Tetrimino } from "./tetrimino";
+import { Playfield } from "../playfield";
 
 export class TetriminoMatrixL extends Matrix {
     constructor() {
@@ -17,10 +18,11 @@ export class TetriminoMatrixL extends Matrix {
 
 @external
 export class TetriminoL extends Tetrimino {
-    constructor(@inject config?: Config) {
+    constructor(playfield: Playfield, @inject config?: Config) {
         super(
             new TetriminoMatrixL(),
             config!.logicalSize.horizontalCenter().add(vec2(0, -3)),
+            playfield,
         );
     }
 }

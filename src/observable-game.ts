@@ -1,4 +1,4 @@
-import { component, inject, initialize, external } from "tsdi";
+import { component, inject, external } from "tsdi";
 import { observable, computed } from "mobx";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
@@ -13,20 +13,16 @@ export class ObservableGame {
     @observable public score = 0;
     @observable public lines = 0;
     @observable public level = 0;
-    @observable public toppedOut = false;
-    @observable public gameMode: GameMode;
+    @observable public gameOver = false;
+    @observable public gameMode?: GameMode;
+    @observable public seconds: number;
     @observable.shallow public incomingGarbage: Garbage[] = [];
     @observable.shallow public tetriminoPreview: Matrix[] = [];
 
     private interval: any;
 
-    @initialize protected initialize() {
-        this.interval = setInterval(this.update, 100);
-        this.update();
-    }
-
     @computed public get isSinglePlayer() {
-        return this.game.gameMode === GameMode.SINGLE_PLAYER;
+        return this.gameMode === GameMode.SINGLE_PLAYER;
     }
 
     protected componentWillUnmount() {
@@ -47,12 +43,17 @@ export class ObservableGame {
     }
 
     @bind private update() {
+        if (!this.game.running) {
+            this.gameOver = true;
+            return;
+        }
+        this.gameOver = false;
         this.holdPiece = this.game.holdPiece;
         this.score = this.game.score;
         this.lines = this.game.lines;
         this.level = this.game.level;
-        this.toppedOut = this.game.toppedOut;
         this.gameMode = this.game.gameMode;
+        this.seconds = this.game.seconds;
         if (this.incomingGarbageChanged) {
             this.incomingGarbage = [ ...this.game.incomingGarbage ];
         }
@@ -69,5 +70,12 @@ export class ObservableGame {
     public start(gameMode: GameMode.MULTI_PLAYER, seed: string): void;
     public start(gameMode: GameMode, seed?: string): void {
         this.game.start(gameMode, seed);
+        this.interval = setInterval(this.update, 100);
+        this.update();
+    }
+
+    public stop() {
+        this.game.stop();
+        clearInterval(this.interval);
     }
 }

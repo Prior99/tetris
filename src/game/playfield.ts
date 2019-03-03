@@ -1,16 +1,12 @@
-import { component, inject } from "tsdi";
+import { external, inject } from "tsdi";
 import { Config } from "config";
 import { CellColor } from "types";
 import { vec2, Matrix  } from "utils";
 
-@component
+@external
 export class Playfield extends Matrix {
     constructor(@inject private config?: Config) {
         super(config!.logicalSize);
-    }
-
-    public reset() {
-        this.update(new Matrix(this.config!.logicalSize));
     }
 
     public addGarbageLines(lines: number) {
