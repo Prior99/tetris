@@ -1,6 +1,6 @@
 import { component } from "tsdi";
 import { observable, computed } from "mobx";
-import { Page, NetworkingMode, RemoteUser, ChatMessage } from "types";
+import { NetworkingMode, RemoteUser, ChatMessage } from "types";
 import { Peer } from "./peer";
 import { Host } from "./host";
 import { Client } from "./client";

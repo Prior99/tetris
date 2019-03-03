@@ -1,11 +1,11 @@
-import { component, inject } from "tsdi";
-import { observable, computed } from "mobx";
+import { inject } from "tsdi";
+import { observable } from "mobx";
 import PeerJS from "peerjs";
 import { Matrix } from "utils";
 import { UI } from "ui";
 import { Config } from "config";
 import { Game } from "game";
-import { RemoteGameState, GameMode, Page } from "types";
+import { GameMode, Page } from "types";
 import { ObservableGame } from "observable-game";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
@@ -60,12 +60,10 @@ export abstract class Peer {
     }
 
     protected sendTo(connection: PeerJS.DataConnection, message: Message) {
-        console.log("Sending", message);
         connection.send(message);
     }
 
     protected handleMessage(connectionId: string, message: Message) {
-        console.log("Got message", message, "from", connectionId);
         switch (message.message) {
             case MessageType.CHAT_MESSAGE: {
                 this.chat.add(message.chatMessage);

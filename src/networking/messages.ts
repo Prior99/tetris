@@ -48,7 +48,6 @@ export interface MessageRestart {
     seed: string;
 }
 
-
 export interface MessageChatMessage {
     message: MessageType.CHAT_MESSAGE;
     chatMessage: ChatMessage;

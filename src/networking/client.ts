@@ -1,4 +1,4 @@
-import { external, initialize } from "tsdi";
+import { external } from "tsdi";
 import { observable } from "mobx";
 import PeerJS from "peerjs";
 import { Message, MessageType } from "./messages";

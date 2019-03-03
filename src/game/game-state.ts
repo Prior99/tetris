@@ -1,5 +1,4 @@
 import { external, inject } from "tsdi";
-import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { vec2, Vec2 } from "utils";
 import {

@@ -26,7 +26,6 @@ export class Lighting extends Graphics {
             (sprite.dimensions.y - this.config.tetriminoPixelSize) / 2,
         ).mult(this.scaleFactor);
         const pixelPosition = this.translate(position).sub(vec2(0, this.cellPixelSize.y));
-        const { totalDuration } = sprite;
         const time = this.getTetriminoBloomAnimationTime(position, sprite);
         this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
     }

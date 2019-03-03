@@ -1,5 +1,5 @@
 import { differenceInMilliseconds } from "date-fns";
-import { component, inject, TSDI } from "tsdi";
+import { component, inject } from "tsdi";
 import { EffectInfo, Garbage, GameMode, SoundsMode } from "types";
 import { Matrix, Vec2 } from "utils";
 import { Config } from "config";

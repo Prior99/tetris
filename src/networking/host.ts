@@ -1,4 +1,4 @@
-import { external, initialize } from "tsdi";
+import { external } from "tsdi";
 import PeerJS from "peerjs";
 import { randomSeed } from "utils";
 import { Message, MessageType } from "./messages";
