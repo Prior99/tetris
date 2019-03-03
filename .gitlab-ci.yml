@@ -1,0 +1,63 @@
+image: node:10
+
+stages:
+  - build
+  - test
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git aseprite xvfb -qq
+    - npm install -g yarn
+  stage: build
+  script:
+    - xvfb-run make build
+  artifacts:
+    paths:
+      - assets/
+      - dist/
+      - images/
+      - manifest.json
+      - index.html
+
+test:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git -qq
+    - npm install -g yarn
+  stage: test
+  script:
+    - make test
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - coverage/
+
+lint:
+  before_script:
+    - apt-get update -qq
+    - apt-get install make git -qq
+    - npm install -g yarn
+  stage: test
+  script:
+    - make lint
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - mv dist assets index.html images manifest.json public/
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+  when: manual
