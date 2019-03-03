@@ -1,3 +1,4 @@
+import { equals } from "ramda";
 import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
@@ -18,6 +19,7 @@ export class Background extends Graphics {
 
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
+    private lastCanvasSizeRendered?: [number, number];
     private lastSerialRendered?: string;
 
     @initialize
@@ -37,13 +39,26 @@ export class Background extends Graphics {
 
     protected get sprite() {
         return this.sprites.sprite(this.spriteClass);
+
+    }
+
+    protected get canvasSize(): [number, number] {
+        if (!this.canvas) { return [0, 0]; }
+        return [this.canvas.width, this.canvas.height];
+    }
+
+    public rescale(size: Vec2) {
+        super.rescale(size);
+        this.lastCanvasSizeRendered = undefined;
     }
 
     private get shouldRender() {
-        const levelChanged = !this.lastLevelRendered || this.lastLevelRendered !== this.game.level;
-        const sizeChanged = !this.lastResizeRendered || !this.lastResizeRendered.equals(this.pixelSize);
-        const serialChanged = !this.lastSerialRendered || this.lastSerialRendered !== this.game.serial;
-        return levelChanged || sizeChanged || serialChanged;
+        const levelChanged = this.lastLevelRendered === undefined || this.lastLevelRendered !== this.game.level;
+        const sizeChanged = this.lastResizeRendered === undefined || !this.lastResizeRendered.equals(this.pixelSize);
+        const serialChanged = this.lastSerialRendered === undefined || this.lastSerialRendered !== this.game.serial;
+        const canvasSizeChanged = this.lastCanvasSizeRendered === undefined ||
+            !equals(this.lastCanvasSizeRendered, this.canvasSize);
+        return levelChanged || sizeChanged || serialChanged || canvasSizeChanged;
     }
 
     @bind public render() {
@@ -58,5 +73,6 @@ export class Background extends Graphics {
         this.lastLevelRendered = this.game.level;
         this.lastResizeRendered = this.pixelSize;
         this.lastSerialRendered = this.game.serial;
+        this.lastCanvasSizeRendered = this.canvasSize;
     }
 }
