@@ -1,0 +1,15 @@
+{
+  "short_name": "Fretris",
+  "name": "Fretris",
+  "icons": [
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "224x224"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "rgba(250, 255, 255)"
+}
