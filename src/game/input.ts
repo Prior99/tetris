@@ -18,6 +18,7 @@ export class Input {
     public moveDown?: KeyState;
     public rotateRight?: KeyState;
     public rotateLeft?: KeyState;
+    public hardDrop?: KeyState;
 
     private timeCurrent = 0;
 
@@ -39,6 +40,14 @@ export class Input {
         window.removeEventListener("keydown", this.handleKeyDown);
     }
 
+    private handleOnceInput(callback: () => void, state?: KeyState) {
+        if (!state) { return; }
+        if (!state.initialFired) {
+            state.initialFired = true;
+            callback();
+        }
+    }
+
     private handleInput(callback: () => void, state?: KeyState, repeatTimeout = this.config.inputRepeatTimeout) {
         if (!state) { return; }
         if (!state.initialFired) {
@@ -54,7 +63,9 @@ export class Input {
 
     public tick(time: number) {
         this.timeCurrent = time;
-        this.handleInput(this.gameState.inputRotateRight, this.rotateRight, this.config.inputRotateRepeatTimeout);
+        this.handleOnceInput(this.gameState.inputRotateRight, this.rotateRight);
+        this.handleOnceInput(this.gameState.inputRotateLeft, this.rotateLeft);
+        this.handleOnceInput(this.gameState.inputHardDrop, this.hardDrop);
         this.handleInput(this.gameState.inputMoveLeft, this.moveLeft);
         this.handleInput(this.gameState.inputMoveRight, this.moveRight);
         this.handleInput(this.gameState.inputMoveDown, this.moveDown);
@@ -81,6 +92,10 @@ export class Input {
             case "ArrowDown":
             case "s": {
                 this.moveDown = undefined;
+                break;
+            }
+            case " ": {
+                this.hardDrop = undefined;
                 break;
             }
         }
@@ -118,7 +133,9 @@ export class Input {
                 break;
             }
             case " ": {
-                this.gameState.inputHardDrop();
+                if (!this.hardDrop) {
+                    this.hardDrop = this.keyState(this.timeCurrent);
+                }
                 break;
             }
             case "Shift":
