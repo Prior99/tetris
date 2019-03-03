@@ -1,9 +1,8 @@
 import { external, inject, initialize } from "tsdi";
-import { vec2, Vec2 } from "utils";
-import { Matrix } from "../matrix";
-import { Playfield } from "../playfield";
-import { CellColor } from "../cell-color";
+import { vec2, Vec2, Matrix  } from "utils";
+import { CellColor } from "types";
 import { Config } from "config";
+import { Playfield } from "../playfield";
 
 export enum Rotation {
     DEG_0 = 0,

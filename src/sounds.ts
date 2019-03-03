@@ -1,12 +1,14 @@
 import { component, inject, initialize } from "tsdi";
-import { AudioManager } from "./audio-manager";
-import { Audio } from "./audio";
-import { AudioMusic120Bpm } from "./audio-music-120bpm";
-import { AudioMusic130Bpm } from "./audio-music-130bpm";
-import { AudioMusic140Bpm } from "./audio-music-140bpm";
-import { AudioMusic150Bpm } from "./audio-music-150bpm";
-import { AudioMusic160Bpm } from "./audio-music-160bpm";
-import { AudioMusic170Bpm } from "./audio-music-170bpm";
+import {
+    AudioManager,
+    Audio,
+    AudioMusic120Bpm,
+    AudioMusic130Bpm,
+    AudioMusic140Bpm,
+    AudioMusic150Bpm,
+    AudioMusic160Bpm,
+    AudioMusic170Bpm,
+} from "resources";
 import { Constructable } from "types";
 import { UI } from "ui";
 import { autorun } from "mobx";

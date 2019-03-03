@@ -1,15 +1,9 @@
 import { component, inject } from "tsdi";
 import { differenceInMilliseconds } from "date-fns";
 import { bind } from "lodash-decorators";
-import { ShuffleBag } from "./shuffle-bag";
 import { Config } from "config";
-import { speed } from "./speed";
-import { Tetrimino } from "./tetriminos";
-import { Playfield } from "./playfield";
 import { vec2, Vec2 } from "utils";
 import {
-    Sounds,
-    musicSpeedForLevel,
     AudioMoveDown,
     AudioRotateLeft,
     AudioRotateRight,
@@ -22,13 +16,14 @@ import {
     AudioScore4,
     AudioLevelUp,
 } from "resources";
+import { musicSpeedForLevel, Sounds } from "sounds";
+import { Garbage } from "types";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
 import { Effects, EffectType } from "./effects";
-
-export interface Garbage {
-    lines: number;
-    date: Date;
-}
+import { speed } from "./speed";
+import { Tetrimino } from "./tetriminos";
+import { Playfield } from "./playfield";
+import { ShuffleBag } from "./shuffle-bag";
 
 function calculateGarbage(lines: number): number {
     switch (lines) {
@@ -87,6 +82,8 @@ export class GameState {
         this.initialized = new Date();
         this.lastTick = new Date();
         this.holdPiece = undefined;
+        this.outgoingGarbage = [];
+        this.incomingGarbage = [];
         this.newTetrimino();
     }
 

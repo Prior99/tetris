@@ -2,8 +2,9 @@ import { external, inject, initialize } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Leaderboard } from "leaderboard";
-import { UI, Page } from "ui";
+import { UI } from "ui";
 import { bind } from "lodash-decorators";
+import { Page } from "types";
 import * as css from "./leaderboard-view.scss";
 
 @external @observer

@@ -5,24 +5,22 @@ import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OwnGame } from "graphics";
-import { GameState, ShuffleBag } from "game";
-import { UI, Page } from "ui";
+import { UI } from "ui";
 import { Networking, NetworkGame } from "networking";
 import * as css from "./own-game-canvas.scss";
 import { vec2 } from "utils";
 import { ObservableGame } from "observable-game";
 import { Leaderboard } from "leaderboard";
+import { Page } from "types";
 
 @external @observer
 export class OwnGameCanvas extends React.Component {
     @inject private config: Config;
     @inject private ownGame: OwnGame;
-    @inject private gameState: GameState;
     @inject private game: ObservableGame;
     @inject private ui: UI;
     @inject private networking: Networking;
     @inject private networkGame: NetworkGame;
-    @inject private shuffleBag: ShuffleBag;
     @inject private leaderboard: Leaderboard;
 
     @observable private submitScoreVisible = false;
@@ -72,9 +70,7 @@ export class OwnGameCanvas extends React.Component {
     @bind private handleReset() {
         const seed = `${Math.random}`.replace(/\./, "");
         if (this.ui.isSinglePlayer || this.networking.isHost) {
-            this.gameState.reset();
-            this.gameState.start();
-            this.shuffleBag.reset(seed);
+            this.game.restart(seed);
         }
         this.networking.restart(seed);
         this.ui.reset();
@@ -86,7 +82,7 @@ export class OwnGameCanvas extends React.Component {
 
     @bind private handleLeaderboardSubmit() {
         this.submitScoreVisible = false;
-        this.leaderboard.submitScore(this.leaderboardName, this.gameState.score);
+        this.leaderboard.submitScore(this.leaderboardName, this.game.score);
         this.ui.leaderboardSubmitted = true;
     }
 

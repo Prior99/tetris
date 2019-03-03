@@ -1,4 +1,3 @@
-import { CellColor } from "game";
 import {
     SpriteTetriminoI,
     SpriteTetriminoJ,
@@ -21,7 +20,7 @@ import {
     Sprite,
 } from "resources";
 
-import { Constructable } from "types";
+import { CellColor, Constructable } from "types";
 
 export function spriteForCellColor(cellColor: CellColor): Constructable<Sprite> | undefined {
     switch (cellColor) {

@@ -2,6 +2,8 @@ import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Loader } from "resources";
+import { UI } from "ui";
+import { Page } from "types";
 import { SinglePlayer } from "./single-player";
 import { Settings } from "./settings";
 import { Menu } from "./menu";
@@ -9,7 +11,6 @@ import { LoaderScreen } from "./loader-screen";
 import { Connect } from "./connect";
 import { Lobby } from "./lobby";
 import { MultiPlayer } from "./multi-player";
-import { Page, UI } from "ui";
 import { LeaderboardView } from "./leaderboard-view";
 
 @external @observer

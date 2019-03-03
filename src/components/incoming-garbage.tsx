@@ -3,7 +3,7 @@ import { differenceInMilliseconds } from "date-fns";
 import { Config } from "config";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { Garbage } from "game";
+import { Garbage } from "types";
 import * as css from "./incoming-garbage.scss";
 
 @external @observer

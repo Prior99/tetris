@@ -1,4 +1,4 @@
-import { CellColor } from "./cell-color";
+import { CellColor } from "types";
 import { vec2, Vec2 } from "utils";
 
 export class Matrix {

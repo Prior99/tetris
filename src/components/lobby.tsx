@@ -4,7 +4,8 @@ import { observer } from "mobx-react";
 import { observable } from "mobx";
 import { Chat, RemoteUsers, Networking, NetworkingMode } from "networking";
 import { bind } from "lodash-decorators";
-import { UI, Page } from "ui";
+import { UI } from "ui";
+import { Page } from "types";
 import * as css from "./lobby.scss";
 import { ChatMessage } from "./chat-message";
 

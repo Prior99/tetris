@@ -4,9 +4,8 @@ import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OtherGame } from "graphics";
 import * as css from "./other-game-canvas.scss";
-import { vec2 } from "utils";
+import { vec2, Matrix  } from "utils";
 import { RemoteGameState } from "networking";
-import { Matrix } from "game";
 
 @external
 export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: RemoteGameState }> {

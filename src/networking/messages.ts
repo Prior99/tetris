@@ -1,4 +1,4 @@
-import { Garbage } from "game";
+import { Garbage } from "types";
 
 export enum MessageType {
     HELLO,

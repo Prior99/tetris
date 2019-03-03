@@ -2,13 +2,15 @@ import Peer from "peerjs";
 import { observable } from "mobx";
 import { component, inject } from "tsdi";
 import { bind } from "lodash-decorators";
+import { UI } from "ui";
+import { Game } from "game";
+import { Matrix } from "utils";
+import { Config } from "config";
+import { Page } from "types";
 import { Message, MessageType, RemoteGameState } from "./messages";
 import { RemoteUsers } from "./remote-users";
 import { NetworkGame } from "./network-game";
-import { UI, Page } from "ui";
-import { Matrix, Playfield, GameState, ShuffleBag } from "game";
 import { Chat } from "./chat";
-import { Config } from "config";
 
 export enum NetworkingMode {
     CLIENT = "client",
@@ -23,9 +25,7 @@ export class Networking {
     @inject private ui: UI;
     @inject private networkGame: NetworkGame;
     @inject private config: Config;
-    @inject private playfield: Playfield;
-    @inject private gameState: GameState;
-    @inject private shuffleBag: ShuffleBag;
+    @inject private game: Game;
 
     private peer: Peer;
     private connection: Peer.DataConnection;
@@ -87,17 +87,14 @@ export class Networking {
                 break;
             }
             case MessageType.RESTART: {
-                this.gameState.reset();
-                this.playfield.reset();
-                this.gameState.start();
+                this.game.restart();
                 this.networkGame.reset();
-                this.shuffleBag.reset(message.seed);
                 this.ui.reset();
                 break;
             }
             case MessageType.GARBAGE: {
                 if (this.id === message.targetId) {
-                    this.gameState.addIncomingGarbage(message.garbage);
+                    this.game.addIncomingGarbage(message.garbage);
                 }
                 break;
             }
@@ -212,8 +209,8 @@ export class Networking {
     }
 
     public updateGarbage() {
-        if (this.gameState.outgoingGarbage.length === 0) { return; }
-        this.gameState.outgoingGarbage.forEach(garbage => {
+        if (!this.game.hasOutgoingGarbage) { return; }
+        this.game.outgoingGarbage.forEach(garbage => {
             const target = this.randomOtherAliveUser();
             if (!target) { return; }
             this.send({
@@ -222,18 +219,18 @@ export class Networking {
                 garbage,
             });
         });
-        this.gameState.outgoingGarbage = [];
+        this.game.clearOutgoingGarbage();
     }
 
     public playfieldLoop() {
         const state = {
-            score: this.gameState.score,
-            lines: this.gameState.lines,
-            level: this.gameState.level,
-            toppedOut: this.gameState.toppedOut,
+            score: this.game.score,
+            lines: this.game.lines,
+            level: this.game.level,
+            toppedOut: this.game.toppedOut,
         };
         this.networkGame.updateState(this.id, state);
-        this.updateMatrix(this.gameState.temporaryState, state);
+        this.updateMatrix(this.game.temporaryState, state);
         this.updateGarbage();
         setTimeout(() => this.playfieldLoop(), this.config.networkSpeed * 1000);
     }

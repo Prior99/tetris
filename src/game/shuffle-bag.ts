@@ -55,7 +55,7 @@ export class ShuffleBag {
         ]));
     }
 
-    public reset(seed: string) {
+    public reset(seed?: string) {
         this.sequence = [];
         this.seed(seed);
     }

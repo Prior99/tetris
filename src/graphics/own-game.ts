@@ -1,7 +1,8 @@
 import { component, inject, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
-import { CellColor, GameState } from "game";
+import { Game } from "game";
+import { CellColor } from "types";
 import { Lighting } from "./lighting";
 import { Background } from "./background";
 import { Graphics } from "./graphics";
@@ -11,7 +12,7 @@ import { spriteForCellColor } from "./sprite-for-cell-color";
 export class OwnGame extends Graphics {
     @inject private lighting: Lighting;
     @inject private background: Background;
-    @inject private gameState: GameState;
+    @inject private game: Game;
 
     @initialize protected async initialize() {
         this.background.render();
@@ -75,7 +76,7 @@ export class OwnGame extends Graphics {
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {
                 const pos = vec2(x, y);
-                this.renderCell(this.translate(pos), this.gameState.temporaryState.at(pos));
+                this.renderCell(this.translate(pos), this.game.temporaryState.at(pos));
             }
         }
     }

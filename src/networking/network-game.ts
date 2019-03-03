@@ -2,8 +2,8 @@ import { component, inject } from "tsdi";
 import { equals } from "ramda";
 import { observable, computed } from "mobx";
 import { RemoteUsers } from "./remote-users";
-import { Matrix } from "game";
 import { RemoteGameState } from "./messages";
+import { Matrix } from "utils";
 import { Config } from "config";
 
 @component

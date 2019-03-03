@@ -1,8 +1,7 @@
 import { component, inject } from "tsdi";
-import { Matrix } from "./matrix";
 import { Config } from "config";
-import { CellColor } from "./cell-color";
-import { vec2 } from "utils";
+import { CellColor } from "types";
+import { vec2, Matrix  } from "utils";
 
 @component
 export class Playfield extends Matrix {

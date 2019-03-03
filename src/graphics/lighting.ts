@@ -1,7 +1,8 @@
 import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { vec2, Vec2 } from "utils";
-import { EffectInfo, Effects, EffectType, CellColor, GameState, EffectLineCleared } from "game";
+import { Game } from "game";
+import { EffectLineCleared, EffectInfo, EffectType, CellColor } from "types";
 import { Graphics } from "./graphics";
 import { lightSpriteForCellColor } from "./sprite-for-cell-color";
 import { SpriteEffectLineCleared } from "resources";
@@ -9,8 +10,7 @@ import { differenceInMilliseconds } from "date-fns";
 
 @component
 export class Lighting extends Graphics {
-    @inject private gameState: GameState;
-    @inject private effects: Effects;
+    @inject private game: Game;
 
     @initialize
     protected async initialize() {
@@ -27,11 +27,11 @@ export class Lighting extends Graphics {
         ).mult(this.scaleFactor);
         const pixelPosition = this.translate(position).sub(vec2(0, this.cellPixelSize.y));
         const { totalDuration } = sprite;
-        const distance = this.gameState.lastHitPosition
-            ? this.gameState.lastHitPosition.distance(position)
+        const distance = this.game.lastHitPosition
+            ? this.game.lastHitPosition.distance(position)
             : Number.POSITIVE_INFINITY;
-        const time = this.gameState.timeSinceLastHit < totalDuration
-            ? Math.min(totalDuration - 0.2, this.gameState.timeSinceLastHit * 3 + distance / 2)
+        const time = this.game.timeSinceLastHit < totalDuration
+            ? Math.min(totalDuration - 0.2, this.game.timeSinceLastHit * 3 + distance / 2)
             : totalDuration - 0.15;
         this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
     }
@@ -44,14 +44,14 @@ export class Lighting extends Graphics {
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {
                 const pos = vec2(x, y);
-                this.renderCell(pos, this.gameState.temporaryState.at(pos));
+                this.renderCell(pos, this.game.temporaryState.at(pos));
             }
         }
         this.renderLineClearEffects();
     }
 
     private renderLineClearEffects() {
-        this.effects.effects.forEach(effect => {
+        this.game.effects.forEach(effect => {
             if (effect.effect.effect === EffectType.LINE_CLEARED) {
                 this.renderLineClearEffect(effect);
             }

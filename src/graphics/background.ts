@@ -1,6 +1,6 @@
 import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
-import { GameState } from "game";
+import { Game } from "game";
 import { vec2, Vec2 } from "utils";
 import {
    SpriteFloorLove,
@@ -14,7 +14,7 @@ import { Graphics } from "./graphics";
 
 @component
 export class Background extends Graphics {
-    @inject private gameState: GameState;
+    @inject private game: Game;
 
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
@@ -25,7 +25,7 @@ export class Background extends Graphics {
     }
 
     protected get spriteClass() {
-        const { level } = this.gameState;
+        const { level } = this.game;
         if (level < 1) { return SpriteFloorBricks; }
         if (level < 2) { return SpriteFloorTetris; }
         if (level < 4) { return SpriteFloorStars; }
@@ -39,7 +39,7 @@ export class Background extends Graphics {
    }
 
    private get shouldRender() {
-        return this.lastLevelRendered !== this.gameState.level || (
+        return this.lastLevelRendered !== this.game.level || (
             !this.lastResizeRendered || !this.lastResizeRendered.equals(this.pixelSize)
         );
     }
@@ -53,7 +53,7 @@ export class Background extends Graphics {
                 this.renderSprite(this.spriteClass, vec2(x, y), renderSize);
             }
         }
-        this.lastLevelRendered = this.gameState.level;
+        this.lastLevelRendered = this.game.level;
         this.lastResizeRendered = this.pixelSize;
     }
 }

@@ -1,10 +1,11 @@
 import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { UI, Page } from "ui";
+import { UI } from "ui";
+import { Page } from "types";
 import { bind } from "lodash-decorators";
 import * as css from "./menu.scss";
-import { Sounds } from "resources";
+import { Sounds } from "sounds";
 
 @external @observer
 export class Menu extends React.Component {

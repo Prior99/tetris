@@ -1,31 +1,10 @@
 import { component, initialize } from "tsdi";
 import { generateName } from "names";
 import { observable, computed } from "mobx";
+import { GameMode, Page, Settings } from "types";
 
 const localStorageIdentifier = "FRETRIS";
 const localStorageVersion = 1;
-
-interface Settings {
-    volumeMusic: number;
-    volumeSounds: number;
-    version: number;
-    name: string;
-}
-
-export enum Page {
-    MENU = "menu",
-    SETTINGS = "setting",
-    SINGLE_PLAYER = "single-player",
-    LOBBY = "lobby",
-    CONNECT = "connect",
-    MULTI_PLAYER = "multi-player",
-    LEADERBOARD = "leaderboard",
-}
-
-export enum GameMode {
-    SINGLE_PLAYER = "single-player",
-    MULTI_PLAYER = "multi-player",
-}
 
 @component
 export class UI {

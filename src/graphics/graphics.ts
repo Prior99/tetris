@@ -7,11 +7,11 @@ import { differenceInMilliseconds } from "date-fns";
 
 @component
 export abstract class Graphics {
-   @inject protected config: Config;
-   @inject protected sprites: SpriteManager;
+    @inject protected config: Config;
+    @inject protected sprites: SpriteManager;
 
-   public canvas?: HTMLCanvasElement;
-   public ctx: CanvasRenderingContext2D;
+    public canvas?: HTMLCanvasElement;
+    public ctx: CanvasRenderingContext2D;
     public pixelSize = vec2(0, 0);
 
     private timeStarted?: Date;
@@ -56,13 +56,13 @@ export abstract class Graphics {
 
     public get scaleFactor() {
         return this.cellPixelSize.div(this.config.tetriminoPixelSize);
-   }
+    }
 
-   public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2, time?: number) {
-       this.sprites.sprite(sprite).render(
-           position,
-           dimensions,
-           this.ctx,
+    public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2, time?: number) {
+        this.sprites.sprite(sprite).render(
+            position,
+            dimensions,
+            this.ctx,
             typeof time === "number" ? time : this.seconds,
         );
     }

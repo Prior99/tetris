@@ -19,4 +19,3 @@ export * from "./audio-score-3";
 export * from "./audio-score-4";
 export * from "./audio-alert";
 export * from "./audio";
-export * from "./sounds";

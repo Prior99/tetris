@@ -1,28 +1,22 @@
 import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
+import { Sounds } from "sounds";
+import { ObservableGame } from "observable-game";
+import { UI } from "ui";
+import { GameMode } from "types";
+import { TetriminoPreviews } from "./tetrimino-previews";
 import { OwnGameCanvas } from "./own-game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
-import { Sounds } from "resources";
-import { GameState, ShuffleBag } from "game";
-import { Input } from "input";
-import { UI, GameMode } from "ui";
-import { TetriminoPreviews } from "./tetrimino-previews";
 
 @external @observer
 export class SinglePlayer extends React.Component {
-    @inject private sounds: Sounds;
-    @inject private shuffleBag: ShuffleBag;
-    @inject private gameState: GameState;
-    @inject private input: Input;
+    @inject private game: ObservableGame;
     @inject private ui: UI;
 
     @initialize protected initialize() {
-        this.sounds.startGame();
-        this.shuffleBag.seed();
-        this.gameState.start();
-        this.input.enable();
+        this.game.start(GameMode.SINGLE_PLAYER);
         this.ui.gameMode = GameMode.SINGLE_PLAYER;
     }
 

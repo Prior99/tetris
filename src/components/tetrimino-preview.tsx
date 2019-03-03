@@ -4,10 +4,10 @@ import { inject, external } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { spriteForCellColor } from "graphics";
-import * as css from "./tetrimino-preview.scss";
-import { vec2, Vec2 } from "utils";
-import { CellColor, Matrix } from "game";
+import { vec2, Vec2, Matrix } from "utils";
+import { CellColor } from "types";
 import { SpriteManager } from "resources";
+import * as css from "./tetrimino-preview.scss";
 
 @external @observer
 export class TetriminoPreview extends React.Component<{ matrix: Matrix, size?: number }> {
