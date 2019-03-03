@@ -23,12 +23,15 @@ This game has the following features:
 <img align="left" width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-1.png">
 <img align="left" width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-2.png">
 
+<br>
+
 ## Multiplayer
 
 Multiplayer is possible using WebRTC. The players send garbage lines to each other which are cancellable.
 
-<img align="left" width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-3.png">
-<img align="left" width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-4.png">
+<img align="left" width="600" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-4.png">
+
+<br>
 
 ## Contributing
 
