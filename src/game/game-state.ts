@@ -1,4 +1,5 @@
 import { external, inject } from "tsdi";
+import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { vec2, Vec2 } from "utils";
 import {
@@ -105,43 +106,43 @@ export class GameState {
 
     public get level() { return Math.floor(this.lines / 10); }
 
-    public inputRotateRight() {
+    @bind public inputRotateRight() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.sounds.play(AudioRotateRight);
         this.current.tetrimino.rotateRight();
     }
 
-    public inputRotateLeft() {
+    @bind public inputRotateLeft() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.sounds.play(AudioRotateLeft);
         this.current.tetrimino.rotateLeft();
     }
 
-    public inputMoveLeft() {
+    @bind public inputMoveLeft() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.current.tetrimino.moveLeft();
         this.sounds.play(AudioMoveDown);
     }
 
-    public inputMoveRight() {
+    @bind public inputMoveRight() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.current.tetrimino.moveRight();
         this.sounds.play(AudioMoveDown);
     }
 
-    public inputMoveDown() {
+    @bind public inputMoveDown() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.current.softDrops++;
         this.current.tetrimino.moveDown();
         this.sounds.play(AudioMoveDown);
     }
 
-    public inputHardDrop() {
+    @bind public inputHardDrop() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.current.hardDrops = this.current.tetrimino.hardDrop();
     }
 
-    public inputHoldPiece() {
+    @bind public inputHoldPiece() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         if (this.current.usedHoldPiece) { return; }
         const currentHoldPiece = this.holdPiece;

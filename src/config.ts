@@ -9,7 +9,6 @@ export class Config {
     public networkSpeed = 10 / 60;
     public initialInputTimeout = 10 / 60;
     public inputRepeatTimeout = 1.5 / 60;
-    public inputRotateRepeatTimeout = 10 / 60;
     public tetriminoPixelSize = 32;
     public loadStride = 2;
     public garbageTimeout = 4;

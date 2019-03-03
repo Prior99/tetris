@@ -133,9 +133,11 @@ export class Game {
 
     private tick() {
         if (!this.timeStarted) { throw new Error("Ticked but game was not started."); }
-        if (!this.gameState) { throw new Error("Tried to tick game that wasn't fully initialized."); }
+        if (!this.gameState || !this.input) { throw new Error("Tried to tick game that wasn't fully initialized."); }
         const now = new Date();
-        this.gameState.tick(differenceInMilliseconds(now, this.timeStarted) / 1000);
+        const time = differenceInMilliseconds(now, this.timeStarted) / 1000;
+        this.input.tick(time);
+        this.gameState.tick(time);
         if (this.gameState.toppedOut) {
             this.stop();
         } else {

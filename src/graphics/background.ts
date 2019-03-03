@@ -39,7 +39,6 @@ export class Background extends Graphics {
 
     protected get sprite() {
         return this.sprites.sprite(this.spriteClass);
-
     }
 
     protected get canvasSize(): [number, number] {

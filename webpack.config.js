@@ -1,5 +1,7 @@
+const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const path = require('path');
-const { HotModuleReplacementPlugin } = require("webpack");
+const { HotModuleReplacementPlugin, DefinePlugin } = require("webpack");
+const gitRevision = new GitRevisionPlugin({ lightweightTags: true });
 
 module.exports = {
     mode: "development",
@@ -80,5 +82,10 @@ module.exports = {
     },
     plugins: [
         new HotModuleReplacementPlugin(),
+        new DefinePlugin({
+            // Taken and adapted from the official README.
+            // See: https://www.npmjs.com/package/git-revision-webpack-plugin
+            "SOFTWARE_VERSION": JSON.stringify(gitRevision.version()),
+        }),
     ],
 };

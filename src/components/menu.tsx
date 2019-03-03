@@ -7,6 +7,8 @@ import { bind } from "lodash-decorators";
 import * as css from "./menu.scss";
 import { Sounds } from "sounds";
 
+declare const SOFTWARE_VERSION: string;
+
 @external @observer
 export class Menu extends React.Component {
     @inject private ui: UI;
@@ -36,7 +38,7 @@ export class Menu extends React.Component {
         return (
             <section className={css.menu}>
                 <div className={css.wrapper}>
-                    <h1>Fretris</h1>
+                    <h1>Fretris <span className={css.version}>version {SOFTWARE_VERSION}</span></h1>
                     <div className={css.content}>
                         <ul>
                             <li><a onClick={this.handleSinglePlayer}>Singleplayer</a></li>

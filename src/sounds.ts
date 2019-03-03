@@ -109,9 +109,9 @@ export class Sounds {
 
     public setMode(mode: SoundsMode) {
         if (mode === SoundsMode.GAME) {
-            this.filterNode.frequency.value = 1000;
-        } else {
             this.filterNode.frequency.value = 30000;
+        } else {
+            this.filterNode.frequency.value = 1000;
         }
     }
 
