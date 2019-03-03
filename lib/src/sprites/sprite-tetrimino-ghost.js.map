@@ -1,1 +1,0 @@
-{"version":3,"file":"sprite-tetrimino-ghost.js","sourceRoot":"","sources":["../../../src/sprites/sprite-tetrimino-ghost.ts"],"names":[],"mappings":";;;;;;;;;;;AAAA,+BAAgC;AAChC,qCAAkC;AAClC,yEAAyE;AAGzE,IAAa,oBAAoB,GAAjC,MAAa,oBAAqB,SAAQ,eAAM;IAC5C,gBAAgB,KAAK,CAAC,mBAAmB,CAAC,CAAC,CAAC,CAAC;CAChD,CAAA;AAFY,oBAAoB;IADhC,eAAQ;;GACI,oBAAoB,CAEhC;AAFY,oDAAoB"}
