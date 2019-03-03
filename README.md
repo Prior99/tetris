@@ -19,6 +19,7 @@ This game has the following features:
  * SRS rotation system
  * Lighting system
  * Leaderboards
+ * Hold piece
 
 <p align="center">
     <img width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-1.png">
