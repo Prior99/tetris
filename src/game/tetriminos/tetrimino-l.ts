@@ -8,10 +8,10 @@ import { Playfield } from "../playfield";
 
 export class TetriminoMatrixL extends Matrix {
     constructor() {
-        super(vec2(2, 3), matrixInitializer(CellColor.TETRIMINO_L, [
-            1, 0,
-            1, 0,
-            1, 1,
+        super(vec2(3, 3), matrixInitializer(CellColor.TETRIMINO_L, [
+            0, 0, 1,
+            1, 1, 1,
+            0, 0, 0,
         ]));
     }
 }

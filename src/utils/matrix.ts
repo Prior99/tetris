@@ -53,22 +53,20 @@ export class Matrix {
         return this.at(pos) === CellColor.EMPTY || this.at(pos) === CellColor.GHOST;
     }
 
-    public fits(other: Matrix, offset: Vec2): boolean {
-        if (offset.x < 0) { return false; }
-        if (offset.x + other.dimensions.x > this.dimensions.x) { return false; }
-        if (offset.y < 0) { return false; }
-        if (offset.y + other.dimensions.y > this.dimensions.y) { return false; }
-        return true;
+    public isInside(pos: Vec2): boolean {
+        return pos.x >= 0 && pos.x < this.dimensions.x && pos.y >= 0 && pos.y < this.dimensions.y;
     }
 
     public overlay(other: Matrix, offset: Vec2): Matrix {
-        if (!this.fits(other, offset)) { throw new Error("Can't overlay."); }
         const result = new Matrix(this);
         for (let x = 0; x < other.dimensions.x; ++x) {
             for (let y = 0; y < other.dimensions.y; ++y) {
-                const otherCellColor = other.at(vec2(x, y));
-                if (otherCellColor !== CellColor.EMPTY) {
-                    result.put(vec2(x, y).add(offset), otherCellColor);
+                const pos = vec2(x, y).add(offset);
+                if (result.isInside(pos)) {
+                    const otherCellColor = other.at(vec2(x, y));
+                    if (otherCellColor !== CellColor.EMPTY) {
+                        result.put(pos, otherCellColor);
+                    }
                 }
             }
         }
@@ -76,10 +74,14 @@ export class Matrix {
     }
 
     public collides(other: Matrix, offset: Vec2): boolean {
-        if (!this.fits(other, offset)) { return true; }
         for (let x = 0; x < other.dimensions.x; ++x) {
             for (let y = 0; y < other.dimensions.y; ++y) {
-                if (!this.emptyAt(vec2(x, y).add(offset)) && !other.emptyAt(vec2(x, y))) { return true; }
+                const pos = vec2(x, y).add(offset);
+                if (!this.isInside(pos)) {
+                    if (!other.emptyAt(vec2(x, y))) { return true; }
+                } else {
+                    if (!this.emptyAt(pos) && !other.emptyAt(vec2(x, y))) { return true; }
+                }
             }
         }
         return false;

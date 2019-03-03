@@ -44,7 +44,7 @@ export class Lighting extends Graphics {
     @bind public render() {
         this.renderClear();
         this.ctx.globalCompositeOperation = "lighten";
-        this.ctx.fillStyle = "rgb(25, 25, 25)";
+        this.ctx.fillStyle = "rgb(70, 70, 70)";
         this.ctx.fillRect(0, 0, this.pixelSize.x, this.pixelSize.y);
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {

@@ -159,7 +159,7 @@ export class Tetrimino {
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 0))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(-1, -1))) ||
                     this.attemptRotation(newMatrix, this.offset.add(vec2(0, 2))) ||
-                    this.attemptRotation(newMatrix, this.offset.add(vec2(1, 2)))
+                    this.attemptRotation(newMatrix, this.offset.add(vec2(-1, 2)))
                 ) {
                     this.setRotation(Rotation.DEG_0);
                 }

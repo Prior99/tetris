@@ -86,20 +86,6 @@ describe("Matrix", () => {
         it("detects the size", () => expect(matrixA.size).toBe(24));
     });
 
-    describe("fits", () => {
-        [vec2(-1, 0), vec2(1, 0), vec2(0, 3)].forEach((offset) => {
-            it(`returns false for offset ${offset.x},${offset.y}`, () => {
-                expect(matrixA.fits(tetriminoA, offset)).toBe(false);
-            });
-        });
-
-        [vec2(0, 0), vec2(0, 2)].forEach((offset) => {
-            it(`returns true for offset ${offset.x},${offset.y}`, () => {
-                expect(matrixA.fits(tetriminoA, offset)).toBe(true);
-            });
-        });
-    });
-
     describe("fullHorizontals", () => {
         it("detects full horizontal lines on matrix A", () => expect(matrixA.fullHorizontals).toEqual([0]));
 
