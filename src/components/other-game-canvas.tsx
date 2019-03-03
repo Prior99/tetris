@@ -3,9 +3,9 @@ import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OtherGame } from "graphics";
-import * as css from "./other-game-canvas.scss";
 import { vec2, Matrix  } from "utils";
-import { RemoteGameState } from "networking";
+import { RemoteGameState } from "types";
+import * as css from "./other-game-canvas.scss";
 
 @external
 export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: RemoteGameState }> {
@@ -13,6 +13,7 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
 
     private canvas?: HTMLCanvasElement;
     private renderer: OtherGame;
+    private running = false;
 
     constructor(props: { matrix: Matrix, state: RemoteGameState }) {
         super(props);
@@ -22,14 +23,17 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
 
     @initialize protected initialize() {
         const renderLoop = () => {
+            if (!this.running) { return; }
             this.renderer.render();
             window.requestAnimationFrame(renderLoop);
         };
+        this.running = true;
         renderLoop();
     }
 
     public componentWillUnmount() {
         window.removeEventListener("resize", this.rescale);
+        this.running = false;
     }
 
     @bind private rescale() {

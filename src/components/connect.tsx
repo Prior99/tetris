@@ -27,14 +27,14 @@ export class Connect extends React.Component {
         this.otherId = evt.currentTarget.value;
     }
 
-    @bind private handleHost() {
+    @bind private async handleHost() {
+        await this.networking.host(this.ui.name);
         this.ui.page = Page.LOBBY;
-        this.networking.host();
     }
 
-    @bind private handleConnect() {
+    @bind private async handleConnect() {
+        await this.networking.client(this.otherId, this.ui.name);
         this.ui.page = Page.LOBBY;
-        this.networking.connect(this.otherId);
     }
 
     public render() {

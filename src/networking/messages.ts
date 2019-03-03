@@ -1,4 +1,4 @@
-import { Garbage } from "types";
+import { Garbage, RemoteUser, RemoteGameState, ChatMessage } from "types";
 
 export enum MessageType {
     HELLO,
@@ -10,17 +10,6 @@ export enum MessageType {
     UPDATE_PLAYFIELD,
     RESTART,
     GARBAGE,
-}
-
-export interface RemoteUser {
-    name: string;
-    id: string;
-}
-
-export interface ChatMessage {
-    text: string;
-    userId: string;
-    date: Date;
 }
 
 export interface MessageHello {
@@ -59,23 +48,17 @@ export interface MessageRestart {
     seed: string;
 }
 
+
+export interface MessageChatMessage {
+    message: MessageType.CHAT_MESSAGE;
+    chatMessage: ChatMessage;
+}
+
 export interface MessageUpdatePlayfield {
     message: MessageType.UPDATE_PLAYFIELD;
     userId: string;
     matrix: string;
     state: RemoteGameState;
-}
-
-export interface RemoteGameState {
-    score: number;
-    lines: number;
-    level: number;
-    toppedOut: boolean;
-}
-
-export interface MessageChatMessage {
-    message: MessageType.CHAT_MESSAGE;
-    chatMessage: ChatMessage;
 }
 
 export type Message = MessageHello |

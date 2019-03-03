@@ -1,8 +1,6 @@
-import { component } from "tsdi";
 import { observable } from "mobx";
-import { ChatMessage } from "./messages";
+import { ChatMessage } from "types";
 
-@component
 export class Chat {
     @observable public messages: ChatMessage[] = [];
 

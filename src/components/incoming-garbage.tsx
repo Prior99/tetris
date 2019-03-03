@@ -21,12 +21,12 @@ export class IncomingGabage extends React.Component<{ garbage: Garbage }> {
         clearInterval(this.interval);
     }
 
-    public get milliseconds() {
+    public get seconds() {
         return this.game.seconds - this.props.garbage.time;
     }
 
     public get progress() {
-        return this.milliseconds / (this.config.garbageTimeout * 1000);
+        return this.seconds / this.config.garbageTimeout;
     }
 
     public render() {

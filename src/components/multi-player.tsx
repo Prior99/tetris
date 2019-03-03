@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Networking, RemoteUsers, NetworkGame } from "networking";
+import { Networking } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { ObservableGame } from "observable-game";
@@ -13,13 +13,7 @@ import { RemoteGame } from "./remote-game";
 @external @observer
 export class MultiPlayer extends React.Component {
     @inject private networking: Networking;
-    @inject private users: RemoteUsers;
-    @inject private networkGame: NetworkGame;
     @inject private game: ObservableGame;
-
-    @initialize protected initialize() {
-        this.game.start(GameMode.MULTI_PLAYER, this.networkGame.seed);
-    }
 
     public render() {
         return (
@@ -31,8 +25,8 @@ export class MultiPlayer extends React.Component {
                 </div>
                 <div className={css.others}>
                     {
-                        this.users.all
-                            .filter(user => user.id !== this.networking.id)
+                        this.networking.allUsers
+                            .filter(user => user.id !== this.networking.ownId)
                             .map(user => <RemoteGame key={user.id} userId={user.id} />)
                     }
                 </div>

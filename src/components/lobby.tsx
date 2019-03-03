@@ -2,19 +2,17 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
-import { Chat, RemoteUsers, Networking, NetworkingMode } from "networking";
+import { Networking } from "networking";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
-import { Page } from "types";
+import { Page, NetworkingMode } from "types";
 import * as css from "./lobby.scss";
 import { ChatMessage } from "./chat-message";
 
 @external @observer
 export class Lobby extends React.Component {
     @inject private ui: UI;
-    @inject private chat: Chat;
     @inject private networking: Networking;
-    @inject private users: RemoteUsers;
 
     @observable private chatText = "";
 
@@ -30,7 +28,7 @@ export class Lobby extends React.Component {
     }
 
     @bind private handleStart() {
-        this.networking.start();
+        this.networking.sendStartGame();
     }
 
     public render() {
@@ -42,11 +40,7 @@ export class Lobby extends React.Component {
                             <h1>Lobby</h1>
                             <div className={css.content}>
                                 <div className={css.id}>
-                                    {
-                                        this.networking.mode === NetworkingMode.CLIENT
-                                            ? this.networking.remoteId
-                                            : this.networking.id
-                                    }
+                                    {this.networking.hostId}
                                 </div>
                                 {
                                     this.networking.mode === NetworkingMode.HOST ? (
@@ -60,7 +54,7 @@ export class Lobby extends React.Component {
                             <h1>Users</h1>
                             <div className={css.content}>
                                 <ul className={css.users}>
-                                    {this.users.all.map(user => <li key={user.id}>{user.name}</li>)}
+                                    {this.networking.allUsers.map(user => <li key={user.id}>{user.name}</li>)}
                                 </ul>
                             </div>
                         </div>
@@ -72,7 +66,7 @@ export class Lobby extends React.Component {
                                 <ul className={css.chat}>
                                     <li>Your chat history starts here.</li>
                                     {
-                                        this.chat.messages.map((message, index) => {
+                                        this.networking.chatMessages.map((message, index) => {
                                             return <ChatMessage key={index} message={message} />;
                                         })
                                     }

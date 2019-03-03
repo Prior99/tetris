@@ -32,7 +32,7 @@ export class Game {
 
     public get seconds(): number {
         if (!this.timeLastTick || !this.timeStarted) { return 0; }
-        return differenceInMilliseconds(this.timeLastTick, this.timeStarted);
+        return differenceInMilliseconds(this.timeLastTick, this.timeStarted) / 1000;
     }
 
     public get tetriminoPreviews(): Matrix[] {
@@ -141,7 +141,7 @@ export class Game {
         } else {
             this.timeout = setTimeout(() => this.tick(), this.config.tickSpeed * 1000);
         }
-        const timeLastTick = now;
+        this.timeLastTick = now;
     }
 
     public get incomingGarbage(): Garbage[] {

@@ -16,6 +16,7 @@ export class ObservableGame {
     @observable public gameOver = false;
     @observable public gameMode?: GameMode;
     @observable public seconds: number;
+    @observable public running = false;
     @observable.shallow public incomingGarbage: Garbage[] = [];
     @observable.shallow public tetriminoPreview: Matrix[] = [];
 
@@ -44,9 +45,11 @@ export class ObservableGame {
 
     @bind private update() {
         if (!this.game.running) {
+            this.running = false;
             this.gameOver = true;
             return;
         }
+        this.running = this.game.running;
         this.gameOver = false;
         this.holdPiece = this.game.holdPiece;
         this.score = this.game.score;

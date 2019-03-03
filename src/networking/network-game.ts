@@ -1,35 +1,30 @@
-import { component, inject } from "tsdi";
+import { external, inject } from "tsdi";
 import { equals } from "ramda";
 import { observable, computed } from "mobx";
-import { RemoteUsers } from "./remote-users";
-import { RemoteGameState } from "./messages";
+import { RemoteGameState } from "types";
 import { Matrix } from "utils";
 import { Config } from "config";
+import { RemoteUsers } from "./remote-users";
 
-@component
+@external
 export class NetworkGame {
-    @inject private users: RemoteUsers;
     @inject private config: Config;
 
-    @observable public seed: string;
     @observable private states = new Map<string, RemoteGameState>();
+
+    constructor(private users: RemoteUsers) {}
 
     private playfields = new Map<string, Matrix>();
 
-    public emptyState() {
-        return {
-            score: 0,
-            lines: 0,
-            level: 0,
-            toppedOut: false,
-        };
-    }
-
-    public start(seed: string) {
-        this.seed = seed;
+    public initialize() {
         this.users.all.forEach(user => {
             this.playfields.set(user.id, new Matrix(this.config.logicalSize));
-            this.states.set(user.id, this.emptyState());
+            this.states.set(user.id, {
+                score: 0,
+                lines: 0,
+                level: 0,
+                toppedOut: false,
+            });
         });
     }
 
@@ -41,16 +36,19 @@ export class NetworkGame {
         return Array.from(this.playfields.values());
     }
 
-    public update(userId: string, matrix: Matrix) {
-        this.playfields.get(userId)!.update(matrix);
+    public update(userId: string, matrix: Matrix, state: RemoteGameState) {
+        if (!this.playfields.has(userId)) {
+            this.playfields.set(userId, matrix);
+        }
+        else if (!matrix.equals(this.playfields.get(userId)!)) {
+            this.playfields.get(userId)!.update(matrix);
+        }
+        if (!equals(this.states.get(userId), state)) {
+            this.states.set(userId, state);
+        }
     }
 
-    public updateState(userId: string, state: RemoteGameState) {
-        if (equals(this.states.get(userId), state)) { return; }
-        this.states.set(userId, state);
-    }
-
-    public byUser(userId: string) {
+    public playfieldForUser(userId: string) {
         return this.playfields.get(userId);
     }
 
@@ -58,14 +56,20 @@ export class NetworkGame {
         return this.states.get(userId);
     }
 
-    public reset() {
-        this.users.all.forEach(user => {
-            this.playfields.forEach(matrix => matrix.update(new Matrix(this.config.logicalSize)));
-            this.states.set(user.id, this.emptyState());
-        });
-    }
-
     @computed public get allToppedOut() {
         return this.allStates.every(({ toppedOut }) => toppedOut);
+    }
+
+    @computed public get otherAliveUsers() {
+        if (!this.users.own) { throw new Error("Users wasn't initialized when retrieving alive users."); }
+        return this.users.all
+            .filter(user => user.id !== this.users.own!.id)
+            .filter(user => !this.stateForUser(user.id)!.toppedOut);
+    }
+
+    public get randomOtherAliveUser() {
+        const { otherAliveUsers } = this;
+        if (otherAliveUsers.length === 0) { return; }
+        return otherAliveUsers[Math.floor(Math.random() * otherAliveUsers.length)];
     }
 }

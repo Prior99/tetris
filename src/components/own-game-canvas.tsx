@@ -6,7 +6,7 @@ import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { OwnGame } from "graphics";
 import { UI } from "ui";
-import { Networking, NetworkGame } from "networking";
+import { Networking } from "networking";
 import * as css from "./own-game-canvas.scss";
 import { vec2, randomSeed } from "utils";
 import { ObservableGame } from "observable-game";
@@ -20,13 +20,13 @@ export class OwnGameCanvas extends React.Component {
     @inject private game: ObservableGame;
     @inject private ui: UI;
     @inject private networking: Networking;
-    @inject private networkGame: NetworkGame;
     @inject private leaderboard: Leaderboard;
 
     @observable private submitScoreVisible = false;
     @observable private leaderboardName = "";
 
     private canvas?: HTMLCanvasElement;
+    private running = false;
 
     constructor(props: {}) {
         super(props);
@@ -35,14 +35,19 @@ export class OwnGameCanvas extends React.Component {
 
     public componentWillUnmount() {
         window.removeEventListener("resize", this.rescale);
+        this.running = false;
     }
 
     @initialize protected initialize() {
         const renderLoop = () => {
-            this.ownGame.render();
+            if (!this.running) { return; }
+            if (this.game.running) {
+                this.ownGame.render();
+            }
             window.requestAnimationFrame(renderLoop);
         };
         this.leaderboardName = this.ui.name || "";
+        this.running = true;
         renderLoop();
     }
 
@@ -68,10 +73,12 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @bind private handleReset() {
-        const seed = randomSeed();
-        this.game.restart(seed);
-        this.networking.restart(seed);
-        this.ui.reset();
+        if (this.networking.gameOngoing) {
+            this.networking.sendRestartGame();
+        } else {
+            this.ui.reset();
+            this.game.restart(randomSeed());
+        }
     }
 
     @bind private handleSubmitScore() {
@@ -87,6 +94,7 @@ export class OwnGameCanvas extends React.Component {
     @bind private handleBack() {
         this.game.stop();
         this.ui.page = Page.MENU;
+        if (this.networking.gameOngoing) { this.networking.close(); }
     }
 
     @bind private handleLeaderboardNameChange(evt: React.SyntheticEvent<HTMLInputElement>) {
@@ -94,7 +102,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @computed public get canRestart() {
-        return this.game.isSinglePlayer || (this.networking.isHost && this.networkGame.allToppedOut);
+        return this.game.isSinglePlayer || (this.networking.isHost && this.networking.allUsersGameOver);
     }
 
     public render() {
