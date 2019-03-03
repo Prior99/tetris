@@ -1,7 +1,7 @@
 import { component, initialize } from "tsdi";
 import { generateName } from "names";
-import { observable, computed } from "mobx";
-import { GameMode, Page, Settings } from "types";
+import { observable } from "mobx";
+import { Page, Settings } from "types";
 
 const localStorageIdentifier = "FRETRIS";
 const localStorageVersion = 1;
@@ -11,7 +11,6 @@ export class UI {
     @observable private volume = { music: 0.5, sounds: 0.6 };
     @observable private userName = generateName();
     @observable public page = Page.MENU;
-    @observable public gameMode: GameMode;
     @observable public leaderboardSubmitted = false;
 
     @initialize protected initialize() {
@@ -39,10 +38,6 @@ export class UI {
 
     public reset() {
         this.leaderboardSubmitted = false;
-    }
-
-    @computed public get isSinglePlayer() {
-        return this.gameMode === GameMode.SINGLE_PLAYER;
     }
 
     get name() {

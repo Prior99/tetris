@@ -52,18 +52,17 @@ export class GameState {
     };
     public lastHitPosition?: Vec2;
     public timeStarted?: Date;
-
-    private running = false;
-    private timeout?: any;
-    private comboCount = 0;
-    private lastHit?: Date;
-
     public lines = 0;
     public score = 0;
     public toppedOut = false;
     public holdPiece?: Tetrimino;
     public outgoingGarbage: Garbage[] = [];
     public incomingGarbage: Garbage[] = [];
+
+    private running = false;
+    private timeout?: any;
+    private comboCount = 0;
+    private lastHit?: Date;
 
     public reset() {
         this.playfield.reset();

@@ -1,5 +1,5 @@
 import { component, inject, initialize, external } from "tsdi";
-import { observable } from "mobx";
+import { observable, computed } from "mobx";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
 import { GameMode, Garbage } from "types";
@@ -14,14 +14,19 @@ export class ObservableGame {
     @observable public lines = 0;
     @observable public level = 0;
     @observable public toppedOut = false;
+    @observable public gameMode: GameMode;
     @observable.shallow public incomingGarbage: Garbage[] = [];
     @observable.shallow public tetriminoPreview: Matrix[] = [];
 
     private interval: any;
 
     @initialize protected initialize() {
-        this.interval = setInterval(this.update, 200);
+        this.interval = setInterval(this.update, 100);
         this.update();
+    }
+
+    @computed public get isSinglePlayer() {
+        return this.game.gameMode === GameMode.SINGLE_PLAYER;
     }
 
     protected componentWillUnmount() {
@@ -47,6 +52,7 @@ export class ObservableGame {
         this.lines = this.game.lines;
         this.level = this.game.level;
         this.toppedOut = this.game.toppedOut;
+        this.gameMode = this.game.gameMode;
         if (this.incomingGarbageChanged) {
             this.incomingGarbage = [ ...this.game.incomingGarbage ];
         }

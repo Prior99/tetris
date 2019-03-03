@@ -17,7 +17,11 @@ export class Game {
     @inject private playfield: Playfield;
     @inject private sounds: Sounds;
 
-    public started = false;
+    public gameMode = GameMode.ENDED;
+
+    public get started() {
+        return this.gameMode !== GameMode.ENDED;
+    }
 
     public get tetriminoPreviews(): Matrix[] {
         if (!this.started) { return []; }
@@ -83,7 +87,7 @@ export class Game {
         this.sounds.startGame();
         this.gameState.start();
         this.input.enable();
-        this.started = true;
+        this.gameMode = gameMode;
     }
 
     public get incomingGarbage(): Garbage[] {

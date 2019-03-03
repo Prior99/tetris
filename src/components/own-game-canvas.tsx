@@ -69,7 +69,7 @@ export class OwnGameCanvas extends React.Component {
 
     @bind private handleReset() {
         const seed = `${Math.random}`.replace(/\./, "");
-        if (this.ui.isSinglePlayer || this.networking.isHost) {
+        if (this.game.isSinglePlayer || this.networking.isHost) {
             this.game.restart(seed);
         }
         this.networking.restart(seed);
@@ -96,7 +96,7 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @computed public get canRestart() {
-        return this.ui.isSinglePlayer || (this.networking.isHost && this.networkGame.allToppedOut);
+        return this.game.isSinglePlayer || (this.networking.isHost && this.networkGame.allToppedOut);
     }
 
     public render() {

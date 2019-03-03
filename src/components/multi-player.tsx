@@ -2,9 +2,7 @@ import * as React from "react";
 import { Networking, RemoteUsers, NetworkGame } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { Sounds } from "sounds";
 import { ObservableGame } from "observable-game";
-import { UI } from "ui";
 import { GameMode } from "types";
 import { TetriminoPreviews } from "./tetrimino-previews";
 import { OwnGameCanvas } from "./own-game-canvas";
@@ -18,11 +16,9 @@ export class MultiPlayer extends React.Component {
     @inject private users: RemoteUsers;
     @inject private networkGame: NetworkGame;
     @inject private game: ObservableGame;
-    @inject private ui: UI;
 
     @initialize protected initialize() {
         this.game.start(GameMode.MULTI_PLAYER, this.networkGame.seed);
-        this.ui.gameMode = GameMode.MULTI_PLAYER;
     }
 
     public render() {
