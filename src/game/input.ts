@@ -3,18 +3,35 @@ import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { GameState } from "./game-state";
 
+interface KeyState {
+    timePressed: number;
+    initialFired: boolean;
+    nextRepeat: number;
+}
+
 @external
 export class Input {
     @inject private config: Config;
 
-    public moveLeftTimeout?: any;
-    public moveRightTimeout?: any;
-    public moveDownTimeout?: any;
-    public rotateTimeout?: any;
+    public moveLeft?: KeyState;
+    public moveRight?: KeyState;
+    public moveDown?: KeyState;
+    public rotateRight?: KeyState;
+    public rotateLeft?: KeyState;
+
+    private timeCurrent = 0;
 
     constructor(private gameState: GameState) {
         window.addEventListener("keyup", this.handleKeyUp);
         window.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    private keyState(timePressed: number) {
+        return {
+            timePressed,
+            initialFired: false,
+            nextRepeat: timePressed + this.config.initialInputTimeout,
+        };
     }
 
     public disable() {
@@ -22,39 +39,48 @@ export class Input {
         window.removeEventListener("keydown", this.handleKeyDown);
     }
 
+    private handleInput(callback: () => void, state?: KeyState, repeatTimeout = this.config.inputRepeatTimeout) {
+        if (!state) { return; }
+        if (!state.initialFired) {
+            state.initialFired = true;
+            callback();
+            return;
+        }
+        if (this.timeCurrent >= state.nextRepeat) {
+            state.nextRepeat += repeatTimeout;
+            callback();
+        }
+    }
+
+    public tick(time: number) {
+        this.timeCurrent = time;
+        this.handleInput(this.gameState.inputRotateRight, this.rotateRight, this.config.inputRotateRepeatTimeout);
+        this.handleInput(this.gameState.inputMoveLeft, this.moveLeft);
+        this.handleInput(this.gameState.inputMoveRight, this.moveRight);
+        this.handleInput(this.gameState.inputMoveDown, this.moveDown);
+    }
+
     @bind private handleKeyUp(evt: KeyboardEvent) {
         switch (evt.key) {
             case "ArrowUp":
             case "x":
             case "w": {
-                if (this.rotateTimeout) {
-                    clearTimeout(this.rotateTimeout);
-                    this.rotateTimeout = undefined;
-                }
+                this.rotateRight = undefined;
                 break;
             }
             case "ArrowLeft":
             case "a": {
-                if (this.moveLeftTimeout) {
-                    clearTimeout(this.moveLeftTimeout);
-                    this.moveLeftTimeout = undefined;
-                }
+                this.moveLeft = undefined;
                 break;
             }
             case "ArrowRight":
             case "d": {
-                if (this.moveRightTimeout) {
-                    clearTimeout(this.moveRightTimeout);
-                    this.moveRightTimeout = undefined;
-                }
+                this.moveRight = undefined;
                 break;
             }
             case "ArrowDown":
             case "s": {
-                if (this.moveDownTimeout) {
-                    clearTimeout(this.moveDownTimeout);
-                    this.moveDownTimeout = undefined;
-                }
+                this.moveDown = undefined;
                 break;
             }
         }
@@ -65,49 +91,29 @@ export class Input {
             case "ArrowUp":
             case "x":
             case "w": {
-                if (!this.rotateTimeout) {
-                    this.gameState.inputRotateRight();
-                    const repeat = () => {
-                        this.gameState.inputRotateRight();
-                        this.rotateTimeout = setTimeout(repeat, this.config.inputRotateRepeatTimeout * 1000);
-                    };
-                    this.rotateTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
+                if (!this.rotateRight) {
+                    this.rotateRight = this.keyState(this.timeCurrent);
                 }
                 break;
             }
             case "ArrowLeft":
             case "a": {
-                if (!this.moveLeftTimeout) {
-                    this.gameState.inputMoveLeft();
-                    const repeat = () => {
-                        this.gameState.inputMoveLeft();
-                        this.moveLeftTimeout = setTimeout(repeat, this.config.inputRepeatTimeout * 1000);
-                    };
-                    this.moveLeftTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
+                if (!this.moveLeft) {
+                    this.moveLeft = this.keyState(this.timeCurrent);
                 }
                 break;
             }
             case "ArrowRight":
             case "d": {
-                if (!this.moveRightTimeout) {
-                    this.gameState.inputMoveRight();
-                    const repeat = () => {
-                        this.gameState.inputMoveRight();
-                        this.moveRightTimeout = setTimeout(repeat, this.config.inputRepeatTimeout * 1000);
-                    };
-                    this.moveRightTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
+                if (!this.moveRight) {
+                    this.moveRight = this.keyState(this.timeCurrent);
                 }
                 break;
             }
             case "ArrowDown":
             case "s": {
-                if (!this.moveDownTimeout) {
-                    this.gameState.inputMoveDown();
-                    const repeat = () => {
-                        this.gameState.inputMoveDown();
-                        this.moveDownTimeout = setTimeout(repeat, this.config.inputRepeatTimeout * 1000);
-                    };
-                    this.moveDownTimeout = setTimeout(repeat, this.config.initialInputTimeout * 1000);
+                if (!this.moveDown) {
+                    this.moveDown = this.keyState(this.timeCurrent);
                 }
                 break;
             }
