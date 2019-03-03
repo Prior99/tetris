@@ -40,7 +40,7 @@ Includes all the game logic.
 
 Resources (audio files and sprites) can be loaded by adding a corresponding class in the `resources/` directory.
 
-The loader will automatically pick it up and load it when the game is started.
+The loader will automatically pick it up and load it when the game is started (Don't forget to proxy-export it from the respective `index.ts` file).
 
 ## Aseprite sprites
 
