@@ -40,6 +40,8 @@ Multiplayer is possible using WebRTC. The players send garbage lines to each oth
 
 Contributions are welcome. Pull-Requests and Issues are happily accepted.
 
+Take a look at the [Contributor's guide](https://github.com/Prior99/tetris/blob/master/CONTRIBUTING.md).
+
 ### Building, Testing and Linting
 
 Yarn is used instead of NPM, so make sure it is installed (`npm i -g yarn`).
