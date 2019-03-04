@@ -26,5 +26,6 @@ export * from "./sprite-tetrimino-light-ghost";
 export * from "./sprite-tetrimino-light-garbage";
 export * from "./sprite-tetrimino-other";
 export * from "./sprite-effect-line-cleared";
+export * from "./sprite-incoming-alert";
 export * from "./sprite";
 export * from "./tinted-sprite";

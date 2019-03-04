@@ -1,6 +1,6 @@
 default: build lint test
 
-ASEPRITE_FLAGS=--batch --format json-array --sheet-type verticals --all-layers 
+ASEPRITE_FLAGS=--batch --format json-array --sheet-type verticals --all-layers
 
 .PHONY: node_modules
 node_modules:
@@ -26,6 +26,7 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/floor-bricks.ase --data assets/floor-bricks.json --sheet assets/floor-bricks.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-carpet.ase --data assets/floor-carpet.json --sheet assets/floor-carpet.png
 	aseprite ${ASEPRITE_FLAGS} ase/effect-line-cleared.ase --data assets/effect-line-cleared.json --sheet assets/effect-line-cleared.png
+	aseprite ${ASEPRITE_FLAGS} ase/incoming-alert.ase --data assets/incoming-alert.json --sheet assets/incoming-alert.png
 
 .PHONY: build
 build: node_modules assets

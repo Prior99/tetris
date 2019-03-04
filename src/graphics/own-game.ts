@@ -7,11 +7,13 @@ import { Lighting } from "./lighting";
 import { Background } from "./background";
 import { Graphics } from "./graphics";
 import { spriteForCellColor } from "./sprite-for-cell-color";
+import { Overlay } from "./overlay";
 
 @component
 export class OwnGame extends Graphics {
     @inject private lighting: Lighting;
     @inject private background: Background;
+    @inject private overlay: Overlay;
     @inject private game: Game;
 
     @initialize protected async initialize() {
@@ -31,6 +33,7 @@ export class OwnGame extends Graphics {
     public rescale(size: Vec2) {
         super.rescale(size);
         this.lighting.rescale(size);
+        this.overlay.rescale(size);
         this.background.rescale(size);
         this.background.render();
     }
@@ -71,6 +74,24 @@ export class OwnGame extends Graphics {
         }
     }
 
+    private renderOverlay() {
+        this.overlay.render();
+        this.ctx.globalCompositeOperation = "lighter";
+        if (this.overlay.canvas) {
+            this.ctx.drawImage(
+                this.overlay.canvas,
+                0,
+                0,
+                this.overlay.pixelSize.x,
+                this.overlay.pixelSize.y,
+                0,
+                0,
+                this.pixelSize.x,
+                this.pixelSize.y,
+            );
+        }
+    }
+
     private renderCells() {
         this.ctx.globalCompositeOperation = "source-over";
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
@@ -86,5 +107,6 @@ export class OwnGame extends Graphics {
         this.renderBackground();
         this.renderCells();
         this.renderLighting();
+        this.renderOverlay();
     }
 }
