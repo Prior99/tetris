@@ -31,14 +31,16 @@ export class Lighting extends Graphics {
     }
 
     private getTetriminoBloomAnimationTime(position: Vec2, sprite: Sprite) {
-        const {timeSinceLastHit } = this.game;
-        if (!timeSinceLastHit || timeSinceLastHit > sprite.totalDuration) {
+        const { hasHit, timeSinceLastLock, tetriminoOffset, lastLockPosition } = this.game;
+        const distanceCurrent = tetriminoOffset ? tetriminoOffset.distance(position) : Number.POSITIVE_INFINITY;
+        if (hasHit) {
+            return Math.min(sprite.totalDuration - 0.2, distanceCurrent / 2);
+        }
+        if (!timeSinceLastLock || timeSinceLastLock > sprite.totalDuration) {
             return sprite.totalDuration - 0.15;
         }
-        const distance = this.game.lastHitPosition
-            ? this.game.lastHitPosition.distance(position)
-            : Number.POSITIVE_INFINITY;
-        return Math.min(sprite.totalDuration - 0.2, timeSinceLastHit * 3 + distance / 2);
+        const distanceLast = lastLockPosition ? lastLockPosition.distance(position) : Number.POSITIVE_INFINITY;
+        return Math.min(sprite.totalDuration - 0.2, timeSinceLastLock * 3 + distanceLast / 2);
     }
 
     @bind public render() {

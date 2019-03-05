@@ -44,7 +44,7 @@ export class GameState {
         hardDrops: number;
         usedHoldPiece: boolean;
     };
-    public lastHitPosition?: Vec2;
+    public lastLockPosition?: Vec2;
     public lines = 0;
     public score = 0;
     public toppedOut = false;
@@ -53,7 +53,8 @@ export class GameState {
     public incomingGarbage: Garbage[] = [];
     public comboCount = 0;
 
-    private timeLastHit = 0;
+    private timeLastHit?: number;
+    private timeLastLock?: number;
     private timeLastMoveDown = 0;
     private timeCurrent = 0;
 
@@ -76,8 +77,24 @@ export class GameState {
         if (this.toppedOut) { return; }
         if (this.timeCurrent - this.timeLastMoveDown > this.speed || this.current.hardDrops) {
             this.timeLastMoveDown = this.timeCurrent;
-            if (this.current.tetrimino.hasHitFloor) { this.commitTetrimino(); }
-            this.moveTetrimino();
+            if (!this.current.tetrimino.hasHitFloor) {
+                this.moveTetrimino();
+            }
+            if (this.current.tetrimino.hasHitFloor) {
+                this.tickHitTetrimino();
+            } else {
+                this.timeLastHit = undefined;
+                this.timeLastLock = undefined;
+            }
+        }
+    }
+
+    private tickHitTetrimino() {
+        if (!this.hasHit) {
+            this.timeLastHit = this.timeCurrent;
+        }
+        if (this.timeSinceLastHit! > this.config.lockTime) {
+            this.commitTetrimino();
         }
     }
 
@@ -140,6 +157,7 @@ export class GameState {
     @bind public inputHardDrop() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
         this.current.hardDrops = this.current.tetrimino.hardDrop();
+        this.commitTetrimino();
     }
 
     @bind public inputHoldPiece() {
@@ -249,13 +267,24 @@ export class GameState {
                 this.comboCount = 0;
             }
         }
-        this.timeLastHit = this.timeCurrent;
-        this.lastHitPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));
+        this.lastLockPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));
         this.newTetrimino();
+        this.timeLastLock = this.timeCurrent;
+        this.timeLastHit = undefined;
     }
 
     public get timeSinceLastHit(): number | undefined {
+        if (!this.timeLastHit) { return; }
         return this.timeCurrent - this.timeLastHit;
+    }
+
+    public get timeSinceLastLock(): number | undefined {
+        if (!this.timeLastLock) { return; }
+        return this.timeCurrent - this.timeLastLock;
+    }
+
+    public get hasHit(): boolean {
+        return this.timeLastHit !== undefined;
     }
 
     public awardScore(action: ScoreAction) {

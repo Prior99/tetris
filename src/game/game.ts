@@ -60,9 +60,25 @@ export class Game {
         return this.gameState.toppedOut;
     }
 
-    public get lastHitPosition(): Vec2 | undefined {
+    public get tetriminoOffset(): Vec2 | undefined {
+        if (!this.gameState) { throw new Error("Can't retrieve tetrimino offset of uninitialized game."); }
+        if (!this.gameState.current) { return; }
+        return this.gameState.current.tetrimino.offset;
+    }
+
+    public get lastLockPosition(): Vec2 | undefined {
         if (!this.gameState) { throw new Error("Can't retrieve last hit position of uninitialized game."); }
-        return this.gameState.lastHitPosition;
+        return this.gameState.lastLockPosition;
+    }
+
+    public get hasHit(): boolean | undefined {
+        if (!this.gameState) { throw new Error("Can't retrieve whether tetrimino has hit of uninitialized game."); }
+        return this.gameState.hasHit;
+    }
+
+    public get timeSinceLastLock(): number | undefined {
+        if (!this.gameState) { throw new Error("Can't retrieve time since last lock of uninitialized game."); }
+        return this.gameState.timeSinceLastLock;
     }
 
     public get timeSinceLastHit(): number | undefined {
