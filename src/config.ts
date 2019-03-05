@@ -3,7 +3,7 @@ import { vec2 } from "utils";
 
 @component
 export class Config {
-    public logicalSize = vec2(10, 24);
+    public logicalSize = vec2(10, 30);
     public visibleSize = vec2(10, 20);
     public tickSpeed = 1 / 60;
     public networkSpeed = 10 / 60;
