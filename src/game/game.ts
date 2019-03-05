@@ -176,6 +176,6 @@ export class Game {
     public get latestIncomingGarbage() {
         if (!this.gameState) { throw new Error("Can't retrieve incoming garbage of uninitialized game."); }
         if (this.gameState.incomingGarbage.length === 0) { return; }
-        return this.gameState.incomingGarbage[this.gameState.incomingGarbage.length - 1];
+        return this.gameState.incomingGarbage[0];
     }
 }

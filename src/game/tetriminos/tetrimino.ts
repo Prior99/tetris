@@ -169,7 +169,7 @@ export class Tetrimino {
 
     public moveLeft() {
         const newOffset = this.offset.add(vec2(-1, 0));
-        if (this.playfield.collides(this.matrix, newOffset)) { /* this.rotateLeft(); */ console.log("HANGS"); console.log(this.playfield.toString()); return; }
+        if (this.playfield.collides(this.matrix, newOffset)) { return; }
         this.offset = newOffset;
         this.refreshGhostPosition();
     }
