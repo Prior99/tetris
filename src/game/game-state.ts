@@ -185,7 +185,7 @@ export class GameState {
 
     private newTetrimino() {
         const tetrimino = this.shuffleBag.take();
-        if (tetrimino.hasHitFloor) {
+        if (tetrimino.isStuck) {
             this.toppedOut = true;
             return;
         }
