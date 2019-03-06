@@ -27,6 +27,16 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/floor-carpet.ase --data assets/floor-carpet.json --sheet assets/floor-carpet.png
 	aseprite ${ASEPRITE_FLAGS} ase/effect-line-cleared.ase --data assets/effect-line-cleared.json --sheet assets/effect-line-cleared.png
 	aseprite ${ASEPRITE_FLAGS} ase/incoming-alert.ase --data assets/incoming-alert.json --sheet assets/incoming-alert.png
+	aseprite ${ASEPRITE_FLAGS} ase/score-double.ase --data assets/score-double.json --sheet assets/score-double.png
+	aseprite ${ASEPRITE_FLAGS} ase/score-triple.ase --data assets/score-triple.json --sheet assets/score-triple.png
+	aseprite ${ASEPRITE_FLAGS} ase/score-tetris.ase --data assets/score-tetris.json --sheet assets/score-tetris.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo.ase --data assets/combo.json --sheet assets/combo.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-1.ase --data assets/combo-1.json --sheet assets/combo-1.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-2.ase --data assets/combo-2.json --sheet assets/combo-2.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-3.ase --data assets/combo-3.json --sheet assets/combo-3.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-4.ase --data assets/combo-4.json --sheet assets/combo-4.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-5.ase --data assets/combo-5.json --sheet assets/combo-5.png
+	aseprite ${ASEPRITE_FLAGS} ase/combo-6.ase --data assets/combo-6.json --sheet assets/combo-6.png
 
 .PHONY: build
 build: node_modules assets

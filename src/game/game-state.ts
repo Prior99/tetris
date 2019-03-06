@@ -61,7 +61,7 @@ export class GameState {
     constructor(
         private shuffleBag: ShuffleBag,
         private playfield: Playfield,
-        private events: Effects,
+        private effects: Effects,
     ) {
         this.newTetrimino();
     }
@@ -255,7 +255,7 @@ export class GameState {
             if (lines > 0) {
                 this.outgoingGarbage.push({ time: this.timeCurrent, lines });
             }
-            offsets.forEach(y => this.events.report({ effect: EffectType.LINE_CLEARED, y }));
+            offsets.forEach(y => this.effects.report({ effect: EffectType.LINE_CLEARED, y }));
         } else {
             const { level, comboCount } = this;
             if (this.comboCount >= 2) {
@@ -293,6 +293,7 @@ export class GameState {
 
     public scoreLineCount(count: number) {
         if (!this.current) { throw new Error("Can't score on uninitialized game state."); }
+        this.effects.reportLines(count);
         const { level } = this;
         switch (count) {
             case 1: this.awardScore({ action: ScoreActionType.SINGLE, level });
