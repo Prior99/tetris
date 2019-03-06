@@ -3,9 +3,12 @@ import { EffectInfo, Effect } from "types";
 export class Effects {
     public effects: EffectInfo<any>[] = [];
 
+    public comboCounts: { count: number, time: number }[] = [{ count: 3, time: 3}];
+
     public timeSinceLastDouble?: number;
     public timeSinceLastTriple?: number;
     public timeSinceLastTetris?: number;
+    public timeSinceComboEnd?: number;
 
     private timeCurrent = 0;
 
@@ -28,5 +31,15 @@ export class Effects {
             case 3: this.timeSinceLastTriple = this.timeCurrent; break;
             case 4: this.timeSinceLastTetris = this.timeCurrent; break;
         }
+    }
+
+    public clearCombo() {
+        this.comboCounts = [];
+        this.timeSinceComboEnd = this.timeCurrent;
+    }
+
+    public reportCombo(count: number) {
+        if (count < 2) { return; }
+        this.comboCounts.push({ count, time: this.timeCurrent });
     }
 }

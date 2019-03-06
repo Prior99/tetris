@@ -9,8 +9,26 @@ import {
     SpriteScoreTriple,
     SpriteScoreTetris,
     Sprite,
+    SpriteCombo,
+    SpriteCombo1,
+    SpriteCombo2,
+    SpriteCombo3,
+    SpriteCombo4,
+    SpriteCombo5,
+    SpriteCombo6,
 } from "resources";
 import { Constructable } from "types";
+
+function comboCountSprite(count: number): Constructable<Sprite> {
+    switch (count) {
+        case 2: return SpriteCombo1;
+        case 3: return SpriteCombo2;
+        case 4: return SpriteCombo3;
+        case 5: return SpriteCombo4;
+        case 6: return SpriteCombo5;
+        default: return SpriteCombo6;
+    }
+}
 
 @component
 export class Overlay extends Graphics {
@@ -64,6 +82,42 @@ export class Overlay extends Graphics {
         }
     }
 
+    private renderComboSplash() {
+        const { timeSinceComboStart, timeSinceComboEnd } = this.game;
+        const sprite = this.sprites.sprite(SpriteCombo);
+        const offset = this.pixelSize
+            .sub(sprite.dimensions.mult(this.scaleFactor))
+            .div(vec2(1, 2))
+            .sub(vec2(0, 32).mult(this.scaleFactor));
+        if (timeSinceComboStart) {
+            const time = Math.min(this.game.seconds - timeSinceComboStart, SpriteCombo.timeUntilFull - 0.1);
+            this.renderSprite(SpriteCombo, offset, sprite.dimensions.mult(this.scaleFactor), time);
+        }
+        if (timeSinceComboEnd) {
+            const time = this.game.seconds - timeSinceComboEnd;
+            if (time <= sprite.totalDuration) {
+                this.renderSprite(SpriteCombo, offset, sprite.dimensions.mult(this.scaleFactor), time);
+            }
+        }
+    }
+
+    private renderComboCount() {
+        this.game.comboCounts.forEach(({ count, time }, index) => {
+            const latest = index === this.game.comboCounts.length - 1;
+            const timeNext = latest ? 0 : this.game.comboCounts[index + 1].time;
+            const timeSince = this.game.seconds - time;
+            const spriteClass = comboCountSprite(count);
+            const sprite = this.sprites.sprite(spriteClass);
+            if (timeSince > sprite.totalDuration && !latest) { return; }
+            const offset = this.pixelSize
+                .sub(sprite.dimensions.mult(this.scaleFactor))
+                .div(vec2(1, 2))
+                .sub(vec2(40, 80).mult(this.scaleFactor));
+            const animationTime = latest ? Math.min(0.24, timeSince) : this.game.seconds - timeNext + 0.25;
+            this.renderSprite(spriteClass, offset, sprite.dimensions.mult(this.scaleFactor), animationTime);
+        });
+    }
+
     @bind public render() {
         this.renderClear();
         this.ctx.globalAlpha = 0.7;
@@ -71,5 +125,7 @@ export class Overlay extends Graphics {
         this.renderDouble();
         this.renderTriple();
         this.renderTetris();
+        this.renderComboSplash();
+        this.renderComboCount();
     }
 }

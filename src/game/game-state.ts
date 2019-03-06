@@ -255,16 +255,20 @@ export class GameState {
             if (lines > 0) {
                 this.outgoingGarbage.push({ time: this.timeCurrent, lines });
             }
+            if (this.comboCount >= 2) {
+                this.effects.reportCombo(this.comboCount);
+            }
             offsets.forEach(y => this.effects.report({ effect: EffectType.LINE_CLEARED, y }));
         } else {
             const { level, comboCount } = this;
+            this.effects.clearCombo();
+            this.comboCount = 0;
             if (this.comboCount >= 2) {
                 this.awardScore({
                     action: ScoreActionType.COMBO,
                     level,
                     comboCount,
                 });
-                this.comboCount = 0;
             }
         }
         this.lastLockPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));

@@ -101,6 +101,23 @@ export class Game {
         return this.effectsController.timeSinceLastTetris;
     }
 
+    public get timeSinceComboStart() {
+        if (!this.effectsController) { throw new Error("Can't retrieve time since combo start."); }
+        const { comboCounts } = this.effectsController;
+        if (comboCounts.length === 0) { return; }
+        return comboCounts[0].time;
+    }
+
+    public get timeSinceComboEnd() {
+        if (!this.effectsController) { throw new Error("Can't retrieve time since combo end."); }
+        return this.effectsController.timeSinceLastTetris;
+    }
+
+    public get comboCounts(): { count: number, time: number}[] {
+        if (!this.effectsController) { throw new Error("Can't combos."); }
+        return this.effectsController.comboCounts;
+    }
+
     public get temporaryState(): Matrix {
         if (!this.gameState) { throw new Error("Can't retrieve temporary state."); }
         return this.gameState.temporaryState;
