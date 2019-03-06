@@ -3,7 +3,7 @@ import { EffectInfo, Effect } from "types";
 export class Effects {
     public effects: EffectInfo<any>[] = [];
 
-    public comboCounts: { count: number, time: number }[] = [{ count: 3, time: 3}];
+    public comboCounts: { count: number, time: number }[] = [];
 
     public timeSinceLastDouble?: number;
     public timeSinceLastTriple?: number;
