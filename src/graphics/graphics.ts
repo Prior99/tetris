@@ -56,13 +56,4 @@ export abstract class Graphics {
     public get scaleFactor() {
         return this.cellPixelSize.div(this.config.tetriminoPixelSize);
     }
-
-    public renderSprite(sprite: Constructable<Sprite>, position: Vec2, dimensions: Vec2, time?: number) {
-        this.sprites.sprite(sprite).render(
-            position,
-            dimensions,
-            this.ctx,
-            typeof time === "number" ? time : this.seconds,
-        );
-    }
 }

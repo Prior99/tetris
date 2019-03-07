@@ -20,7 +20,7 @@ export class Sprite {
         return time % this.totalDuration;
     }
 
-    public frame(time: number): Frame | undefined {
+    public frameByTime(time: number): Frame | undefined {
         let offset = this.offsetInAnimation(time);
         let index = 0;
         let frame: Frame | undefined = undefined;
@@ -32,8 +32,35 @@ export class Sprite {
         return frame;
     }
 
-    public render(position: Vec2, dimensions: Vec2, ctx: CanvasRenderingContext2D, time: number) {
-        const frame = this.frame(time);
+    public frameByIndex(index: number) {
+        if (index < 0) {
+            return this.atlas.frames[this.frameCount + index];
+        }
+        return this.atlas.frames[index];
+    }
+
+    public get frameCount() {
+        return this.atlas.frames.length;
+    }
+
+    public renderAnimation(position: Vec2, dimensions: Vec2, ctx: CanvasRenderingContext2D, time: number) {
+        const frame = this.frameByTime(time);
+        if (!frame) { return; }
+        ctx.drawImage(
+            this.image,
+            frame.frame.x,
+            frame.frame.y,
+            frame.frame.w,
+            frame.frame.h,
+            position.x,
+            position.y,
+            dimensions.x,
+            dimensions.y,
+        );
+    }
+
+    public renderFrame(position: Vec2, dimensions: Vec2, ctx: CanvasRenderingContext2D, index: number) {
+        const frame = this.frameByIndex(index);
         if (!frame) { return; }
         ctx.drawImage(
             this.image,
