@@ -1,8 +1,8 @@
-import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
+import { external } from "tsdi";
 import { vec2 } from "utils";
 import { Game } from "game";
-import { Graphics } from "./graphics";
+import { Graphics } from "../graphics";
 import {
     SpriteIncomingAlert,
     SpriteScoreDouble,
@@ -30,12 +30,10 @@ function comboCountSprite(count: number): Constructable<Sprite> {
     }
 }
 
-@component
+@external
 export class Overlay extends Graphics {
-    @inject private game: Game;
-
-    @initialize
-    protected async initialize() {
+    constructor(private game: Game) {
+        super();
         this.updateCanvas(document.createElement("canvas"));
     }
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
-import { OtherGame } from "graphics";
+import { GraphicsRemoteGame } from "graphics";
 import { vec2, Matrix  } from "utils";
 import { RemoteGameState } from "types";
 import * as css from "./other-game-canvas.scss";
@@ -12,19 +12,19 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
     @inject private config: Config;
 
     private canvas?: HTMLCanvasElement;
-    private renderer: OtherGame;
     private running = false;
+    private graphics: GraphicsRemoteGame;
 
     constructor(props: { matrix: Matrix, state: RemoteGameState }) {
         super(props);
         window.addEventListener("resize", this.rescale);
-        this.renderer = new OtherGame(props.matrix);
+        this.graphics = new GraphicsRemoteGame(props.matrix);
     }
 
     @initialize protected initialize() {
         const renderLoop = () => {
             if (!this.running) { return; }
-            this.renderer.render();
+            this.graphics.render();
             window.requestAnimationFrame(renderLoop);
         };
         this.running = true;
@@ -44,7 +44,7 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
         const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
         const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
 
-        this.renderer.rescale(adjustedSize);
+        this.graphics.rescale(adjustedSize);
 
         canvas.style.width = `${adjustedSize.x / 2}px`;
         canvas.style.height = `${adjustedSize.y / 2}px`;
@@ -53,7 +53,7 @@ export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: Re
     @bind private canvasRef(canvas: HTMLCanvasElement) {
         if (!canvas) { return; }
         this.canvas = canvas;
-        this.renderer.updateCanvas(canvas);
+        this.graphics.updateCanvas(canvas);
         this.rescale();
     }
 

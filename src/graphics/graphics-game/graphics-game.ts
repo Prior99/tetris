@@ -1,22 +1,22 @@
-import { component, inject, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
+import { external } from "tsdi";
 import { vec2, Vec2 } from "utils";
 import { Game } from "game";
 import { CellColor } from "types";
 import { Lighting } from "./lighting";
 import { Background } from "./background";
-import { Graphics } from "./graphics";
-import { spriteForCellColor } from "./sprite-for-cell-color";
+import { Graphics } from "../graphics";
+import { spriteForCellColor } from "../sprite-for-cell-color";
 import { Overlay } from "./overlay";
 
-@component
-export class OwnGame extends Graphics {
-    @inject private lighting: Lighting;
-    @inject private background: Background;
-    @inject private overlay: Overlay;
-    @inject private game: Game;
+@external
+export class GraphicsGame extends Graphics {
+    private background = new Background(this.game);
+    private overlay = new Overlay(this.game);
+    private lighting = new Lighting(this.game);
 
-    @initialize protected async initialize() {
+    constructor (protected game: Game) {
+        super();
         this.background.render();
         this.render();
     }

@@ -1,5 +1,5 @@
 import { equals } from "ramda";
-import { component, initialize, inject } from "tsdi";
+import { external } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
 import { vec2, Vec2 } from "utils";
@@ -11,19 +11,17 @@ import {
     SpriteFloorTetris,
     SpriteFloorStars,
 } from "resources";
-import { Graphics } from "./graphics";
+import { Graphics } from "../graphics";
 
-@component
+@external
 export class Background extends Graphics {
-    @inject private game: Game;
-
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
     private lastCanvasSizeRendered?: [number, number];
     private lastSerialRendered?: string;
 
-    @initialize
-    protected async initialize() {
+    constructor (private game: Game) {
+        super();
         this.updateCanvas(document.createElement("canvas"));
     }
 

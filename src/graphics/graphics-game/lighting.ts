@@ -1,19 +1,17 @@
-import { component, initialize, inject } from "tsdi";
 import { bind } from "lodash-decorators";
+import { external } from "tsdi";
 import { vec2, Vec2 } from "utils";
 import { Game } from "game";
 import { EffectLineCleared, EffectInfo, EffectType, CellColor } from "types";
-import { Graphics } from "./graphics";
-import { lightSpriteForCellColor } from "./sprite-for-cell-color";
+import { Graphics } from "../graphics";
+import { lightSpriteForCellColor } from "../sprite-for-cell-color";
 import { SpriteEffectLineCleared, Sprite } from "resources";
 import { differenceInMilliseconds } from "date-fns";
 
-@component
+@external
 export class Lighting extends Graphics {
-    @inject private game: Game;
-
-    @initialize
-    protected async initialize() {
+    constructor(private game: Game) {
+        super();
         this.updateCanvas(document.createElement("canvas"));
     }
 

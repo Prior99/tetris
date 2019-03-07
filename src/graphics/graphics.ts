@@ -5,7 +5,6 @@ import { Constructable } from "types";
 import { SpriteManager, Sprite } from "resources";
 import { differenceInMilliseconds } from "date-fns";
 
-@component
 export abstract class Graphics {
     @inject protected config: Config;
     @inject protected sprites: SpriteManager;

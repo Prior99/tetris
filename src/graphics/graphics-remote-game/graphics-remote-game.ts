@@ -1,19 +1,18 @@
-import { external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
+import { external } from "tsdi";
 import { vec2, Vec2, Matrix } from "utils";
 import { CellColor } from "types";
 import { SpriteTetriminoOther, SpriteTetriminoGhost } from "resources";
-import { Graphics } from "./graphics";
+import { Graphics } from "../graphics";
 
 @external
-export class OtherGame extends Graphics {
-    constructor(private matrix: Matrix) { super(); }
-
-    private lastRenderedMatrix?: Matrix;
-
-    @initialize protected async initialize() {
+export class GraphicsRemoteGame extends Graphics {
+    constructor(private matrix: Matrix) {
+        super();
         this.render();
     }
+
+    private lastRenderedMatrix?: Matrix;
 
     private renderCell(pixelPosition: Vec2, cellColor: CellColor) {
         if (!this.ctx) { return; }

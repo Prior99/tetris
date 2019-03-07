@@ -4,7 +4,8 @@ import { computed, observable } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
-import { OwnGame } from "graphics";
+import { GraphicsGame } from "graphics";
+import { Game } from "game";
 import { UI } from "ui";
 import { Networking } from "networking";
 import * as css from "./own-game-canvas.scss";
@@ -16,8 +17,8 @@ import { Page } from "types";
 @external @observer
 export class OwnGameCanvas extends React.Component {
     @inject private config: Config;
-    @inject private ownGame: OwnGame;
-    @inject private game: ObservableGame;
+    @inject private observableGame: ObservableGame;
+    @inject private game: Game;
     @inject private ui: UI;
     @inject private networking: Networking;
     @inject private leaderboard: Leaderboard;
@@ -25,6 +26,7 @@ export class OwnGameCanvas extends React.Component {
     @observable private submitScoreVisible = false;
     @observable private leaderboardName = "";
 
+    private graphics: GraphicsGame;
     private canvas?: HTMLCanvasElement;
     private running = false;
 
@@ -39,10 +41,11 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @initialize protected initialize() {
+        this.graphics = new GraphicsGame(this.game);
         const renderLoop = () => {
             if (!this.running) { return; }
-            if (this.game.running) {
-                this.ownGame.render();
+            if (this.observableGame.running) {
+                this.graphics.render();
             }
             window.requestAnimationFrame(renderLoop);
         };
@@ -59,7 +62,7 @@ export class OwnGameCanvas extends React.Component {
         const minimalSize = this.config.visibleSize.mult(this.config.tetriminoPixelSize);
         const adjustedSize = naturalSize.sub(naturalSize.mod(minimalSize));
 
-        this.ownGame.rescale(adjustedSize);
+        this.graphics.rescale(adjustedSize);
 
         canvas.style.width = `${adjustedSize.x}px`;
         canvas.style.height = `${adjustedSize.y}px`;
@@ -68,7 +71,7 @@ export class OwnGameCanvas extends React.Component {
     @bind private canvasRef(canvas: HTMLCanvasElement) {
         if (!canvas) { return; }
         this.canvas = canvas;
-        this.ownGame.updateCanvas(canvas);
+        this.graphics.updateCanvas(canvas);
         this.rescale();
     }
 
@@ -77,7 +80,7 @@ export class OwnGameCanvas extends React.Component {
             this.networking.sendRestartGame();
         } else {
             this.ui.reset();
-            this.game.restart(randomSeed());
+            this.observableGame.restart(randomSeed());
         }
     }
 
@@ -87,12 +90,12 @@ export class OwnGameCanvas extends React.Component {
 
     @bind private handleLeaderboardSubmit() {
         this.submitScoreVisible = false;
-        this.leaderboard.submitScore(this.leaderboardName, this.game.score);
+        this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score);
         this.ui.leaderboardSubmitted = true;
     }
 
     @bind private handleBack() {
-        this.game.stop();
+        this.observableGame.stop();
         this.ui.page = Page.MENU;
         if (this.networking.gameOngoing) { this.networking.close(); }
     }
@@ -102,16 +105,16 @@ export class OwnGameCanvas extends React.Component {
     }
 
     @computed public get canRestart() {
-        return this.game.isSinglePlayer || (this.networking.isHost && this.networking.allUsersGameOver);
+        return this.observableGame.isSinglePlayer || (this.networking.isHost && this.networking.allUsersGameOver);
     }
 
     public render() {
         return (
             <div className={css.canvasWrapper}>
                 {
-                    this.game.gameOver ? (
-                        <div className={css.gameOver}>
-                            <div className={css.gameOverText}>Game over</div>
+                    this.observableGame.gameOver ? (
+                        <div className={css.observableGameOver}>
+                            <div className={css.observableGameOverText}>observableGame over</div>
                             {
                                 this.canRestart ? (
                                     <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
@@ -142,7 +145,7 @@ export class OwnGameCanvas extends React.Component {
                         </div>
                     ) : <></>
                 }
-                <canvas ref={this.canvasRef} className={css.gameCanvas} />
+                <canvas ref={this.canvasRef} className={css.observableGameCanvas} />
             </div>
         );
     }
