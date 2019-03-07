@@ -28,18 +28,15 @@ export class Loader {
     @inject private audios: AudioManager;
     @inject private config: Config;
 
-    @observable public resources: { status: LoadStatus, promise: Promise<any> }[] = [];
+    @observable public resources: { name: string, status: LoadStatus, promise: Promise<any> }[] = [];
 
-    public queue(promise: Promise<any>) {
-        this.resources.push({
-            status: LoadStatus.PENDING,
-            promise,
-        });
+    public queue(name: string, promise: Promise<any>) {
+        this.resources.push({ status: LoadStatus.PENDING, promise, name });
     }
 
     @initialize protected async initialize() {
-        allSprites.forEach((sprite, index) => this.queue(this.sprites.load(sprite)));
-        allAudios.forEach((audio, index) => this.queue(this.audios.load(audio)));
+        allSprites.forEach((sprite, index) => this.queue(sprite.name, this.sprites.load(sprite)));
+        allAudios.forEach((audio, index) => this.queue(audio.name, this.audios.load(audio)));
         for (let i = 0; i < this.resources.length; i += this.config.loadStride) {
             const slice = this.resources.slice(i, i + this.config.loadStride);
             slice.forEach(resource => resource.status = LoadStatus.IN_PROGRESS);
