@@ -75,76 +75,10 @@ export class GameCanvas extends React.Component {
         this.rescale();
     }
 
-    @bind private handleReset() {
-        if (this.networking.gameOngoing) {
-            this.networking.sendRestartGame();
-        } else {
-            this.ui.reset();
-            this.observableGame.restart(randomSeed());
-        }
-    }
-
-    @bind private handleSubmitScore() {
-        this.submitScoreVisible = true;
-    }
-
-    @bind private handleLeaderboardSubmit() {
-        this.submitScoreVisible = false;
-        this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score);
-        this.ui.leaderboardSubmitted = true;
-    }
-
-    @bind private handleBack() {
-        this.observableGame.stop();
-        this.ui.page = Page.MENU;
-        if (this.networking.gameOngoing) { this.networking.close(); }
-    }
-
-    @bind private handleLeaderboardNameChange(evt: React.SyntheticEvent<HTMLInputElement>) {
-        this.leaderboardName = evt.currentTarget.value;
-    }
-
-    @computed public get canRestart() {
-        return this.observableGame.isSinglePlayer || (this.networking.isHost && this.networking.allUsersGameOver);
-    }
-
     public render() {
         return (
             <div className={css.canvasWrapper}>
-                {
-                    this.observableGame.gameOver ? (
-                        <div className={css.observableGameOver}>
-                            <div className={css.observableGameOverText}>observableGame over</div>
-                            {
-                                this.canRestart ? (
-                                    <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
-                                ) : <></>
-                            }
-                            {
-                                this.ui.leaderboardSubmitted ? (
-                                    <></>
-                                ) : (
-                                    <div className={css.submitScore}>
-                                        {
-                                            !this.submitScoreVisible ? (
-                                                <a onClick={this.handleSubmitScore}>Submit score</a>
-                                            ) : (
-                                                <div className={css.submitScoreForm}>
-                                                    <input
-                                                        value={this.leaderboardName}
-                                                        onChange={this.handleLeaderboardNameChange}
-                                                    />
-                                                    <button onClick={this.handleLeaderboardSubmit}>Submit</button>
-                                                </div>
-                                            )
-                                        }
-                                    </div>
-                                )
-                            }
-                            <div className={css.back}><a onClick={this.handleBack}>Back</a></div>
-                        </div>
-                    ) : <></>
-                }
+                {this.props.children}
                 <canvas ref={this.canvasRef} className={css.observableGameCanvas} />
             </div>
         );

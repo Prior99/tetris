@@ -60,27 +60,7 @@ export class RemoteGameCanvas extends React.Component<{ matrix: Matrix, state: R
     public render() {
         return (
             <div className={css.canvasWrapper}>
-                {
-                    this.props.state.toppedOut ? (
-                        <div className={css.gameOver}>
-                            <div className={css.gameOverText}>Game over</div>
-                            <div className={css.gameOverStats}>
-                                <div className={css.info}>
-                                    <div className={css.label}>Score</div>
-                                    <div className={css.value}>{this.props.state.score}</div>
-                                </div>
-                                <div className={css.info}>
-                                    <div className={css.label}>Lines</div>
-                                    <div className={css.value}>{this.props.state.lines}</div>
-                                </div>
-                                <div className={css.info}>
-                                    <div className={css.label}>Level</div>
-                                    <div className={css.value}>{this.props.state.level}</div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : <></>
-                }
+                {this.props.children}
                 <canvas ref={this.canvasRef} className={css.gameCanvas} />
             </div>
         );

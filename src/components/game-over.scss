@@ -1,0 +1,33 @@
+@import "colors.scss";
+
+.gameOver {
+    font-family: hackregular;
+    color: white;
+    width: 100%;
+    height: 100%;
+    background: rgba($black, 0.5);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+
+    .gameOverText {
+        display: block;
+        font-size: 40pt;
+    }
+
+    .submitScore, .restart, .back {
+        display: block;
+        font-size: 20pt;
+        cursor: pointer;
+
+        a {
+            cursor: pointer;
+        }
+    }
+}
+
