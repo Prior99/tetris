@@ -5,10 +5,10 @@ import { Config } from "config";
 import { GraphicsRemoteGame } from "graphics";
 import { vec2, Matrix  } from "utils";
 import { RemoteGameState } from "types";
-import * as css from "./other-game-canvas.scss";
+import * as css from "./remote-game-canvas.scss";
 
 @external
-export class OtherGameCanvas extends React.Component<{ matrix: Matrix, state: RemoteGameState }> {
+export class RemoteGameCanvas extends React.Component<{ matrix: Matrix, state: RemoteGameState }> {
     @inject private config: Config;
 
     private canvas?: HTMLCanvasElement;

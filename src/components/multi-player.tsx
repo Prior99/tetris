@@ -3,7 +3,7 @@ import { Networking } from "networking";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { TetriminoPreviews } from "./tetrimino-previews";
-import { OwnGameCanvas } from "./own-game-canvas";
+import { GameCanvas } from "./game-canvas";
 import { Info } from "./info";
 import * as css from "./multi-player.scss";
 import { RemoteGame } from "./remote-game";
@@ -17,7 +17,7 @@ export class MultiPlayer extends React.Component {
             <section className={css.multiPlayer}>
                 <div className={css.wrapper}>
                     <Info />
-                    <OwnGameCanvas />
+                    <GameCanvas />
                     <TetriminoPreviews />
                 </div>
                 <div className={css.others}>

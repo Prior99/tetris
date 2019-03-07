@@ -14,7 +14,7 @@ import { MultiPlayer } from "./multi-player";
 import { LeaderboardView } from "./leaderboard-view";
 
 @external @observer
-export class Router extends React.Component {
+export class App extends React.Component {
     @inject private loader: Loader;
     @inject private ui: UI;
 

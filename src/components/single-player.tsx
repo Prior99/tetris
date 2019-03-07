@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { ObservableGame } from "observable-game";
 import { GameMode } from "types";
 import { TetriminoPreviews } from "./tetrimino-previews";
-import { OwnGameCanvas } from "./own-game-canvas";
+import { GameCanvas } from "./game-canvas";
 import { Info } from "./info";
 import * as css from "./single-player.scss";
 
@@ -21,7 +21,7 @@ export class SinglePlayer extends React.Component {
             <section className={css.game}>
                 <div className={css.wrapper}>
                     <Info />
-                    <OwnGameCanvas />
+                    <GameCanvas />
                     <TetriminoPreviews />
                 </div>
             </section>

@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import DevTools from "mobx-react-devtools";
 import { TSDI } from "tsdi";
 import { FactoryAudioContext } from "factory-audio-context";
-import { Router } from "components";
+import { App } from "components";
 import "./index.scss";
 
 async function main() {
@@ -16,7 +16,7 @@ async function main() {
     ReactDOM.render(
         <>
             <DevTools />
-            <Router />
+            <App />
         </>,
         document.getElementById("root"),
     );

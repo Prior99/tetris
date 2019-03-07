@@ -8,14 +8,14 @@ import { GraphicsGame } from "graphics";
 import { Game } from "game";
 import { UI } from "ui";
 import { Networking } from "networking";
-import * as css from "./own-game-canvas.scss";
 import { vec2, randomSeed } from "utils";
 import { ObservableGame } from "observable-game";
 import { Leaderboard } from "leaderboard";
 import { Page } from "types";
+import * as css from "./game-canvas.scss";
 
 @external @observer
-export class OwnGameCanvas extends React.Component {
+export class GameCanvas extends React.Component {
     @inject private config: Config;
     @inject private observableGame: ObservableGame;
     @inject private game: Game;
