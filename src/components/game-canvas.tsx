@@ -1,17 +1,12 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { computed, observable } from "mobx";
 import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { GraphicsGame } from "graphics";
 import { Game } from "game";
-import { UI } from "ui";
-import { Networking } from "networking";
-import { vec2, randomSeed } from "utils";
+import { vec2 } from "utils";
 import { ObservableGame } from "observable-game";
-import { Leaderboard } from "leaderboard";
-import { Page } from "types";
 import * as css from "./game-canvas.scss";
 
 @external @observer
@@ -19,12 +14,6 @@ export class GameCanvas extends React.Component {
     @inject private config: Config;
     @inject private observableGame: ObservableGame;
     @inject private game: Game;
-    @inject private ui: UI;
-    @inject private networking: Networking;
-    @inject private leaderboard: Leaderboard;
-
-    @observable private submitScoreVisible = false;
-    @observable private leaderboardName = "";
 
     private graphics: GraphicsGame;
     private canvas?: HTMLCanvasElement;
@@ -49,7 +38,6 @@ export class GameCanvas extends React.Component {
             }
             window.requestAnimationFrame(renderLoop);
         };
-        this.leaderboardName = this.ui.name || "";
         this.running = true;
         renderLoop();
     }

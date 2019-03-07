@@ -1,4 +1,4 @@
-import { component, inject } from "tsdi";
+import { inject } from "tsdi";
 import { Config } from "config";
 import { vec2, Vec2 } from "utils";
 import { Constructable } from "types";

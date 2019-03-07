@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Networking } from "networking";
-import { external, inject } from "tsdi";
+import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { computed, observable } from "mobx";
 import { bind } from "lodash-decorators";
 import { ObservableGame } from "observable-game";
 import { UI } from "ui";
 import { Page } from "types";
-import { randomSeed } from "utils";
 import { Leaderboard } from "leaderboard";
 import { TetriminoPreviews } from "./tetrimino-previews";
 import { GameCanvas } from "./game-canvas";
@@ -24,6 +23,10 @@ export class MultiPlayer extends React.Component {
 
     @observable private submitScoreVisible = false;
     @observable private leaderboardName = "";
+
+    @initialize protected initialize() {
+        this.leaderboardName = this.ui.name || "";
+    }
 
     @bind private handleReset() {
         this.networking.sendRestartGame();

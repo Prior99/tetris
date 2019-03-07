@@ -1,7 +1,7 @@
 import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
-import { computed, observable } from "mobx";
+import { observable } from "mobx";
 import { ObservableGame } from "observable-game";
 import { GameMode, Page } from "types";
 import { randomSeed } from "utils";
@@ -24,6 +24,7 @@ export class SinglePlayer extends React.Component {
 
     @initialize protected initialize() {
         this.observableGame.start(GameMode.SINGLE_PLAYER);
+        this.leaderboardName = this.ui.name || "";
     }
 
     @bind private handleReset() {
