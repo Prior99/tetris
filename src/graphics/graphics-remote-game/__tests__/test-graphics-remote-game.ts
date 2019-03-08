@@ -8,7 +8,7 @@ describe("GraphicsRemoteGame", () => {
     let canvas: Canvas;
 
     beforeEach(() => {
-        canvas = createCanvas(320, 960);
+        canvas = createCanvas(320, 640);
         matrix = new Matrix(vec2(10, 30), [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

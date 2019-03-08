@@ -1,4 +1,5 @@
 jest.mock("./src/factory-audio-context");
+jest.mock("./src/sounds");
 jest.mock("./src/resources/audio/audio");
 jest.mock("./src/utils/create-canvas");
 jest.mock("./src/resources/sprites/image-manager");

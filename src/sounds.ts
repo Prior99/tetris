@@ -55,7 +55,7 @@ export class Sounds {
     private soundsNode: GainNode;
     private filterNode: BiquadFilterNode;
 
-    public get musicAudio() {
+    private get musicAudio() {
         if (typeof this.musicSpeed !== "number") { return; }
         return this.audioManager.audio(musicForSpeed(this.musicSpeed));
     }
