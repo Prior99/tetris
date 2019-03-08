@@ -1,6 +1,7 @@
 import { external } from "tsdi";
 import { Atlas } from "types";
 import { Sprite } from "./sprite";
+import { createCanvas } from "utils";
 import * as atlasTetriminoLight from "assets/tetrimino-light.json";
 
 @external
@@ -16,7 +17,7 @@ export class TintedSprite extends Sprite {
     public async load() {
         await this.images.load(this.atlas.meta.image);
         const image = this.images.image(this.atlas.meta.image);
-        this.tintedImage = document.createElement("canvas");
+        this.tintedImage = createCanvas();
         this.tintedImage.width = image.width;
         this.tintedImage.height = image.height;
         const ctx = this.tintedImage.getContext("2d")!;

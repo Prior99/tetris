@@ -2,7 +2,7 @@ import { equals } from "ramda";
 import { external } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
-import { vec2, Vec2 } from "utils";
+import { vec2, Vec2, createCanvas } from "utils";
 import {
     SpriteFloorLove,
     SpriteFloorBricks,
@@ -22,7 +22,7 @@ export class Background extends Graphics {
 
     constructor (private game: Game) {
         super();
-        this.updateCanvas(document.createElement("canvas"));
+        this.updateCanvas(createCanvas());
     }
 
     protected get spriteClass() {

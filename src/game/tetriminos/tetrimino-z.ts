@@ -1,8 +1,7 @@
 import { external, inject } from "tsdi";
-import { Matrix, vec2 } from "utils";
+import { matrixInitializer, Matrix, vec2 } from "utils";
 import { CellColor } from "types";
 import { Config } from "config";
-import { matrixInitializer } from "./matrix-initializer";
 import { Tetrimino } from "./tetrimino";
 import { Playfield } from "../playfield";
 

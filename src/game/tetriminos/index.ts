@@ -1,4 +1,3 @@
-export * from "./matrix-initializer";
 export * from "./tetrimino-i";
 export * from "./tetrimino-j";
 export * from "./tetrimino-l";

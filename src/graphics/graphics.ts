@@ -23,6 +23,7 @@ export abstract class Graphics {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
         this.ctx.imageSmoothingEnabled = false;
+        this.pixelSize = vec2(canvas.width, canvas.height);
     }
 
     public get seconds() {

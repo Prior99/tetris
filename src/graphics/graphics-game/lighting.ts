@@ -1,6 +1,6 @@
 import { bind } from "lodash-decorators";
 import { external } from "tsdi";
-import { vec2, Vec2 } from "utils";
+import { vec2, Vec2, createCanvas } from "utils";
 import { Game } from "game";
 import { EffectLineCleared, EffectInfo, EffectType, CellColor } from "types";
 import { Graphics } from "../graphics";
@@ -12,7 +12,7 @@ import { differenceInMilliseconds } from "date-fns";
 export class Lighting extends Graphics {
     constructor(private game: Game) {
         super();
-        this.updateCanvas(document.createElement("canvas"));
+        this.updateCanvas(createCanvas());
     }
 
     private renderCell(position: Vec2, cellColor: CellColor) {

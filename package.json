@@ -17,7 +17,8 @@
         "moduleDirectories": [
             "node_modules",
             "src",
-            "assets"
+            "assets",
+            "."
         ],
         "moduleFileExtensions": [
             "ts",
@@ -44,6 +45,13 @@
         ],
         "collectCoverageFrom": [
             "src/**/*.ts"
+        ],
+        "setupFilesAfterEnv": [
+            "./jest-setup.ts"
+        ],
+        "reporters": [
+            "default",
+            "jest-screenshot/reporter"
         ]
     },
     "devDependencies": {
@@ -54,12 +62,14 @@
         "@types/random-seed": "^0.3.3",
         "@types/react": "^16.8.3",
         "@types/uuid": "^3.4.4",
+        "canvas": "^2.3.1",
         "classnames": "^2.2.6",
         "css-loader": "^2.1.0",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^3.0.1",
         "git-revision-webpack-plugin": "^3.0.3",
         "jest": "^24.1.0",
+        "jest-screenshot": "^0.2.2",
         "json-loader": "^0.5.7",
         "mobx-react-devtools": "^6.0.3",
         "node-sass": "^4.11.0",

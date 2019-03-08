@@ -1,6 +1,6 @@
 import { bind } from "lodash-decorators";
 import { external } from "tsdi";
-import { vec2 } from "utils";
+import { vec2, createCanvas } from "utils";
 import { Game } from "game";
 import { Graphics } from "../graphics";
 import {
@@ -34,7 +34,7 @@ function comboCountSprite(count: number): Constructable<Sprite> {
 export class Overlay extends Graphics {
     constructor(private game: Game) {
         super();
-        this.updateCanvas(document.createElement("canvas"));
+        this.updateCanvas(createCanvas());
     }
 
     private renderIncomingAlert() {

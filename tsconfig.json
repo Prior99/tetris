@@ -17,5 +17,5 @@
             "assets/*": ["assets/*"]
         }
     },
-    "include": ["src/**/*.ts?", "typings/**/*", "assets/*.json"],
+    "include": ["src/**/*.ts?", "typings/**/*", "assets/*.json", "*.ts"],
 }

@@ -8,9 +8,9 @@ import * as audios from "./audio";
 import { Constructable } from "types";
 import { Config } from "config";
 
-const allSprites: Constructable<Sprite>[] =
+export const allSprites: { name: string, sprite: Constructable<Sprite> }[] =
     without(["ImageManager", "SpriteFloor", "SpriteManager", "Sprite", "TintedSprite"], Object.keys(sprites))
-    .map(key => sprites[key]);
+    .map(name => ({ name, sprite: sprites[name] }));
 
 const allAudios: Constructable<Audio>[] =
     without(["AudioManager", "Audio", "Sounds", "musicSpeedForLevel", "MusicSpeed"], Object.keys(audios))
@@ -38,10 +38,15 @@ export class Loader {
     }
 
     @initialize protected async initialize() {
-        allSprites.forEach((sprite, index) => this.queue(this.sprites.load(sprite)));
+        allSprites.forEach((sprite, index) => this.queue(this.sprites.load(sprite.sprite)));
         allAudios.forEach((audio, index) => this.queue(this.audios.load(audio)));
-        for (let i = 0; i < this.resources.length; i += this.config.loadStride) {
-            const slice = this.resources.slice(i, i + this.config.loadStride);
+        await this.loadAll();
+    }
+
+    public async loadAll() {
+        const notLoaded = this.resources.filter(({ status }) => status !== LoadStatus.DONE);
+        for (let i = 0; i < notLoaded.length; i += this.config.loadStride) {
+            const slice = notLoaded.slice(i, i + this.config.loadStride);
             slice.forEach(resource => resource.status = LoadStatus.IN_PROGRESS);
             await Promise.all(slice.map(({ promise }) => promise));
             slice.forEach(resource => resource.status = LoadStatus.DONE);
