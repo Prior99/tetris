@@ -8,3 +8,4 @@ export * from "./game-mode";
 export * from "./settings";
 export * from "./sounds-mode";
 export * from "./networking";
+export * from "./mutable";

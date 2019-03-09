@@ -14,7 +14,7 @@ import {
 import { Graphics } from "../graphics";
 
 @external
-export class Background extends Graphics {
+export class GraphicsBackground extends Graphics {
     private lastLevelRendered?: number;
     private lastResizeRendered?: Vec2;
     private lastCanvasSizeRendered?: [number, number];

@@ -3,17 +3,17 @@ import { external } from "tsdi";
 import { vec2, Vec2 } from "utils";
 import { Game } from "game";
 import { CellColor } from "types";
-import { Lighting } from "./lighting";
-import { Background } from "./background";
+import { GraphicsLighting } from "./graphics-lighting";
+import { GraphicsBackground } from "./graphics-background";
 import { Graphics } from "../graphics";
 import { spriteForCellColor } from "../sprite-for-cell-color";
-import { Overlay } from "./overlay";
+import { GraphicsOverlay } from "./graphics-overlay";
 
 @external
 export class GraphicsGame extends Graphics {
-    private background = new Background(this.game);
-    private overlay = new Overlay(this.game);
-    private lighting = new Lighting(this.game);
+    private background = new GraphicsBackground(this.game);
+    private overlay = new GraphicsOverlay(this.game);
+    private lighting = new GraphicsLighting(this.game);
 
     constructor (protected game: Game) {
         super();

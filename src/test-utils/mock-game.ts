@@ -1,10 +1,10 @@
 import { merge } from "ramda";
-import { GameMode } from "types";
+import { GameMode, Mutable } from "types";
 import { vec2 } from "utils";
 import { Game } from "game";
 import { mockPlayfield } from "./mock-playfield";
 
-export function mockGame(override?: Partial<Game>): Game {
+export function mockGame(override?: Partial<Game>): Mutable<Game> {
     return merge({
         gameMode: GameMode.SINGLE_PLAYER,
         running: true,
@@ -40,5 +40,5 @@ export function mockGame(override?: Partial<Game>): Game {
         incomingGarbage: [],
         holdPiece: undefined,
         latestIncomingGarbage: undefined,
-    }, override) as any as Game;
+    }, override) as any as Mutable<Game>;
 }

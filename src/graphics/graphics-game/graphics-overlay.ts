@@ -31,7 +31,7 @@ function comboCountSprite(count: number): Constructable<Sprite> {
 }
 
 @external
-export class Overlay extends Graphics {
+export class GraphicsOverlay extends Graphics {
     constructor(private game: Game) {
         super();
         this.updateCanvas(createCanvas());

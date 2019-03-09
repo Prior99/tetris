@@ -9,7 +9,7 @@ import { SpriteEffectLineCleared, Sprite } from "resources";
 import { differenceInMilliseconds } from "date-fns";
 
 @external
-export class Lighting extends Graphics {
+export class GraphicsLighting extends Graphics {
     constructor(private game: Game) {
         super();
         this.updateCanvas(createCanvas());
