@@ -1,5 +1,6 @@
 import { createCanvas, Canvas } from "canvas";
-import { vec2, Matrix, matrixInitializer } from "utils";
+import { Matrix } from "utils";
+import { mockPlayfield } from "test-utils";
 import { GraphicsRemoteGame } from "..";
 
 describe("GraphicsRemoteGame", () => {
@@ -9,38 +10,7 @@ describe("GraphicsRemoteGame", () => {
 
     beforeEach(() => {
         canvas = createCanvas(320, 640);
-        matrix = new Matrix(vec2(10, 30), [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 3, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 5, 5, 0,
-            0, 0, 0, 0, 0, 0, 5, 5, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 1, 0, 4, 4, 0, 0, 0, 0,
-            1, 1, 1, 0, 4, 4, 0, 0, 0, 0,
-        ]);
+        matrix = mockPlayfield();
         graphics = new GraphicsRemoteGame(matrix);
         graphics.updateCanvas(canvas);
         graphics.render();
