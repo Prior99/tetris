@@ -22,9 +22,13 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/floor-white-tiles.ase --data assets/floor-white-tiles.json --sheet assets/floor-white-tiles.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-tetris.ase --data assets/floor-tetris.json --sheet assets/floor-tetris.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-stars.ase --data assets/floor-stars.json --sheet assets/floor-stars.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-night-sky.ase --data assets/floor-night-sky.json --sheet assets/floor-night-sky.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-love.ase --data assets/floor-love.json --sheet assets/floor-love.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-bricks.ase --data assets/floor-bricks.json --sheet assets/floor-bricks.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-carpet.ase --data assets/floor-carpet.json --sheet assets/floor-carpet.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-hexagons.ase --data assets/floor-hexagons.json --sheet assets/floor-hexagons.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-stars.ase --data assets/floor-stars.json --sheet assets/floor-stars.png
+	aseprite ${ASEPRITE_FLAGS} ase/floor-city.ase --data assets/floor-city.json --sheet assets/floor-city.png
 	aseprite ${ASEPRITE_FLAGS} ase/effect-line-cleared.ase --data assets/effect-line-cleared.json --sheet assets/effect-line-cleared.png
 	aseprite ${ASEPRITE_FLAGS} ase/incoming-alert.ase --data assets/incoming-alert.json --sheet assets/incoming-alert.png
 	aseprite ${ASEPRITE_FLAGS} ase/score-double.ase --data assets/score-double.json --sheet assets/score-double.png

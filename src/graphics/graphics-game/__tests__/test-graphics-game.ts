@@ -1,4 +1,5 @@
 import { createCanvas, Canvas } from "canvas";
+import { Game } from "game";
 import { vec2, Matrix, matrixInitializer } from "utils";
 import { GameMode } from "types";
 import { mockGame } from "test-utils";
@@ -10,7 +11,7 @@ describe("GraphicsGame", () => {
 
     beforeEach(() => {
         canvas = createCanvas(320, 640);
-        graphics = new GraphicsGame(mockGame());
+        graphics = new GraphicsGame(mockGame() as Game);
         graphics.rescale(vec2(320, 640));
         graphics.updateCanvas(canvas);
         graphics.render();

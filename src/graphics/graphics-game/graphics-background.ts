@@ -10,6 +10,9 @@ import {
     SpriteFloorWood,
     SpriteFloorTetris,
     SpriteFloorStars,
+    SpriteFloorHexagons,
+    SpriteFloorNightSky,
+    SpriteFloorCity,
 } from "resources";
 import { Graphics } from "../graphics";
 
@@ -29,10 +32,13 @@ export class GraphicsBackground extends Graphics {
         const { level } = this.game;
         if (level < 1) { return SpriteFloorBricks; }
         if (level < 2) { return SpriteFloorTetris; }
-        if (level < 4) { return SpriteFloorStars; }
-        if (level < 6) { return SpriteFloorLove; }
-        if (level < 8) { return SpriteFloorWood; }
-        return SpriteFloorWhiteTiles;
+        if (level < 3) { return SpriteFloorStars; }
+        if (level < 4) { return SpriteFloorLove; }
+        if (level < 5) { return SpriteFloorHexagons; }
+        if (level < 6) { return SpriteFloorCity; }
+        if (level < 7) { return SpriteFloorNightSky; }
+        if (level < 8) { return SpriteFloorWhiteTiles; }
+        return SpriteFloorWood;
     }
 
     protected get sprite() {
