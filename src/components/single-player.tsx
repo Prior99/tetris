@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { observable } from "mobx";
 import { ObservableGame } from "observable-game";
 import { GameMode, Page, WinningConditionType, GarbageMode } from "types";
-import { randomSeed } from "utils";
+import { randomSeed, leaderboardEnabled } from "utils";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
 import { Leaderboard } from "leaderboard";
@@ -62,7 +62,7 @@ export class SinglePlayer extends React.Component {
                                     <div className={css.gameOverText}>Game Over</div>
                                         <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
                                     {
-                                        this.ui.leaderboardSubmitted ? (
+                                        this.ui.leaderboardSubmitted || !leaderboardEnabled(this.ui.parameters) ? (
                                             <></>
                                         ) : (
                                             <div className={css.submitScore}>

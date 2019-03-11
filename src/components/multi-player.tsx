@@ -6,6 +6,7 @@ import { computed, observable } from "mobx";
 import { bind } from "lodash-decorators";
 import { ObservableGame } from "observable-game";
 import { UI } from "ui";
+import { leaderboardEnabled } from "utils";
 import { Page } from "types";
 import { Leaderboard } from "leaderboard";
 import { TetriminoPreviews } from "./tetrimino-previews";
@@ -72,7 +73,8 @@ export class MultiPlayer extends React.Component {
                                         ) : <></>
                                     }
                                     {
-                                        this.ui.leaderboardSubmitted ? (
+                                        this.ui.leaderboardSubmitted ||
+                                        !leaderboardEnabled(this.networking.parameters) ? (
                                             <></>
                                         ) : (
                                             <div className={css.submitScore}>
