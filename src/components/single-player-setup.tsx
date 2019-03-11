@@ -34,6 +34,7 @@ export class SinglePlayerSetup extends React.Component {
                             onChange={parameters => this.ui.parameters = parameters}
                             parameters={this.ui.parameters}
                             enabled={true}
+                            singleplayer
                         />
                         <button style={{ width: "100%" }} onClick={this.handleStart}>Start</button>
                         <a onClick={this.handleBack}>Back</a>

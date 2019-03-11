@@ -13,7 +13,7 @@ export class NetworkGame {
     @observable private states = new Map<string, RemoteGameState>();
     @observable public parameters: GameParameters = {
         seed: randomSeed(),
-        garbageMode: GarbageMode.NONE,
+        garbageMode: GarbageMode.HALF_REFERRED,
         gameMode: GameMode.SINGLE_PLAYER,
         initialGarbageLines: 0,
         initialLevel: 0,
