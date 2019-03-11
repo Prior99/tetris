@@ -50,13 +50,14 @@ export class Host extends Peer {
     public sendStartGame() {
         const seed = randomSeed();
         this.send({ message: MessageType.START, parameters: this.networkGame.parameters });
-        this.startNetworkGame(seed);
+        this.startNetworkGame(this.networkGame.parameters);
     }
 
     public sendRestartGame() {
-        const seed = randomSeed();
-        this.send({ message: MessageType.RESTART, seed });
-        this.restartNetworkGame(seed);
+        this.networkGame.parameters.seed = randomSeed();
+        const { parameters } = this.networkGame;
+        this.send({ message: MessageType.RESTART, parameters });
+        this.restartNetworkGame(parameters);
     }
 
     public sendParameterChange(parameters: GameParameters) {

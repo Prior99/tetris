@@ -2,7 +2,7 @@ import { external, inject } from "tsdi";
 import { equals } from "ramda";
 import { observable, computed } from "mobx";
 import { RemoteGameState, GameParameters, GameMode, GarbageMode, WinningConditionType } from "types";
-import { Matrix } from "utils";
+import { Matrix, randomSeed } from "utils";
 import { Config } from "config";
 import { RemoteUsers } from "./remote-users";
 
@@ -12,6 +12,7 @@ export class NetworkGame {
 
     @observable private states = new Map<string, RemoteGameState>();
     @observable public parameters: GameParameters = {
+        seed: randomSeed(),
         garbageMode: GarbageMode.NONE,
         gameMode: GameMode.SINGLE_PLAYER,
         initialGarbageLines: 0,

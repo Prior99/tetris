@@ -5,7 +5,7 @@ import { Matrix } from "utils";
 import { UI } from "ui";
 import { Config } from "config";
 import { Game } from "game";
-import { GameMode, Page } from "types";
+import { GameMode, Page, GameParameters } from "types";
 import { ObservableGame } from "observable-game";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
@@ -95,7 +95,7 @@ export abstract class Peer {
                 break;
             }
             case MessageType.RESTART: {
-                this.restartNetworkGame(message.seed);
+                this.restartNetworkGame(message.parameters);
                 break;
             }
             case MessageType.GARBAGE: {
@@ -107,12 +107,12 @@ export abstract class Peer {
         }
     }
 
-    protected restartNetworkGame(seed: string) {
+    protected restartNetworkGame(parameters: GameParameters) {
         this.ui.reset();
-        this.observableGame.restart(seed);
+        this.observableGame.restart(parameters);
     }
 
-    protected startNetworkGame(parameters) {
+    protected startNetworkGame(parameters: GameParameters) {
         this.networkGame.initialize();
         this.observableGame.start(parameters);
         this.tick();

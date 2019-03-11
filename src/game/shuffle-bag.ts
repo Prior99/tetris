@@ -9,14 +9,13 @@ import {
     TetriminoT,
     TetriminoZ,
 } from "./tetriminos";
-import { randomSeed } from "utils";
 import { Playfield } from "./playfield";
 
 export class ShuffleBag {
     private sequence: Tetrimino[] = [];
     private random: Random.RandomSeed;
 
-    constructor(private playfield: Playfield, seed = randomSeed()) {
+    constructor(private playfield: Playfield, seed: string) {
         this.random = Random.create(seed);
         this.refill();
     }

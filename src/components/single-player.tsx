@@ -23,20 +23,12 @@ export class SinglePlayer extends React.Component {
     @observable private leaderboardName = "";
 
     @initialize protected initialize() {
-        this.observableGame.start({
-            garbageMode: GarbageMode.NONE,
-            gameMode: GameMode.SINGLE_PLAYER,
-            initialGarbageLines: 0,
-            initialLevel: 0,
-            levelUpDisabled: false,
-            winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
-        });
         this.leaderboardName = this.ui.name || "";
     }
 
     @bind private handleReset() {
         this.ui.reset();
-        this.observableGame.restart(randomSeed());
+        this.observableGame.restart(this.ui.parameters);
     }
 
     @bind private handleSubmitScore() {

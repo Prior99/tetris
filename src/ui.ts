@@ -1,5 +1,5 @@
 import { component, initialize } from "tsdi";
-import { generateName } from "utils";
+import { generateName, randomSeed } from "utils";
 import { observable } from "mobx";
 import { Page, Settings, GameParameters, GarbageMode, GameMode, WinningConditionType } from "types";
 
@@ -13,6 +13,7 @@ export class UI {
     @observable public page = Page.MENU;
     @observable public leaderboardSubmitted = false;
     @observable public parameters: GameParameters = {
+        seed: randomSeed(),
         garbageMode: GarbageMode.NONE,
         gameMode: GameMode.SINGLE_PLAYER,
         initialGarbageLines: 0,
@@ -46,6 +47,7 @@ export class UI {
 
     public reset() {
         this.leaderboardSubmitted = false;
+        this.parameters.seed = randomSeed();
     }
 
     get name() {

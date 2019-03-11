@@ -29,7 +29,7 @@ export enum GarbageMode {
 export interface GameParameters {
     winningCondition: WinningCondition;
     gameMode: GameMode;
-    seed?: string;
+    seed: string;
     initialGarbageLines: number;
     garbageMode: GarbageMode;
     initialLevel: number;

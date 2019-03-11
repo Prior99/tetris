@@ -52,7 +52,7 @@ export interface MessageGarbage {
 
 export interface MessageRestart {
     message: MessageType.RESTART;
-    seed: string;
+    parameters: GameParameters;
 }
 
 export interface MessageChatMessage {

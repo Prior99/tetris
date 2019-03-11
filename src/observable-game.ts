@@ -65,8 +65,8 @@ export class ObservableGame {
         }
     }
 
-    public restart(seed: string): void {
-        this.game.restart(seed);
+    public restart(parameters: GameParameters): void {
+        this.game.restart(parameters);
     }
 
     public start(parameters: GameParameters): void {

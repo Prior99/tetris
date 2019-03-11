@@ -16,7 +16,7 @@ import {
     AudioLevelUp,
 } from "resources";
 import { musicSpeedForLevel, Sounds } from "sounds";
-import { Garbage, EffectType } from "types";
+import { Garbage, EffectType, GameParameters, GarbageMode } from "types";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
 import { Effects } from "./effects";
 import { speed } from "./speed";
@@ -62,6 +62,7 @@ export class GameState {
         private shuffleBag: ShuffleBag,
         private playfield: Playfield,
         private effects: Effects,
+        private parameters: GameParameters,
     ) {
         this.newTetrimino();
     }
@@ -121,7 +122,12 @@ export class GameState {
 
     public get speed() { return speed(this.level); }
 
-    public get level() { return Math.floor(this.lines / 10); }
+    public get level() {
+        if (this.parameters.levelUpDisabled) {
+            return this.parameters.initialLevel;
+        }
+        return this.parameters.initialLevel + Math.floor(this.lines / 10);
+    }
 
     @bind public inputRotateRight() {
         if (!this.current) { throw new Error("Received input event on uninitialized game state."); }
@@ -232,6 +238,15 @@ export class GameState {
         return cancelled;
     }
 
+    private calculateReturnedGarbage(clearedGarbageLines: number): number {
+        switch (this.parameters.garbageMode) {
+            case GarbageMode.FULL_REFERRED: return clearedGarbageLines;
+            case GarbageMode.HALF_REFERRED: return Math.floor(clearedGarbageLines / 2);
+            case GarbageMode.INITIAL_ONLY: return 0;
+        }
+        return 0;
+    }
+
     private commitTetrimino() {
         if (!this.current) { throw new Error("Can't commit tetrimino on uninitialized game state."); }
         this.sounds.play(AudioHit);
@@ -251,8 +266,8 @@ export class GameState {
             }
             this.scoreLineCount(count);
             const clearedGarbageLines = this.cancelIncomingGarbage(count);
-            const lines = calculateGarbage(count) + Math.floor(clearedGarbageLines / 2);
-            if (lines > 0) {
+            const lines = calculateGarbage(count) + this.calculateReturnedGarbage(clearedGarbageLines);
+            if (lines > 0 && this.parameters.garbageMode !== GarbageMode.NONE) {
                 this.outgoingGarbage.push({ time: this.timeCurrent, lines });
             }
             if (this.comboCount >= 2) {
