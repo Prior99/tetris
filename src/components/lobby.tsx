@@ -8,6 +8,7 @@ import { UI } from "ui";
 import { Page, NetworkingMode } from "types";
 import * as css from "./lobby.scss";
 import { ChatMessage } from "./chat-message";
+import { Configure } from "./configure";
 
 @external @observer
 export class Lobby extends React.Component {
@@ -42,6 +43,11 @@ export class Lobby extends React.Component {
                                 <div className={css.id}>
                                     {this.networking.hostId}
                                 </div>
+                                <Configure
+                                    onChange={parameters => this.networking.changeParameters(parameters)}
+                                    parameters={this.networking.parameters}
+                                    enabled={this.networking.mode === NetworkingMode.HOST}
+                                />
                                 {
                                     this.networking.mode === NetworkingMode.HOST ? (
                                         <button style={{ width: "100%" }} onClick={this.handleStart}>Start</button>

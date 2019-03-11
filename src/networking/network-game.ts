@@ -1,7 +1,7 @@
 import { external, inject } from "tsdi";
 import { equals } from "ramda";
 import { observable, computed } from "mobx";
-import { RemoteGameState } from "types";
+import { RemoteGameState, GameParameters, GameMode, GarbageMode, WinningConditionType } from "types";
 import { Matrix } from "utils";
 import { Config } from "config";
 import { RemoteUsers } from "./remote-users";
@@ -11,6 +11,14 @@ export class NetworkGame {
     @inject private config: Config;
 
     @observable private states = new Map<string, RemoteGameState>();
+    @observable public parameters: GameParameters = {
+        garbageMode: GarbageMode.NONE,
+        gameMode: GameMode.SINGLE_PLAYER,
+        initialGarbageLines: 0,
+        initialLevel: 0,
+        levelUpDisabled: false,
+        winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
+    };
 
     constructor(private users: RemoteUsers) {}
 

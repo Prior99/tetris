@@ -1,6 +1,7 @@
 import { external } from "tsdi";
 import PeerJS from "peerjs";
 import { randomSeed } from "utils";
+import { GameParameters } from "types";
 import { Message, MessageType } from "./messages";
 import { Peer } from "./peer";
 import { RemoteUsers } from "./remote-users";
@@ -48,7 +49,7 @@ export class Host extends Peer {
 
     public sendStartGame() {
         const seed = randomSeed();
-        this.send({ message: MessageType.START, seed });
+        this.send({ message: MessageType.START, parameters: this.networkGame.parameters });
         this.startNetworkGame(seed);
     }
 
@@ -56,6 +57,10 @@ export class Host extends Peer {
         const seed = randomSeed();
         this.send({ message: MessageType.RESTART, seed });
         this.restartNetworkGame(seed);
+    }
+
+    public sendParameterChange(parameters: GameParameters) {
+        this.send({ message: MessageType.PARAMETERS_CHANGE, parameters });
     }
 
     private handleConnect(connection: PeerJS.DataConnection) {
@@ -68,6 +73,7 @@ export class Host extends Peer {
                 this.sendTo(connection, {
                     message: MessageType.WELCOME,
                     users: this.users.all,
+                    parameters: this.networkGame.parameters,
                 });
                 this.send({
                     message: MessageType.USER_CONNECTED,

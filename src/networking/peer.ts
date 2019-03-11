@@ -69,8 +69,13 @@ export abstract class Peer {
                 this.chat.add(message.chatMessage);
                 break;
             }
+            case MessageType.PARAMETERS_CHANGE: {
+                this.networkGame.parameters = message.parameters;
+                break;
+            }
             case MessageType.WELCOME: {
                 this.users.add(...message.users);
+                this.networkGame.parameters = message.parameters;
                 break;
             }
             case MessageType.USER_CONNECTED: {
@@ -78,7 +83,7 @@ export abstract class Peer {
                 break;
             }
             case MessageType.START: {
-                this.startNetworkGame(message.seed);
+                this.startNetworkGame(message.parameters);
                 break;
             }
             case MessageType.UPDATE_PLAYFIELD: {
@@ -107,9 +112,9 @@ export abstract class Peer {
         this.observableGame.restart(seed);
     }
 
-    protected startNetworkGame(seed: string) {
+    protected startNetworkGame(parameters) {
         this.networkGame.initialize();
-        this.observableGame.start(GameMode.MULTI_PLAYER, seed);
+        this.observableGame.start(parameters);
         this.tick();
         this.ui.page = Page.MULTI_PLAYER;
     }

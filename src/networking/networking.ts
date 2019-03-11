@@ -1,6 +1,6 @@
 import { component } from "tsdi";
 import { observable, computed } from "mobx";
-import { NetworkingMode, RemoteUser, ChatMessage } from "types";
+import { GameParameters, NetworkingMode, RemoteUser, ChatMessage } from "types";
 import { Peer } from "./peer";
 import { Host } from "./host";
 import { Client } from "./client";
@@ -105,5 +105,15 @@ export class Networking {
 
     @computed public get ownId() {
         return this.peer.id;
+    }
+
+    @computed public get parameters() {
+        return this.networkGame.parameters;
+    }
+
+    public changeParameters(parameters: GameParameters) {
+        if (this.mode !== NetworkingMode.HOST) { return; }
+        this.networkGame.parameters = parameters;
+        (this.peer as Host).sendParameterChange(parameters);
     }
 }

@@ -1,6 +1,6 @@
 import { differenceInMilliseconds } from "date-fns";
 import { component, inject } from "tsdi";
-import { EffectInfo, Garbage, GameMode, SoundsMode } from "types";
+import { EffectInfo, Garbage, GameMode, SoundsMode, GameParameters } from "types";
 import { Matrix, Vec2 } from "utils";
 import { Config } from "config";
 import { Sounds } from "sounds";
@@ -22,9 +22,9 @@ export class Game {
     private effectsController?: Effects;
     private playfield?: Playfield;
 
-    public gameMode?: GameMode;
     public running = false;
     public serial: string;
+    public parameters: GameParameters;
 
     private timeStarted?: Date;
     private timeLastTick?: Date;
@@ -129,9 +129,9 @@ export class Game {
     }
 
     public restart(seed?: string): void {
-        if (!this.gameMode) { throw new Error("Restarted game that was not started previously."); }
+        if (!this.parameters.gameMode) { throw new Error("Restarted game that was not started previously."); }
         this.stop();
-        this.start(this.gameMode, seed);
+        this.start(this.parameters);
     }
 
     public addIncomingGarbage(garbage: Garbage): void {
@@ -154,16 +154,15 @@ export class Game {
         this.gameState.outgoingGarbage = [];
     }
 
-    public start(gameMode: GameMode, seed?: string): void {
+    public start(parameters: GameParameters): void {
         this.playfield = new Playfield();
-        this.shuffleBag = new ShuffleBag(this.playfield, seed);
+        this.shuffleBag = new ShuffleBag(this.playfield, parameters.seed);
         this.effectsController = new Effects();
         this.gameState = new GameState(this.shuffleBag, this.playfield, this.effectsController);
         this.input = new Input(this.gameState);
 
         this.running = true;
         this.sounds.setMode(SoundsMode.GAME);
-        this.gameMode = gameMode;
         this.timeStarted = new Date();
         this.tick();
         this.serial = Uuid.v4();

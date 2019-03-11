@@ -3,7 +3,7 @@ import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
 import { ObservableGame } from "observable-game";
-import { GameMode, Page } from "types";
+import { GameMode, Page, WinningConditionType, GarbageMode } from "types";
 import { randomSeed } from "utils";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
@@ -23,7 +23,14 @@ export class SinglePlayer extends React.Component {
     @observable private leaderboardName = "";
 
     @initialize protected initialize() {
-        this.observableGame.start(GameMode.SINGLE_PLAYER);
+        this.observableGame.start({
+            garbageMode: GarbageMode.NONE,
+            gameMode: GameMode.SINGLE_PLAYER,
+            initialGarbageLines: 0,
+            initialLevel: 0,
+            levelUpDisabled: false,
+            winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
+        });
         this.leaderboardName = this.ui.name || "";
     }
 

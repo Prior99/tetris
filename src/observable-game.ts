@@ -2,7 +2,7 @@ import { component, inject, external } from "tsdi";
 import { observable, computed } from "mobx";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
-import { GameMode, Garbage } from "types";
+import { GameMode, Garbage, GameParameters } from "types";
 import { Matrix } from "utils";
 
 @component @external
@@ -55,7 +55,7 @@ export class ObservableGame {
         this.score = this.game.score;
         this.lines = this.game.lines;
         this.level = this.game.level;
-        this.gameMode = this.game.gameMode;
+        this.gameMode = this.game.parameters.gameMode;
         this.seconds = this.game.seconds;
         if (this.incomingGarbageChanged) {
             this.incomingGarbage = [ ...this.game.incomingGarbage ];
@@ -69,10 +69,8 @@ export class ObservableGame {
         this.game.restart(seed);
     }
 
-    public start(gameMode: GameMode.SINGLE_PLAYER): void;
-    public start(gameMode: GameMode.MULTI_PLAYER, seed: string): void;
-    public start(gameMode: GameMode, seed?: string): void {
-        this.game.start(gameMode, seed);
+    public start(parameters: GameParameters): void {
+        this.game.start(parameters);
         this.interval = setInterval(this.update, 100);
         this.update();
     }
