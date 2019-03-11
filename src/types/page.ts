@@ -6,4 +6,5 @@ export enum Page {
     CONNECT = "connect",
     MULTI_PLAYER = "multi-player",
     LEADERBOARD = "leaderboard",
+    SINGLE_PLAYER_SETUP = "single-player-setup",
 }

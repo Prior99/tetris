@@ -12,6 +12,7 @@ import { Connect } from "./connect";
 import { Lobby } from "./lobby";
 import { MultiPlayer } from "./multi-player";
 import { LeaderboardView } from "./leaderboard-view";
+import { SinglePlayerSetup } from "./single-player-setup";
 
 @external @observer
 export class App extends React.Component {
@@ -28,6 +29,7 @@ export class App extends React.Component {
             case Page.CONNECT: return <Connect />;
             case Page.MULTI_PLAYER: return <MultiPlayer />;
             case Page.LEADERBOARD: return <LeaderboardView />;
+            case Page.SINGLE_PLAYER_SETUP: return <SinglePlayerSetup />;
         }
     }
 }

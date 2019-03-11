@@ -155,6 +155,7 @@ export class Game {
     }
 
     public start(parameters: GameParameters): void {
+        this.parameters = parameters;
         this.playfield = new Playfield();
         this.shuffleBag = new ShuffleBag(this.playfield, parameters.seed);
         this.effectsController = new Effects();

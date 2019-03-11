@@ -19,7 +19,7 @@ export class Menu extends React.Component {
     }
 
     @bind private handleSinglePlayer() {
-        this.ui.page = Page.SINGLE_PLAYER;
+        this.ui.page = Page.SINGLE_PLAYER_SETUP;
     }
 
     @bind private handleSettings() {

@@ -1,7 +1,7 @@
 import { component, initialize } from "tsdi";
 import { generateName } from "utils";
 import { observable } from "mobx";
-import { Page, Settings } from "types";
+import { Page, Settings, GameParameters, GarbageMode, GameMode, WinningConditionType } from "types";
 
 const localStorageIdentifier = "FRETRIS";
 const localStorageVersion = 1;
@@ -12,6 +12,14 @@ export class UI {
     @observable private userName = generateName();
     @observable public page = Page.MENU;
     @observable public leaderboardSubmitted = false;
+    @observable public parameters: GameParameters = {
+        garbageMode: GarbageMode.NONE,
+        gameMode: GameMode.SINGLE_PLAYER,
+        initialGarbageLines: 0,
+        initialLevel: 0,
+        levelUpDisabled: false,
+        winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
+    };
 
     @initialize protected initialize() {
         const json = localStorage.getItem(localStorageIdentifier);
