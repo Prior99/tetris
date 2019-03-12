@@ -148,6 +148,13 @@ export class Matrix {
         return lines;
     }
 
+    public hasAny(cellColor: CellColor): boolean {
+        for (let i = 0; i < this.state.length; ++i) {
+            if (this.state[i] === cellColor) { return true; }
+        }
+        return false;
+    }
+
     public removeHorizontal(targetY: number) {
         for (let y = targetY; y < this.dimensions.y; ++y) {
             for (let x = 0; x < this.dimensions.x; ++x) {

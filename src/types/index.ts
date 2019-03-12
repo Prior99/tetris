@@ -10,3 +10,4 @@ export * from "./sounds-mode";
 export * from "./networking";
 export * from "./mutable";
 export * from "./game-parameters";
+export * from "./game-over-reason";

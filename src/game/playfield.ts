@@ -21,4 +21,8 @@ export class Playfield extends Matrix {
             }
         }
     }
+
+    public clear() {
+        this.update(new Matrix(this.dimensions));
+    }
 }

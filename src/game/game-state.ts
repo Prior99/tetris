@@ -16,7 +16,15 @@ import {
     AudioLevelUp,
 } from "resources";
 import { musicSpeedForLevel, Sounds } from "sounds";
-import { Garbage, EffectType, GameParameters, GarbageMode } from "types";
+import {
+    Garbage,
+    EffectType,
+    GameParameters,
+    GarbageMode,
+    GameOverReason,
+    WinningConditionType,
+    CellColor,
+} from "types";
 import { ScoreAction, ScoreActionType, scorePointValue } from "./scoring";
 import { Effects } from "./effects";
 import { speed } from "./speed";
@@ -47,7 +55,7 @@ export class GameState {
     public lastLockPosition?: Vec2;
     public lines = 0;
     public score = 0;
-    public gameOver = false;
+    public gameOverReason = GameOverReason.NONE;
     public holdPiece?: Tetrimino;
     public outgoingGarbage: Garbage[] = [];
     public incomingGarbage: Garbage[] = [];
@@ -57,6 +65,7 @@ export class GameState {
     private timeLastLock?: number;
     private timeLastMoveDown = 0;
     private timeCurrent = 0;
+    private toppedOutCount = 0;
 
     constructor(
         private shuffleBag: ShuffleBag,
@@ -71,6 +80,15 @@ export class GameState {
         this.timeCurrent = time;
         this.tickMatrix();
         this.tickGarbage();
+        const timeOver = this.parameters.winningCondition.condition === WinningConditionType.SUM_IN_TIME &&
+            time > this.parameters.winningCondition.seconds;
+        if (timeOver) {
+            this.gameOverReason = GameOverReason.TIME_OVER;
+        }
+    }
+
+    public get gameOver(): boolean {
+        return this.gameOverReason !== GameOverReason.NONE;
     }
 
     private tickMatrix() {
@@ -184,16 +202,53 @@ export class GameState {
         }
     }
 
+    public gameOverLastManStanding() {
+        this.gameOverReason = GameOverReason.LAST_MAN_STANDING;
+    }
+
     private moveTetrimino() {
         if (!this.current) { throw new Error("Tried to move tetrimino down on uninitialized game state."); }
         this.current.tetrimino.moveDown();
     }
 
+    private reset() {
+        this.lines = 0;
+        this.comboCount = 0;
+        this.timeLastHit = undefined;
+        this.timeLastLock = undefined;
+        this.holdPiece = undefined;
+        this.lastLockPosition = undefined;
+        this.playfield.clear();
+    }
+
+    private handleToppedOut() {
+        this.toppedOutCount++;
+        switch (this.parameters.winningCondition.condition) {
+            case WinningConditionType.SUM_IN_TIME: {
+                this.reset();
+                break;
+            }
+            case WinningConditionType.BATTLE_ROYALE: {
+                if (this.toppedOutCount >= this.parameters.winningCondition.lives) {
+                    this.gameOverReason = GameOverReason.TOPPED_OUT;
+                } else {
+                    this.reset();
+                }
+                break;
+            }
+            case WinningConditionType.CLEAR_GARBAGE:
+            case WinningConditionType.HIGHEST_SCORE_ONE_GAME: {
+                this.gameOverReason = GameOverReason.TOPPED_OUT;
+                break;
+            }
+        }
+    }
+
     private newTetrimino() {
         const tetrimino = this.shuffleBag.take();
         if (tetrimino.isStuck) {
-            this.gameOver = true;
-            return;
+            this.handleToppedOut();
+            tetrimino.refreshGhostPosition();
         }
         this.current = {
             tetrimino,
@@ -247,6 +302,39 @@ export class GameState {
         return 0;
     }
 
+    private createOutgoingGarbage(count: number) {
+        const clearedGarbageLines = this.cancelIncomingGarbage(count);
+        const lines = calculateGarbage(count) + this.calculateReturnedGarbage(clearedGarbageLines);
+        if (lines > 0 && this.parameters.garbageMode !== GarbageMode.NONE) {
+            this.outgoingGarbage.push({ time: this.timeCurrent, lines });
+        }
+        if (this.comboCount >= 2) {
+            this.effects.reportCombo(this.comboCount);
+        }
+    }
+
+    private endCombo() {
+        const { level, comboCount } = this;
+        this.effects.clearCombo();
+        this.comboCount = 0;
+        if (this.comboCount >= 2) {
+            this.awardScore({
+                action: ScoreActionType.COMBO,
+                level,
+                comboCount,
+            });
+        }
+    }
+
+    private checkClearGarbageGameOver() {
+        if (this.parameters.winningCondition.condition !== WinningConditionType.CLEAR_GARBAGE) {
+            return;
+        }
+        if (!this.playfield.hasAny(CellColor.GARBAGE)) {
+            this.gameOverReason = GameOverReason.GARBAGE_CLEARED;
+        }
+    }
+
     private commitTetrimino() {
         if (!this.current) { throw new Error("Can't commit tetrimino on uninitialized game state."); }
         this.sounds.play(AudioHit);
@@ -265,26 +353,11 @@ export class GameState {
                 this.playScoreSound(count);
             }
             this.scoreLineCount(count);
-            const clearedGarbageLines = this.cancelIncomingGarbage(count);
-            const lines = calculateGarbage(count) + this.calculateReturnedGarbage(clearedGarbageLines);
-            if (lines > 0 && this.parameters.garbageMode !== GarbageMode.NONE) {
-                this.outgoingGarbage.push({ time: this.timeCurrent, lines });
-            }
-            if (this.comboCount >= 2) {
-                this.effects.reportCombo(this.comboCount);
-            }
+            this.createOutgoingGarbage(count);
+            this.checkClearGarbageGameOver();
             offsets.forEach(y => this.effects.report({ effect: EffectType.LINE_CLEARED, y }));
         } else {
-            const { level, comboCount } = this;
-            this.effects.clearCombo();
-            this.comboCount = 0;
-            if (this.comboCount >= 2) {
-                this.awardScore({
-                    action: ScoreActionType.COMBO,
-                    level,
-                    comboCount,
-                });
-            }
+            this.endCombo();
         }
         this.lastLockPosition = tetrimino.offset.add(vec2(tetrimino.matrix.dimensions.x / 2, 0));
         this.newTetrimino();

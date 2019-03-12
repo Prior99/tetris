@@ -216,4 +216,9 @@ export class Game {
         if (this.gameState.incomingGarbage.length === 0) { return; }
         return this.gameState.incomingGarbage[0];
     }
+
+    public gameOverLastManStanding() {
+        if (!this.gameState) { throw new Error("Can't set uninitialized game to be game over."); }
+        this.gameState.gameOverLastManStanding();
+    }
 }

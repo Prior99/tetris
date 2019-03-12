@@ -68,53 +68,53 @@ export class Configure extends React.Component<ConfigureProps> {
                             : <div className={css.disable}>Leaderboard disabled</div>
                     }
                 </div>
+                <div className={css.field}>
+                    <label>
+                        Winning condition
+                        <select
+                            disabled={!this.props.enabled}
+                            onChange={this.handleWinningCondition}
+                            value={this.props.parameters.winningCondition.condition}
+                        >
+                            <option value={WinningConditionType.BATTLE_ROYALE}>Battle Royale</option>
+                            <option value={WinningConditionType.HIGHEST_SCORE_ONE_GAME}>Highest Score</option>
+                            <option value={WinningConditionType.SUM_IN_TIME}>Score sum in time</option>
+                            <option value={WinningConditionType.CLEAR_GARBAGE}>Clear garbage</option>
+                        </select>
+                    </label>
+                </div>
                 {
-                    !this.props.singleplayer ? <>
+                    this.props.parameters.winningCondition.condition === WinningConditionType.SUM_IN_TIME ? (
                         <div className={css.field}>
                             <label>
-                                Winning condition
-                                <select
+                                Seconds
+                                <input
                                     disabled={!this.props.enabled}
-                                    onChange={this.handleWinningCondition}
-                                    value={this.props.parameters.winningCondition.condition}
-                                >
-                                    <option value={WinningConditionType.BATTLE_ROYALE}>Battle Royale</option>
-                                    <option value={WinningConditionType.HIGHEST_SCORE_ONE_GAME}>Highest Score</option>
-                                    <option value={WinningConditionType.SUM_IN_TIME}>Score sum in time</option>
-                                    <option value={WinningConditionType.CLEAR_GARBAGE}>Clear garbage</option>
-                                </select>
+                                    type="number"
+                                    onChange={this.handleSeconds}
+                                    value={this.props.parameters.winningCondition.seconds}
+                                />
                             </label>
                         </div>
-                        {
-                            this.props.parameters.winningCondition.condition === WinningConditionType.SUM_IN_TIME ? (
-                                <div className={css.field}>
-                                    <label>
-                                        Seconds
-                                        <input
-                                            disabled={!this.props.enabled}
-                                            type="number"
-                                            onChange={this.handleSeconds}
-                                            value={this.props.parameters.winningCondition.seconds}
-                                        />
-                                    </label>
-                                </div>
-                            ) : <></>
-                        }
-                        {
-                            this.props.parameters.winningCondition.condition === WinningConditionType.BATTLE_ROYALE ? (
-                                <div className={css.field}>
-                                    <label>
-                                        Lives
-                                        <input
-                                            disabled={!this.props.enabled}
-                                            type="number"
-                                            onChange={this.handleLives}
-                                            value={this.props.parameters.winningCondition.lives}
-                                        />
-                                    </label>
-                                </div>
-                            ) : <></>
-                        }
+                    ) : <></>
+                }
+                {
+                    this.props.parameters.winningCondition.condition === WinningConditionType.BATTLE_ROYALE ? (
+                        <div className={css.field}>
+                            <label>
+                                Lives
+                                <input
+                                    disabled={!this.props.enabled}
+                                    type="number"
+                                    onChange={this.handleLives}
+                                    value={this.props.parameters.winningCondition.lives}
+                                />
+                            </label>
+                        </div>
+                    ) : <></>
+                }
+                {
+                    !this.props.singleplayer ? <>
                         <div className={css.field}>
                             <label>
                                 Garbage mode
