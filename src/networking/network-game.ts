@@ -32,7 +32,7 @@ export class NetworkGame {
                 score: 0,
                 lines: 0,
                 level: 0,
-                toppedOut: false,
+                gameOver: false,
             });
         });
     }
@@ -65,15 +65,15 @@ export class NetworkGame {
         return this.states.get(userId);
     }
 
-    @computed public get allToppedOut() {
-        return this.allStates.every(({ toppedOut }) => toppedOut);
+    @computed public get allGameOver() {
+        return this.allStates.every(({ gameOver }) => gameOver);
     }
 
     @computed public get otherAliveUsers() {
         if (!this.users.own) { throw new Error("Users wasn't initialized when retrieving alive users."); }
         return this.users.all
             .filter(user => user.id !== this.users.own!.id)
-            .filter(user => !this.stateForUser(user.id)!.toppedOut);
+            .filter(user => !this.stateForUser(user.id)!.gameOver);
     }
 
     public get randomOtherAliveUser() {

@@ -47,7 +47,7 @@ export class GameState {
     public lastLockPosition?: Vec2;
     public lines = 0;
     public score = 0;
-    public toppedOut = false;
+    public gameOver = false;
     public holdPiece?: Tetrimino;
     public outgoingGarbage: Garbage[] = [];
     public incomingGarbage: Garbage[] = [];
@@ -75,7 +75,7 @@ export class GameState {
 
     private tickMatrix() {
         if (!this.current) { throw new Error("Ticked matrix but game was not initialized."); }
-        if (this.toppedOut) { return; }
+        if (this.gameOver) { return; }
         if (this.timeCurrent - this.timeLastMoveDown > this.speed || this.current.hardDrops) {
             this.timeLastMoveDown = this.timeCurrent;
             if (!this.current.tetrimino.hasHitFloor) {
@@ -192,7 +192,7 @@ export class GameState {
     private newTetrimino() {
         const tetrimino = this.shuffleBag.take();
         if (tetrimino.isStuck) {
-            this.toppedOut = true;
+            this.gameOver = true;
             return;
         }
         this.current = {

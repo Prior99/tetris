@@ -57,9 +57,9 @@ export class Game {
         return this.gameState.score;
     }
 
-    public get toppedOut(): boolean {
-        if (!this.gameState) { throw new Error("Can't retrieve topped out state."); }
-        return this.gameState.toppedOut;
+    public get gameOver(): boolean {
+        if (!this.gameState) { throw new Error("Can't retrieve game over state."); }
+        return this.gameState.gameOver;
     }
 
     public get tetriminoOffset(): Vec2 | undefined {
@@ -192,7 +192,7 @@ export class Game {
         this.effectsController.tick(time);
         this.input.tick(time);
         this.gameState.tick(time);
-        if (this.gameState.toppedOut) {
+        if (this.gameState.gameOver) {
             this.stop();
         } else {
             this.timeout = setTimeout(() => this.tick(), this.config.tickSpeed * 1000);

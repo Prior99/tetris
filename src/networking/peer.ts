@@ -131,7 +131,7 @@ export abstract class Peer {
             score: this.game.score,
             lines: this.game.lines,
             level: this.game.level,
-            toppedOut: this.game.toppedOut,
+            gameOver: this.game.gameOver,
         };
         this.networkGame.update(this.id, this.game.temporaryState, state);
         this.send({

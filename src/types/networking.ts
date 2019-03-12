@@ -8,7 +8,7 @@ export interface RemoteGameState {
     score: number;
     lines: number;
     level: number;
-    toppedOut: boolean;
+    gameOver: boolean;
 }
 
 export interface RemoteUser {

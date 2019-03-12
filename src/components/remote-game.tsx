@@ -17,7 +17,7 @@ export class RemoteGame extends React.Component<{ userId: string }> {
         return (
             <RemoteGameCanvas state={state} matrix={matrix}>
                 {
-                    state.toppedOut ? (
+                    state.gameOver ? (
                         <div className={css.gameOver}>
                             <div className={css.gameOverText}>Game over</div>
                             <div className={css.gameOverStats}>

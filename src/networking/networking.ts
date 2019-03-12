@@ -95,7 +95,7 @@ export class Networking {
     }
 
     @computed public get allUsersGameOver(): boolean {
-        return this.networkGame.allToppedOut;
+        return this.networkGame.allGameOver;
     }
 
     public isUserInitialized(userId: string) {

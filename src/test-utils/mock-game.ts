@@ -14,7 +14,7 @@ export function mockGame(override?: Partial<Game>): Mutable<Game> {
         level: 1,
         lines: 0,
         score: 0,
-        toppedOut: false,
+        gameOver: false,
         tetriminoOffset: vec2(4, 4),
         lastLockPosition: vec2(5, 5),
         hasHit: false,
