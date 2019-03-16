@@ -1,7 +1,7 @@
 import { differenceInMilliseconds } from "date-fns";
 import * as Random from "random-seed";
 import { component, inject } from "tsdi";
-import { EffectInfo, Garbage, GameMode, SoundsMode, GameParameters } from "types";
+import { GameOverReason, EffectInfo, Garbage, SoundsMode, GameParameters } from "types";
 import { Matrix, Vec2 } from "utils";
 import { Config } from "config";
 import { Sounds } from "sounds";
@@ -60,6 +60,11 @@ export class Game {
     public get gameOver(): boolean {
         if (!this.gameState) { throw new Error("Can't retrieve game over state."); }
         return this.gameState.gameOver;
+    }
+
+    public get gameOverReason(): GameOverReason {
+        if (!this.gameState) { throw new Error("Can't retrieve game over state."); }
+        return this.gameState.gameOverReason;
     }
 
     public get tetriminoOffset(): Vec2 | undefined {
@@ -133,7 +138,7 @@ export class Game {
     public restart(parameters: GameParameters): void {
         if (!this.parameters.gameMode) { throw new Error("Restarted game that was not started previously."); }
         this.stop();
-        this.start(this.parameters);
+        this.start(parameters);
     }
 
     public addIncomingGarbage(garbage: Garbage): void {
@@ -220,5 +225,15 @@ export class Game {
     public gameOverLastManStanding() {
         if (!this.gameState) { throw new Error("Can't set uninitialized game to be game over."); }
         this.gameState.gameOverLastManStanding();
+    }
+
+    public gameOverOtherUserHasWon() {
+        if (!this.gameState) { throw new Error("Can't set uninitialized game to be game over."); }
+        this.gameState.gameOverOtherUserHasWon();
+    }
+
+    public get timeGameOver() {
+        if (!this.gameState) { throw new Error("Can't retrieve game over time."); }
+        return this.gameState.timeGameOver;
     }
 }

@@ -1,3 +1,5 @@
+import { GameOverReason } from "types";
+
 export enum NetworkingMode {
     CLIENT = "client",
     HOST = "host",
@@ -8,7 +10,8 @@ export interface RemoteGameState {
     score: number;
     lines: number;
     level: number;
-    gameOver: boolean;
+    gameOverReason: GameOverReason;
+    timeGameOver: number | undefined;
 }
 
 export interface RemoteUser {

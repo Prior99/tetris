@@ -1,10 +1,15 @@
 import { external, inject } from "tsdi";
 import { equals } from "ramda";
 import { observable, computed } from "mobx";
-import { RemoteGameState, GameParameters, GameMode, GarbageMode, WinningConditionType } from "types";
+import { GameOverReason, RemoteGameState, GameParameters, GameMode, GarbageMode, WinningConditionType } from "types";
 import { Matrix, randomSeed } from "utils";
 import { Config } from "config";
 import { RemoteUsers } from "./remote-users";
+
+export interface Winner {
+    userId: string;
+    state: RemoteGameState;
+}
 
 @external
 export class NetworkGame {
@@ -20,6 +25,7 @@ export class NetworkGame {
         levelUpDisabled: false,
         winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
     };
+    @observable private winners = new Map<string, Set<string>>();
 
     constructor(private users: RemoteUsers) {}
 
@@ -32,8 +38,10 @@ export class NetworkGame {
                 score: 0,
                 lines: 0,
                 level: 0,
-                gameOver: false,
+                gameOverReason: GameOverReason.NONE,
+                timeGameOver: undefined,
             });
+            this.winners.set(user.id, new Set());
         });
     }
 
@@ -55,6 +63,41 @@ export class NetworkGame {
         if (!equals(this.states.get(userId), state)) {
             this.states.set(userId, state);
         }
+        if (this.allGameOver) {
+            this.winners.get(this.winner!.userId)!.add(this.parameters.seed);
+        }
+    }
+
+    public get winner(): Winner | undefined {
+        if (this.allStates.some(({ gameOverReason }) => gameOverReason === GameOverReason.NONE)) {
+            return;
+        }
+        switch (this.parameters.winningCondition.condition) {
+            case WinningConditionType.BATTLE_ROYALE: {
+                const result = Array.from(this.states.entries()).find(([_, { gameOverReason }]) => {
+                    return gameOverReason === GameOverReason.LAST_MAN_STANDING;
+                });
+                if (!result) { return; }
+                const [userId, state] = result;
+                return { userId, state };
+            }
+            case WinningConditionType.CLEAR_GARBAGE: {
+                const result = Array.from(this.states.entries()).find(([_, { gameOverReason }]) => {
+                    return gameOverReason === GameOverReason.GARBAGE_CLEARED;
+                });
+                if (!result) { return; }
+                const [userId, state] = result;
+                return { userId, state };
+            }
+            case WinningConditionType.HIGHEST_SCORE_ONE_GAME:
+            case WinningConditionType.SUM_IN_TIME: {
+                return Array.from(this.states.entries()).reduce((result: Winner | undefined, [userId, state]) => {
+                    if (!result) { return { userId, state }; }
+                    if (state.score > result.state.score) { return { userId, state }; }
+                    return result;
+                }, undefined)!;
+            }
+        }
     }
 
     public playfieldForUser(userId: string) {
@@ -66,19 +109,28 @@ export class NetworkGame {
     }
 
     @computed public get allGameOver() {
-        return this.allStates.every(({ gameOver }) => gameOver);
+        return this.allStates.every(({ gameOverReason }) => gameOverReason !== GameOverReason.NONE);
     }
 
     @computed public get otherAliveUsers() {
         if (!this.users.own) { throw new Error("Users wasn't initialized when retrieving alive users."); }
         return this.users.all
             .filter(user => user.id !== this.users.own!.id)
-            .filter(user => !this.stateForUser(user.id)!.gameOver);
+            .filter(user => this.stateForUser(user.id)!.gameOverReason === GameOverReason.NONE);
     }
 
     public get randomOtherAliveUser() {
         const { otherAliveUsers } = this;
         if (otherAliveUsers.length === 0) { return; }
         return otherAliveUsers[Math.floor(Math.random() * otherAliveUsers.length)];
+    }
+
+    public get winnerList() {
+        return Array.from(this.winners.entries())
+            .map(([userId, wins]) => ({
+                userId,
+                wins: wins.size,
+            }))
+            .sort((a, b) => a.wins - b.wins);
     }
 }

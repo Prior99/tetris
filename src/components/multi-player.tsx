@@ -3,6 +3,7 @@ import { Networking } from "networking";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { computed, observable } from "mobx";
+import classNames from "classnames/bind";
 import { bind } from "lodash-decorators";
 import { ObservableGame } from "observable-game";
 import { UI } from "ui";
@@ -14,6 +15,9 @@ import { GameCanvas } from "./game-canvas";
 import { Info } from "./info";
 import * as css from "./multi-player.scss";
 import { RemoteGame } from "./remote-game";
+import { Scoreboard } from "./scoreboard";
+
+const cx = classNames.bind(css);
 
 @external @observer
 export class MultiPlayer extends React.Component {
@@ -58,15 +62,24 @@ export class MultiPlayer extends React.Component {
     }
 
     public render() {
+        const classes = cx({
+            gameOver: true,
+            winner: this.networking.isWinner,
+        });
         return (
             <section className={css.multiPlayer}>
+                <div className={css.scoreboard}>
+                    <Scoreboard />
+                </div>
                 <div className={css.wrapper}>
                     <Info />
                     <GameCanvas>
                         {
                             this.observableGame.gameOver ? (
-                                <div className={css.gameOver}>
-                                    <div className={css.gameOverText}>Game Over</div>
+                                <div className={classes}>
+                                    <div className={css.gameOverText}>
+                                        {this.networking.isWinner ? "Winner" : "Game Over"}
+                                    </div>
                                     {
                                         this.canRestart ? (
                                             <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>

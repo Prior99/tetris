@@ -1,6 +1,11 @@
 @import "colors.scss";
 
 .gameOver {
+    &.winner {
+        background: rgba(255, 200, 0, 0.5);
+        color: rgb(255, 200, 0);
+    }
+
     font-family: hackregular;
     color: white;
     width: 100%;

@@ -60,6 +60,7 @@ export class GameState {
     public outgoingGarbage: Garbage[] = [];
     public incomingGarbage: Garbage[] = [];
     public comboCount = 0;
+    public timeGameOver: undefined | number;
 
     private timeLastHit?: number;
     private timeLastLock?: number;
@@ -83,7 +84,7 @@ export class GameState {
         const timeOver = this.parameters.winningCondition.condition === WinningConditionType.SUM_IN_TIME &&
             time > this.parameters.winningCondition.seconds;
         if (timeOver) {
-            this.gameOverReason = GameOverReason.TIME_OVER;
+            this.setGameOver(GameOverReason.TIME_OVER);
         }
     }
 
@@ -202,8 +203,12 @@ export class GameState {
         }
     }
 
+    public gameOverOtherUserHasWon() {
+        this.setGameOver(GameOverReason.OTHER_USER_HAS_WON);
+    }
+
     public gameOverLastManStanding() {
-        this.gameOverReason = GameOverReason.LAST_MAN_STANDING;
+        this.setGameOver(GameOverReason.LAST_MAN_STANDING);
     }
 
     private moveTetrimino() {
@@ -230,7 +235,7 @@ export class GameState {
             }
             case WinningConditionType.BATTLE_ROYALE: {
                 if (this.toppedOutCount >= this.parameters.winningCondition.lives) {
-                    this.gameOverReason = GameOverReason.TOPPED_OUT;
+                    this.setGameOver(GameOverReason.TOPPED_OUT);
                 } else {
                     this.reset();
                 }
@@ -238,7 +243,7 @@ export class GameState {
             }
             case WinningConditionType.CLEAR_GARBAGE:
             case WinningConditionType.HIGHEST_SCORE_ONE_GAME: {
-                this.gameOverReason = GameOverReason.TOPPED_OUT;
+                this.setGameOver(GameOverReason.TOPPED_OUT);
                 break;
             }
         }
@@ -331,8 +336,13 @@ export class GameState {
             return;
         }
         if (!this.playfield.hasAny(CellColor.GARBAGE)) {
-            this.gameOverReason = GameOverReason.GARBAGE_CLEARED;
+            this.setGameOver(GameOverReason.GARBAGE_CLEARED);
         }
+    }
+
+    private setGameOver(reason: GameOverReason) {
+        this.gameOverReason = reason;
+        this.timeGameOver = this.timeCurrent;
     }
 
     private commitTetrimino() {

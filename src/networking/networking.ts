@@ -5,7 +5,7 @@ import { Peer } from "./peer";
 import { Host } from "./host";
 import { Client } from "./client";
 import { RemoteUsers } from "./remote-users";
-import { NetworkGame } from "./network-game";
+import { NetworkGame, Winner } from "./network-game";
 import { Chat } from "./chat";
 
 @component
@@ -115,5 +115,18 @@ export class Networking {
         if (this.mode !== NetworkingMode.HOST) { return; }
         this.networkGame.parameters = parameters;
         (this.peer as Host).sendParameterChange(parameters);
+    }
+
+    public get isWinner(): boolean {
+        if (!this.winner) { return false; }
+        return this.winner.userId === this.ownId;
+    }
+
+    public get winner(): Winner | undefined {
+        return this.networkGame.winner;
+    }
+
+    public get winners() {
+        return this.networkGame.winnerList;
     }
 }

@@ -5,7 +5,7 @@ import { Matrix } from "utils";
 import { UI } from "ui";
 import { Config } from "config";
 import { Game } from "game";
-import { GameMode, Page, GameParameters } from "types";
+import { GameOverReason, Page, GameParameters, WinningConditionType } from "types";
 import { ObservableGame } from "observable-game";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
@@ -92,6 +92,18 @@ export abstract class Peer {
                     new Matrix(this.config.logicalSize, message.matrix),
                     message.state,
                 );
+                switch (this.game.parameters.winningCondition.condition) {
+                    case WinningConditionType.BATTLE_ROYALE: {
+                        if (message.state.gameOverReason !== GameOverReason.NONE && !this.game.gameOver) {
+                            this.game.gameOverLastManStanding();
+                        }
+                    }
+                    case WinningConditionType.CLEAR_GARBAGE: {
+                        if (message.state.gameOverReason === GameOverReason.GARBAGE_CLEARED && !this.game.gameOver) {
+                            this.game.gameOverOtherUserHasWon();
+                        }
+                    }
+                }
                 break;
             }
             case MessageType.RESTART: {
@@ -108,6 +120,7 @@ export abstract class Peer {
     }
 
     protected restartNetworkGame(parameters: GameParameters) {
+        this.networkGame.parameters = parameters;
         this.ui.reset();
         this.observableGame.restart(parameters);
     }
@@ -131,7 +144,8 @@ export abstract class Peer {
             score: this.game.score,
             lines: this.game.lines,
             level: this.game.level,
-            gameOver: this.game.gameOver,
+            gameOverReason: this.game.gameOverReason,
+            timeGameOver: this.game.timeGameOver,
         };
         this.networkGame.update(this.id, this.game.temporaryState, state);
         this.send({

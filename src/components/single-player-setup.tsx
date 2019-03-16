@@ -1,21 +1,17 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
-import { observable } from "mobx";
-import { Networking } from "networking";
 import { ObservableGame } from "observable-game";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
-import { Page, NetworkingMode } from "types";
+import { Page } from "types";
 import * as css from "./single-player-setup.scss";
-import { ChatMessage } from "./chat-message";
 import { Configure } from "./configure";
 
 @external @observer
 export class SinglePlayerSetup extends React.Component {
     @inject private observableGame: ObservableGame;
     @inject private ui: UI;
-    @inject private networking: Networking;
 
     @bind private handleBack() { this.ui.page = Page.MENU; }
 
