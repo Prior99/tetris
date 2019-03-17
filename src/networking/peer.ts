@@ -5,7 +5,7 @@ import { Matrix } from "utils";
 import { UI } from "ui";
 import { Config } from "config";
 import { Game } from "game";
-import { GameOverReason, Page, GameParameters, WinningConditionType } from "types";
+import { GameOverReason, Page, GameParameters } from "types";
 import { ObservableGame } from "observable-game";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";

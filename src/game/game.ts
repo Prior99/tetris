@@ -1,5 +1,4 @@
 import { differenceInMilliseconds } from "date-fns";
-import * as Random from "random-seed";
 import { component, inject } from "tsdi";
 import { GameOverReason, EffectInfo, Garbage, SoundsMode, GameParameters } from "types";
 import { Matrix, Vec2 } from "utils";
