@@ -1,8 +1,6 @@
-import { component } from "tsdi";
 import { observable, computed } from "mobx";
 import { RemoteUser } from "types";
 
-@component
 export class RemoteUsers {
     @observable public users = new Map<string, RemoteUser>();
 

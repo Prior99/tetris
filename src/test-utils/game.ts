@@ -2,7 +2,7 @@ import { merge } from "ramda";
 import { GameMode, Mutable } from "types";
 import { vec2 } from "utils";
 import { Game } from "game";
-import { mockPlayfield } from "./mock-playfield";
+import { mockPlayfield } from "./playfield";
 
 export function mockGame(override?: Partial<Game>): Mutable<Game> {
     return merge({
