@@ -10,7 +10,6 @@ import { RemoteUsers } from "./remote-users";
 export class NetworkGame {
     @inject private config: Config;
 
-    @observable private states = new Map<string, RemoteGameState>();
     @observable public parameters: GameParameters = {
         seed: randomSeed(),
         garbageMode: GarbageMode.HALF_REFERRED,
@@ -20,15 +19,34 @@ export class NetworkGame {
         levelUpDisabled: false,
         winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
     };
+
+    @observable private states = new Map<string, RemoteGameState>();
     @observable private scoreboardMap = new Map<string, Set<string>>();
 
     constructor(private users: RemoteUsers) {}
 
     private playfields = new Map<string, Matrix>();
 
-    public initialize() {
+    public start() {
+        this.resetStates();
+        this.resetPlayfields();
+        this.resetScoreboard();
+    }
+
+    public restart(parameters: GameParameters) {
+        this.parameters = parameters;
+        this.resetStates();
+        this.resetPlayfields();
+    }
+
+    public resetScoreboard() {
         this.users.all.forEach(user => {
-            this.playfields.set(user.id, new Matrix(this.config.logicalSize));
+            this.scoreboardMap.set(user.id, new Set());
+        });
+    }
+
+    private resetStates() {
+        this.users.all.forEach(user => {
             this.states.set(user.id, {
                 score: 0,
                 lines: 0,
@@ -36,7 +54,12 @@ export class NetworkGame {
                 gameOverReason: GameOverReason.NONE,
                 timeGameOver: undefined,
             });
-            this.scoreboardMap.set(user.id, new Set());
+        });
+    }
+
+    private resetPlayfields() {
+        this.users.all.forEach(user => {
+            this.playfields.set(user.id, new Matrix(this.config.logicalSize));
         });
     }
 
@@ -122,13 +145,13 @@ export class NetworkGame {
         return this.otherUsers.filter(userId => this.stateForUser(userId)!.gameOverReason === GameOverReason.NONE);
     }
 
-    public get randomOtherAliveUser() {
+    @computed public get randomOtherAliveUser() {
         const { otherAliveUsers } = this;
         if (otherAliveUsers.length === 0) { return; }
         return otherAliveUsers[Math.floor(Math.random() * otherAliveUsers.length)];
     }
 
-    public get scoreboard() {
+    @computed public get scoreboard() {
         return Array.from(this.scoreboardMap.entries())
             .map(([userId, wins]) => ({
                 userId,
@@ -137,15 +160,20 @@ export class NetworkGame {
             .sort((a, b) => b.wins - a.wins);
     }
 
-    public get isGameOverLastManStanding(): boolean {
+    @computed public get isGameOverLastManStanding(): boolean {
         if (this.parameters.winningCondition.condition !== WinningConditionType.BATTLE_ROYALE) { return false; }
         return this.otherAliveUsers.length === 0;
     }
 
-    public get isGameOverOtherUserClearedGarbage(): boolean {
+    @computed public get isGameOverOtherUserClearedGarbage(): boolean {
         if (this.parameters.winningCondition.condition !== WinningConditionType.CLEAR_GARBAGE) { return false; }
         return this.otherUsers.some(userId => {
             return this.stateForUser(userId)!.gameOverReason === GameOverReason.GARBAGE_CLEARED;
         });
+    }
+
+    @computed public get ownState(): RemoteGameState {
+        if (!this.users.own) { throw new Error("Can't retrieve own state of uninitialized network game."); }
+        return this.stateForUser(this.users.own.id)!;
     }
 }

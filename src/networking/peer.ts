@@ -114,13 +114,13 @@ export abstract class Peer {
     }
 
     protected restartNetworkGame(parameters: GameParameters) {
-        this.networkGame.parameters = parameters;
+        this.networkGame.restart(parameters);
         this.ui.reset();
         this.observableGame.restart(parameters);
     }
 
     protected startNetworkGame(parameters: GameParameters) {
-        this.networkGame.initialize();
+        this.networkGame.start();
         this.observableGame.start(parameters);
         this.tick();
         this.ui.page = Page.MULTI_PLAYER;
@@ -141,20 +141,23 @@ export abstract class Peer {
             gameOverReason: this.game.gameOverReason,
             timeGameOver: this.game.timeGameOver,
         };
-        this.networkGame.update(this.id, this.game.temporaryState, state);
-        this.send({
-            message: MessageType.UPDATE_PLAYFIELD,
-            userId: this.id,
-            matrix: this.game.temporaryState.toBase64(),
-            state,
-        });
-        if (this.game.hasOutgoingGarbage) {
-            this.game.outgoingGarbage.forEach(garbage => {
-                const targetId = this.networkGame.randomOtherAliveUser;
-                if (!targetId) { return; }
-                this.send({ message: MessageType.GARBAGE, targetId, garbage });
+        // Only send updates if not game over or game over not yet sent.
+        if (this.networkGame.ownState.gameOverReason === GameOverReason.NONE) {
+            this.networkGame.update(this.id, this.game.temporaryState, state);
+            this.send({
+                message: MessageType.UPDATE_PLAYFIELD,
+                userId: this.id,
+                matrix: this.game.temporaryState.toBase64(),
+                state,
             });
-            this.game.clearOutgoingGarbage();
+            if (this.game.hasOutgoingGarbage) {
+                this.game.outgoingGarbage.forEach(garbage => {
+                    const targetId = this.networkGame.randomOtherAliveUser;
+                    if (!targetId) { return; }
+                    this.send({ message: MessageType.GARBAGE, targetId, garbage });
+                });
+                this.game.clearOutgoingGarbage();
+            }
         }
         this.timeout = setTimeout(() => this.tick(), this.config.networkSpeed * 1000);
     }

@@ -12,7 +12,7 @@ describe("NetworkGame", () => {
     beforeEach(() => {
         remoteUsers = createRemoteUsers();
         networkGame = createNetworkGame(remoteUsers);
-        networkGame.initialize();
+        networkGame.start();
     });
 
     describe("initially", () => {
