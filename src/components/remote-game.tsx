@@ -15,7 +15,7 @@ export class RemoteGame extends React.Component<{ userId: string }> {
     @inject private networking: Networking;
 
     @computed private get isWinner() {
-        return this.networking.winner && this.networking.winner.userId === this.props.userId;
+        return this.networking.currentWinners && this.networking.currentWinners.includes(this.props.userId);
     }
 
     private renderCanvas() {

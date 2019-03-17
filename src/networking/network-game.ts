@@ -6,11 +6,6 @@ import { Matrix, randomSeed } from "utils";
 import { Config } from "config";
 import { RemoteUsers } from "./remote-users";
 
-export interface Winner {
-    userId: string;
-    state: RemoteGameState;
-}
-
 @external
 export class NetworkGame {
     @inject private config: Config;
@@ -25,7 +20,7 @@ export class NetworkGame {
         levelUpDisabled: false,
         winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
     };
-    @observable private winners = new Map<string, Set<string>>();
+    @observable private scoreboardMap = new Map<string, Set<string>>();
 
     constructor(private users: RemoteUsers) {}
 
@@ -41,7 +36,7 @@ export class NetworkGame {
                 gameOverReason: GameOverReason.NONE,
                 timeGameOver: undefined,
             });
-            this.winners.set(user.id, new Set());
+            this.scoreboardMap.set(user.id, new Set());
         });
     }
 
@@ -64,38 +59,44 @@ export class NetworkGame {
             this.states.set(userId, state);
         }
         if (this.allGameOver) {
-            this.winners.get(this.winner!.userId)!.add(this.parameters.seed);
+            if (this.currentWinners) {
+                this.currentWinners.forEach(winnerId => {
+                    if (!this.scoreboardMap.has(winnerId)) { throw new Error("An unknown user has won the game."); }
+                    this.scoreboardMap.get(winnerId)!.add(this.parameters.seed);
+                });
+            }
         }
     }
 
-    public get winner(): Winner | undefined {
+    public get currentWinners(): string[] | undefined {
         if (this.allStates.some(({ gameOverReason }) => gameOverReason === GameOverReason.NONE)) {
             return;
         }
         switch (this.parameters.winningCondition.condition) {
             case WinningConditionType.BATTLE_ROYALE: {
-                const result = Array.from(this.states.entries()).find(([_, { gameOverReason }]) => {
-                    return gameOverReason === GameOverReason.LAST_MAN_STANDING;
-                });
-                if (!result) { return; }
-                const [userId, state] = result;
-                return { userId, state };
+                return Array.from(this.states.entries())
+                    .filter(([_, { gameOverReason }]) => gameOverReason === GameOverReason.LAST_MAN_STANDING)
+                    .map(([userId, _]) => userId);
             }
             case WinningConditionType.CLEAR_GARBAGE: {
-                const result = Array.from(this.states.entries()).find(([_, { gameOverReason }]) => {
-                    return gameOverReason === GameOverReason.GARBAGE_CLEARED;
-                });
-                if (!result) { return; }
-                const [userId, state] = result;
-                return { userId, state };
+                return Array.from(this.states.entries())
+                    .filter(([_, { gameOverReason }]) => gameOverReason === GameOverReason.GARBAGE_CLEARED)
+                    .map(([userId, _]) => userId);
             }
             case WinningConditionType.HIGHEST_SCORE_ONE_GAME:
             case WinningConditionType.SUM_IN_TIME: {
-                return Array.from(this.states.entries()).reduce((result: Winner | undefined, [userId, state]) => {
-                    if (!result) { return { userId, state }; }
-                    if (state.score > result.state.score) { return { userId, state }; }
-                    return result;
-                }, undefined)!;
+                let highestScore: number | undefined;
+                let highestUserIds: string[] = [];
+                for (let [userId, state] of this.states.entries()) {
+                    if (highestScore === undefined || state.score > highestScore) {
+                        highestScore = state.score;
+                        highestUserIds = [userId];
+                    }
+                    else if (state.score === highestScore) {
+                        highestUserIds.push(userId);
+                    }
+                }
+                return highestUserIds;
             }
         }
     }
@@ -125,12 +126,12 @@ export class NetworkGame {
         return otherAliveUsers[Math.floor(Math.random() * otherAliveUsers.length)];
     }
 
-    public get winnerList() {
-        return Array.from(this.winners.entries())
+    public get scoreboard() {
+        return Array.from(this.scoreboardMap.entries())
             .map(([userId, wins]) => ({
                 userId,
                 wins: wins.size,
             }))
-            .sort((a, b) => a.wins - b.wins);
+            .sort((a, b) => b.wins - a.wins);
     }
 }

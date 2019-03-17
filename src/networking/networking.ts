@@ -5,7 +5,7 @@ import { Peer } from "./peer";
 import { Host } from "./host";
 import { Client } from "./client";
 import { RemoteUsers } from "./remote-users";
-import { NetworkGame, Winner } from "./network-game";
+import { NetworkGame } from "./network-game";
 import { Chat } from "./chat";
 
 @component
@@ -118,15 +118,15 @@ export class Networking {
     }
 
     public get isWinner(): boolean {
-        if (!this.winner) { return false; }
-        return this.winner.userId === this.ownId;
+        if (!this.currentWinners) { return false; }
+        return this.currentWinners.includes(this.ownId!);
     }
 
-    public get winner(): Winner | undefined {
-        return this.networkGame.winner;
+    public get currentWinners(): string[] | undefined {
+        return this.networkGame.currentWinners;
     }
 
-    public get winners() {
-        return this.networkGame.winnerList;
+    public get scoreboard() {
+        return this.networkGame.scoreboard;
     }
 }

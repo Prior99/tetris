@@ -24,7 +24,7 @@ export class Scoreboard extends React.Component {
                             </thead>
                             <tbody>
                             {
-                                this.networking.winners.map(({ userId, wins }, index) => {
+                                this.networking.scoreboard.map(({ userId, wins }, index) => {
                                     const { score } = this.networking.stateForUser(userId)!;
                                     const { name } = this.networking.userById(userId)!;
                                     return (
