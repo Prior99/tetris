@@ -68,40 +68,6 @@ exports[`GameState after topping out shows the expected temporary state 1`] = `
 "
 `;
 
-exports[`GameState dropping first tetrimino holding second tetrimino roating and dropping third tetrimino shows the expected temporary state 1`] = `
-"0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 1 0 0 0 0
-0 0 0 0 0 1 0 0 0 0
-0 0 0 0 0 1 0 0 0 0
-0 0 0 0 0 1 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 8 0 0 0 0
-0 0 0 0 0 8 0 0 0 0
-0 0 0 4 4 8 0 2 2 2
-0 0 0 4 4 8 0 0 0 2
-9 9 9 9 9 9 9 9 0 9
-9 9 9 9 9 0 9 9 9 9
-"
-`;
-
 exports[`GameState dropping first tetrimino holding second tetrimino rotating and dropping third tetrimino dropping fourth tetrimino shows the expected temporary state 1`] = `
 "0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0
