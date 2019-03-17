@@ -40,9 +40,9 @@ describe("NetworkGame", () => {
         it("has no winner", () => expect(networkGame.currentWinners).toBeUndefined());
 
         it("returns all users as alive", () => expect(networkGame.otherAliveUsers).toEqual([
-            { id: "user-id-a", name: "User A" },
-            { id: "user-id-b", name: "User B" },
-            { id: "user-id-c", name: "User C" },
+            "user-id-a",
+            "user-id-b",
+            "user-id-c",
         ]));
 
         it("reports empty playfields", () => {
@@ -52,12 +52,73 @@ describe("NetworkGame", () => {
         });
     });
 
+    describe(`with winning condition: ${WinningConditionType.BATTLE_ROYALE}`, () => {
+        beforeEach(() => networkGame.parameters.winningCondition = {
+            condition: WinningConditionType.BATTLE_ROYALE,
+            lives: 1,
+        });
+
+        it("has no winner", () => expect(networkGame.currentWinners).toBeUndefined());
+
+        it("nobody is game over", () => expect(networkGame.allGameOver).toBe(false));
+
+        it("doesn't report to be last man standing", () => {
+            expect(networkGame.isGameOverLastManStanding).toBe(false);
+        });
+
+        describe("with all other users game over", () => {
+            beforeEach(() => {
+                ["user-id-a", "user-id-b", "user-id-c"].forEach(userId => {
+                    updateNetworkGameState(networkGame, userId, { gameOverReason: GameOverReason.TOPPED_OUT });
+                });
+            });
+
+            it("reports user to be last man standing", () => {
+                expect(networkGame.isGameOverLastManStanding).toBe(true);
+            });
+        });
+
+        describe("with one user being the winner", () => {
+            beforeEach(() => {
+                ["user-id-a", "user-id-b", "user-id-own"].forEach(userId => {
+                    updateNetworkGameState(networkGame, userId, { gameOverReason: GameOverReason.TOPPED_OUT });
+                });
+                updateNetworkGameState(networkGame, "user-id-c", { gameOverReason: GameOverReason.LAST_MAN_STANDING });
+            });
+
+            it("has a winner", () => expect(networkGame.currentWinners).toEqual(["user-id-c"]));
+
+            it("all users are game over", () => expect(networkGame.allGameOver).toBe(true));
+
+            it("reports winners", () => expect(networkGame.scoreboard).toEqual([
+                { userId: "user-id-c", wins: 1 },
+                { userId: "user-id-own", wins: 0 },
+                { userId: "user-id-a", wins: 0 },
+                { userId: "user-id-b", wins: 0 },
+            ]));
+        });
+    });
+
     describe(`with winning condition: ${WinningConditionType.CLEAR_GARBAGE}`, () => {
         beforeEach(() => networkGame.parameters.winningCondition = { condition: WinningConditionType.CLEAR_GARBAGE });
 
         it("has no winner", () => expect(networkGame.currentWinners).toBeUndefined());
 
         it("nobody is game over", () => expect(networkGame.allGameOver).toBe(false));
+
+        it("doesn't report other user to have cleared the garbage", () => {
+            expect(networkGame.isGameOverOtherUserClearedGarbage).toBe(false);
+        });
+
+        describe("with one other user having cleared the garbage", () => {
+            beforeEach(() => updateNetworkGameState(networkGame, "user-id-a", {
+                gameOverReason: GameOverReason.GARBAGE_CLEARED,
+            }));
+
+            it("reports other user to have cleared the garbage", () => {
+                expect(networkGame.isGameOverOtherUserClearedGarbage).toBe(true);
+            });
+        });
 
         describe("with one user being the winner", () => {
             beforeEach(() => {

@@ -113,11 +113,13 @@ export class NetworkGame {
         return this.allStates.every(({ gameOverReason }) => gameOverReason !== GameOverReason.NONE);
     }
 
-    @computed public get otherAliveUsers() {
+    @computed public get otherUsers(): string[] {
         if (!this.users.own) { throw new Error("Users wasn't initialized when retrieving alive users."); }
-        return this.users.all
-            .filter(user => user.id !== this.users.own!.id)
-            .filter(user => this.stateForUser(user.id)!.gameOverReason === GameOverReason.NONE);
+        return this.users.all.filter(user => user.id !== this.users.own!.id).map(user => user.id);
+    }
+
+    @computed public get otherAliveUsers() {
+        return this.otherUsers.filter(userId => this.stateForUser(userId)!.gameOverReason === GameOverReason.NONE);
     }
 
     public get randomOtherAliveUser() {
@@ -133,5 +135,17 @@ export class NetworkGame {
                 wins: wins.size,
             }))
             .sort((a, b) => b.wins - a.wins);
+    }
+
+    public get isGameOverLastManStanding(): boolean {
+        if (this.parameters.winningCondition.condition !== WinningConditionType.BATTLE_ROYALE) { return false; }
+        return this.otherAliveUsers.length === 0;
+    }
+
+    public get isGameOverOtherUserClearedGarbage(): boolean {
+        if (this.parameters.winningCondition.condition !== WinningConditionType.CLEAR_GARBAGE) { return false; }
+        return this.otherUsers.some(userId => {
+            return this.stateForUser(userId)!.gameOverReason === GameOverReason.GARBAGE_CLEARED;
+        });
     }
 }

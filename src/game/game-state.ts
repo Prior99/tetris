@@ -1,7 +1,7 @@
 import { external, inject } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
-import { vec2, Vec2 } from "utils";
+import { vec2, Vec2, Matrix } from "utils";
 import {
     AudioMoveDown,
     AudioRotateLeft,
@@ -411,7 +411,7 @@ export class GameState {
         }
     }
 
-    public get temporaryState() {
+    public get temporaryState(): Matrix {
         if (!this.current) {
             return this.playfield;
         }

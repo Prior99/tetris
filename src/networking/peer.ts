@@ -92,18 +92,7 @@ export abstract class Peer {
                     new Matrix(this.config.logicalSize, message.matrix),
                     message.state,
                 );
-                switch (this.game.parameters.winningCondition.condition) {
-                    case WinningConditionType.BATTLE_ROYALE: {
-                        if (message.state.gameOverReason !== GameOverReason.NONE && !this.game.gameOver) {
-                            this.game.gameOverLastManStanding();
-                        }
-                    }
-                    case WinningConditionType.CLEAR_GARBAGE: {
-                        if (message.state.gameOverReason === GameOverReason.GARBAGE_CLEARED && !this.game.gameOver) {
-                            this.game.gameOverOtherUserHasWon();
-                        }
-                    }
-                }
+                this.checkGameOver();
                 break;
             }
             case MessageType.RESTART: {
@@ -117,6 +106,11 @@ export abstract class Peer {
                 break;
             }
         }
+    }
+
+    private checkGameOver() {
+        if (this.networkGame.isGameOverLastManStanding) { this.game.gameOverLastManStanding(); }
+        if (this.networkGame.isGameOverOtherUserClearedGarbage) { this.game.gameOverOtherUserHasWon(); }
     }
 
     protected restartNetworkGame(parameters: GameParameters) {
@@ -156,13 +150,9 @@ export abstract class Peer {
         });
         if (this.game.hasOutgoingGarbage) {
             this.game.outgoingGarbage.forEach(garbage => {
-                const target = this.networkGame.randomOtherAliveUser;
-                if (!target) { return; }
-                this.send({
-                    message: MessageType.GARBAGE,
-                    targetId: target.id,
-                    garbage,
-                });
+                const targetId = this.networkGame.randomOtherAliveUser;
+                if (!targetId) { return; }
+                this.send({ message: MessageType.GARBAGE, targetId, garbage });
             });
             this.game.clearOutgoingGarbage();
         }

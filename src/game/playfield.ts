@@ -1,13 +1,17 @@
 import { external, inject } from "tsdi";
 import * as Random from "random-seed";
 import { Config } from "config";
-import { CellColor } from "types";
+import { CellColor, GameParameters } from "types";
 import { vec2, Matrix  } from "utils";
 
 @external
 export class Playfield extends Matrix {
-    constructor(private random: Random.RandomSeed, @inject private config?: Config) {
+    private random: Random.RandomSeed;
+
+    constructor(parameters: GameParameters, @inject private config?: Config) {
         super(config!.logicalSize);
+        this.random = Random.create(parameters.seed);
+        this.addGarbageLines(parameters.initialGarbageLines);
     }
 
     public addGarbageLines(lines: number) {

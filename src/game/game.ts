@@ -22,7 +22,6 @@ export class Game {
     private shuffleBag?: ShuffleBag;
     private effectsController?: Effects;
     private playfield?: Playfield;
-    private random: Random.RandomSeed;
 
     public running = false;
     public serial: string;
@@ -163,9 +162,7 @@ export class Game {
 
     public start(parameters: GameParameters): void {
         this.parameters = parameters;
-        this.random = Random.create(parameters.seed);
-        this.playfield = new Playfield(this.random);
-        this.playfield.addGarbageLines(parameters.initialGarbageLines);
+        this.playfield = new Playfield(parameters);
         this.shuffleBag = new ShuffleBag(this.playfield, parameters.seed);
         this.effectsController = new Effects();
         this.gameState = new GameState(this.shuffleBag, this.playfield, this.effectsController, this.parameters);
