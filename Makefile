@@ -18,6 +18,7 @@ assets:
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-other.ase --data assets/tetrimino-other.json --sheet assets/tetrimino-other.png
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-ghost.ase --data assets/tetrimino-ghost.json --sheet assets/tetrimino-ghost.png
 	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-light.ase --data assets/tetrimino-light.json --sheet assets/tetrimino-light.png
+	aseprite ${ASEPRITE_FLAGS} ase/tetrimino-background.ase --data assets/tetrimino-background.json --sheet assets/tetrimino-background.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-wood.ase --data assets/floor-wood.json --sheet assets/floor-wood.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-white-tiles.ase --data assets/floor-white-tiles.json --sheet assets/floor-white-tiles.png
 	aseprite ${ASEPRITE_FLAGS} ase/floor-tetris.ase --data assets/floor-tetris.json --sheet assets/floor-tetris.png

@@ -1,7 +1,6 @@
 @import "colors.scss";
 
 .loader {
-    background-color: $black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,7 +21,7 @@
     }
 
     $pendingColor: rgb(64, 64, 64);
-    $doneColor: rgb(255, 255, 255);
+    $doneColor: $black;
 
     .pending {
         @include box;

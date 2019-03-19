@@ -13,14 +13,14 @@ import { Lobby } from "./lobby";
 import { MultiPlayer } from "./multi-player";
 import { LeaderboardView } from "./leaderboard-view";
 import { SinglePlayerSetup } from "./single-player-setup";
+import { Background } from "./background";
 
 @external @observer
 export class App extends React.Component {
     @inject private loader: Loader;
     @inject private ui: UI;
 
-    public render() {
-        if (!this.loader.done) { return <LoaderScreen />; }
+    public renderContent() {
         switch (this.ui.page) {
             case Page.MENU: return <Menu />;
             case Page.SINGLE_PLAYER: return <SinglePlayer />;
@@ -31,5 +31,15 @@ export class App extends React.Component {
             case Page.LEADERBOARD: return <LeaderboardView />;
             case Page.SINGLE_PLAYER_SETUP: return <SinglePlayerSetup />;
         }
+    }
+
+    public render() {
+        if (!this.loader.done) { return <LoaderScreen />; }
+        return (
+            <>
+                <Background />
+                {this.renderContent()}
+            </>
+        );
     }
 }
