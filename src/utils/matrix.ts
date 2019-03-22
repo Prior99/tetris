@@ -37,6 +37,10 @@ export class Matrix {
         }
     }
 
+    public clear() {
+        for (let i = 0; i < this.state.length; ++i) { this.state[i] = 0; }
+    }
+
     public get size() {
         return this.dimensions.area;
     }

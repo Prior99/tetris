@@ -59,7 +59,11 @@ export class NetworkGame {
 
     private resetPlayfields() {
         this.users.all.forEach(user => {
-            this.playfields.set(user.id, new Matrix(this.config.logicalSize));
+            if (this.playfields.has(user.id)) {
+                this.playfields.get(user.id)!.clear();
+            } else {
+                this.playfields.set(user.id, new Matrix(this.config.logicalSize));
+            }
         });
     }
 

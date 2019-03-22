@@ -3,7 +3,7 @@
 
 .scoreboard {
     padding: 10px;
-    color: $white;
+    color: $black;
 
     .table {
         .head {
@@ -21,9 +21,9 @@
         }
 
         .wins, .name, .rank, .score {
-            color: $white;
+            color: $black;
             padding: 3px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba($black, 0.1);
         }
 
         .wins {
