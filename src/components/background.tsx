@@ -5,19 +5,16 @@ import { inject, external, initialize } from "tsdi";
 import { bind } from "lodash-decorators";
 import { Config } from "config";
 import { vec2, Vec2, Matrix } from "utils";
-import {
-    TetriminoMatrixI,
-    TetriminoMatrixJ,
-    TetriminoMatrixL,
-    TetriminoMatrixO,
-    TetriminoMatrixS,
-    TetriminoMatrixZ,
-    TetriminoMatrixT,
-} from "game/tetriminos";
 import { spriteForCellColor } from "graphics";
 import { CellColor } from "types";
 import { SpriteManager } from "resources";
 import * as css from "./background.scss";
+
+interface FlyingTetrimino {
+    color: CellColor;
+    pos: Vec2;
+    trajectory: Vec2;
+}
 
 @external @observer
 export class Background extends React.Component {
@@ -28,6 +25,7 @@ export class Background extends React.Component {
     private ctx?: CanvasRenderingContext2D;
     private dimensions = vec2(0, 0);
     private rand = RandomSeed.create();
+    private flyingTetriminos = new Map<number, FlyingTetrimino>();
 
     constructor(props: { matrix: Matrix }) {
         super(props);
@@ -58,14 +56,17 @@ export class Background extends React.Component {
     }
 
     @bind private renderCanvas() {
-        if (!this.canvas || !this.ctx || !this.dimensions) {
+        if (!this.canvas || !this.ctx) {
             setTimeout(this.renderCanvas, 100);
             return;
         }
-        this.ctx.fillStyle = "rgba(255, 255, 255, 0.02)";
+        this.ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.rand.floatBetween(0, 1) > 0.5) { this.renderNewTetrimino(); }
-        setTimeout(this.renderCanvas, 100);
+        // this.ctx.clearRect(0, 0, this.pixelSize.x, this.pixelSize.y);
+        this.flyingTetriminos.forEach(this.renderTetrimino);
+        this.flyingTetriminos.forEach(this.tickTetrimino);
+        this.cleanUp();
+        window.requestAnimationFrame(this.renderCanvas);
     }
 
     @bind private canvasRef(canvas: HTMLCanvasElement) {
@@ -73,48 +74,69 @@ export class Background extends React.Component {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
         this.rescale();
+        while (this.flyingTetriminos.size < this.dimensions.x / 10) {
+            this.createTetrimino();
+        }
     }
 
-    private randomTetrimino(): Matrix {
-        const tetriminos = [
-            TetriminoMatrixI,
-            TetriminoMatrixJ,
-            TetriminoMatrixL,
-            TetriminoMatrixO,
-            TetriminoMatrixS,
-            TetriminoMatrixZ,
-            TetriminoMatrixT,
+    private randomTetrimino(column: number): FlyingTetrimino {
+        const colors = [
+            CellColor.TETRIMINO_I,
+            CellColor.TETRIMINO_J,
+            CellColor.TETRIMINO_L,
+            CellColor.TETRIMINO_O,
+            CellColor.TETRIMINO_S,
+            CellColor.TETRIMINO_Z,
+            CellColor.TETRIMINO_T,
         ];
-        const clazz = tetriminos[this.rand.range(tetriminos.length)];
-        let tetrimino = new clazz();
-        const rotation = this.rand.range(4);
-        for (let i = 0; i < rotation; ++i) { tetrimino = tetrimino.rotateLeft(); }
-        return tetrimino;
+        const color = colors[this.rand.range(colors.length)];
+        const pos = vec2(column * this.config.tetriminoPixelSize, -this.config.tetriminoPixelSize);
+        return { pos, trajectory: this.randomTrajectory(), color };
     }
 
-    private randomPosition(): Vec2 {
-        return vec2(this.rand.range(this.dimensions.x), this.rand.range(this.dimensions.y));
+    private randomTrajectory() {
+        return vec2(0, this.rand.floatBetween(0.3, 0.8));
     }
 
-    private renderNewTetrimino() {
-        const tetrimino = this.randomTetrimino();
-        const position = this.randomPosition();
-        for (let x = 0; x < tetrimino.dimensions.x; ++x) {
-            for (let y = 0; y < tetrimino.dimensions.y; ++y) {
-                const offset = vec2(x, y);
-                const color = tetrimino.at(offset);
-                if (color === CellColor.EMPTY) { continue; }
-                const pixelPosition = position
-                    .add(offset)
-                    .mult(this.config.tetriminoPixelSize)
-                    .add(vec2(this.config.tetriminoPixelSize, this.config.tetriminoPixelSize).div(-2));
-                const spriteClass = spriteForCellColor(color);
-                if (!spriteClass) {  continue; }
-                const sprite = this.sprites.sprite(spriteClass);
-                sprite.render(pixelPosition, sprite.dimensions, this.ctx!, 0);
+    private randomColumn(): number {
+        const freeColumns: number[] = [];
+        for (let column = 0; column < this.dimensions.x; ++column) {
+            if (!this.flyingTetriminos.has(column)) { freeColumns.push(column); }
+        }
+        return freeColumns[this.rand.range(freeColumns.length)];
+    }
+
+    private get pixelSize() {
+        if (!this.canvas) { throw new Error("Can't determine pixel size of uninitialized background component."); }
+        return vec2(this.canvas.width, this.canvas.height);
+    }
+
+    private createTetrimino() {
+        const column = this.randomColumn();
+        const flyingTetrimino = this.randomTetrimino(column);
+        this.flyingTetriminos.set(column, flyingTetrimino);
+    }
+
+    @bind private renderTetrimino({ color, pos, trajectory }: FlyingTetrimino) {
+        const spriteClass = spriteForCellColor(color);
+        if (!spriteClass) { return; }
+        const sprite = this.sprites.sprite(spriteClass);
+        sprite.render(pos, sprite.dimensions, this.ctx!, 0);
+    }
+
+    @bind private tickTetrimino(tetrimino: FlyingTetrimino) {
+        tetrimino.pos = tetrimino.pos.add(tetrimino.trajectory);
+    }
+
+    private cleanUp() {
+        for (let [column, { pos }] of this.flyingTetriminos.entries()) {
+            if (pos.y > this.pixelSize.y || pos.x > this.pixelSize.x) {
+                this.flyingTetriminos.delete(column);
             }
         }
-
+        if (this.flyingTetriminos.size < this.dimensions.x && this.rand.range(100) < 5) {
+            this.createTetrimino();
+        }
     }
 
     public render() {
