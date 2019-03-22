@@ -1,8 +1,6 @@
 @import "colors.scss";
-@import "../menu/menu.scss";
 
 .settings {
-    @extend .menu;
 
     input[type=range] {
         width: 100%;

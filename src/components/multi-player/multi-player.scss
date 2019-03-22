@@ -2,7 +2,6 @@
 @import "../game-over.scss";
 
 .multiPlayer {
-    @extend .game;
 
     display: flex;
     flex-direction: row;

@@ -1,0 +1,16 @@
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+
+    .version {
+        font-size: 0.75rem;
+        float: right;
+        margin-right: 15px;
+        margin-top: 0.65rem;
+        text-transform: uppercase;
+        opacity: 0.6;
+    }
+}

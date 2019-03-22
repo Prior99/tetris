@@ -1,8 +1,6 @@
 @import "colors.scss";
-@import "../menu/menu.scss";
 
 .leaderboard {
-    @extend .menu;
 
     .score {
         font-weight: bold;

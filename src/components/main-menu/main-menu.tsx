@@ -1,16 +1,17 @@
 import * as React from "react";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
+import { Menu, Segment } from "semantic-ui-react";
+import { bind } from "lodash-decorators";
 import { UI } from "ui";
 import { Page, SoundsMode } from "types";
-import { bind } from "lodash-decorators";
-import * as css from "../menu/menu.scss";
 import { Sounds } from "sounds";
+import * as css from "./main-menu.scss";
 
 declare const SOFTWARE_VERSION: string;
 
 @external @observer
-export class Menu extends React.Component {
+export class MainMenu extends React.Component {
     @inject private ui: UI;
     @inject private sounds: Sounds;
 
@@ -37,17 +38,16 @@ export class Menu extends React.Component {
     public render() {
         return (
             <section className={css.menu}>
-                <div className={css.wrapper}>
-                    <h1>Fretris <span className={css.version}>version {SOFTWARE_VERSION}</span></h1>
-                    <div className={css.content}>
-                        <ul>
-                            <li><a onClick={this.handleSinglePlayer}>Singleplayer</a></li>
-                            <li><a onClick={this.handleSettings}>Settings</a></li>
-                            <li><a onClick={this.handleMultiplayer}>Multiplayer</a></li>
-                            <li><a onClick={this.handleLeaderboard}>Leaderboard</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <Segment raised>
+                    <h1>Fretris</h1>
+                    <Menu vertical secondary>
+                        <Menu.Item onClick={this.handleSinglePlayer}>Singleplayer</Menu.Item>
+                        <Menu.Item onClick={this.handleSettings}>Settings</Menu.Item>
+                        <Menu.Item onClick={this.handleMultiplayer}>Multiplayer</Menu.Item>
+                        <Menu.Item onClick={this.handleLeaderboard}>Leaderboard</Menu.Item>
+                    </Menu>
+                    <p className={css.version}>version {SOFTWARE_VERSION}</p>
+                </Segment>
             </section>
         );
     }

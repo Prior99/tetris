@@ -1,8 +1,6 @@
 @import "colors.scss";
-@import "../menu/menu.scss";
 
 .lobby {
-    @extend .menu;
 
     .chat {
         padding-left: 5px !important;

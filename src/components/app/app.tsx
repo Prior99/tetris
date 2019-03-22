@@ -6,7 +6,7 @@ import { UI } from "ui";
 import { Page } from "types";
 import { SinglePlayer } from "../single-player";
 import { Settings } from "../settings";
-import { Menu } from "../menu";
+import { MainMenu } from "../main-menu";
 import { LoaderScreen } from "../loader-screen";
 import { Connect } from "../connect";
 import { Lobby } from "../lobby";
@@ -22,7 +22,7 @@ export class App extends React.Component {
 
     public renderContent() {
         switch (this.ui.page) {
-            case Page.MENU: return <Menu />;
+            case Page.MENU: return <MainMenu />;
             case Page.SINGLE_PLAYER: return <SinglePlayer />;
             case Page.SETTINGS: return <Settings />;
             case Page.LOBBY: return <Lobby />;
