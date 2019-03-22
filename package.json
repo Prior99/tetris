@@ -97,6 +97,7 @@
         "random-seed": "^0.3.0",
         "react": "^16.8.2",
         "react-dom": "^16.8.2",
+        "semantic-ui-css": "^2.4.1",
         "tsdi": "^0.20.3",
         "uuid": "^3.3.2"
     }

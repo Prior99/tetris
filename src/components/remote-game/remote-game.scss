@@ -1,0 +1,29 @@
+@import "colors.scss";
+@import "../game-over.scss";
+
+.remoteGame {
+    display: flex;
+    justify-content: center;
+    border: 2px solid $white;
+    border-radius: 5px;
+    background: $white;
+    flex-direction: column;
+    margin: 5px;
+
+    canvas {
+        border-radius: 5px;
+        background: lighten($black, 10%);
+    }
+
+    .headline {
+        width: 100%;
+        color: $black;
+        background: $white;
+        font-family: hackregular;
+        font-size: 13pt;
+    }
+
+    .gameOverText {
+        font-size: 20pt;
+    }
+}
