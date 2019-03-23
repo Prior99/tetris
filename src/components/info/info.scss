@@ -1,64 +1,15 @@
-@import "colors.scss";
-@import "../block.scss";
-
 .info {
-    font-family: hackregular;
-    color: $black;
-    padding: 10px;
-    background: $white;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
 
-    .infoBlock {
-        @extend .block;
-        width: 120px;
+.infoItem {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0 !important;
 
-        .value {
-            padding: 5px 5px 0 5px;
-            font-size: 15pt;
-            text-align: center;
-        }
-
-        .label {
-            border-bottom: 1px solid $white;
-            width: 100%;
-            padding: 0 5px;
-            font-size: 20pt;
-            text-align: center;
-            box-sizing: border-box;
-        }
-    }
-
-    .holdPiece {
-        @extend .infoBlock;
-        height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .score {
-        @extend .infoBlock;
-    }
-
-    .lines {
-        @extend .infoBlock;
-
-        .value {
-            font-size: 20pt;
-        }
-    }
-
-    .level {
-        @extend .infoBlock;
-
-        .value {
-            font-size: 20pt;
-        }
-    }
-
-    .garbage {
-        @extend .infoBlock;
-
-        height: auto;
-        padding-bottom: 10px;
+    &:first-child {
+        margin-top: 0 !important;
     }
 }

@@ -5,7 +5,7 @@ import { History } from "history";
 import { ObservableGame } from "observable-game";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
-import { Page, WinningCondition, WinningConditionType } from "types";
+import { WinningCondition, WinningConditionType } from "types";
 import { Configure } from "../configure";
 import { MenuContainer } from "components/menu-container";
 import { Button, Segment } from "semantic-ui-react";
@@ -17,7 +17,7 @@ function winningConditionToString(winningCondition: WinningCondition) {
         case WinningConditionType.CLEAR_GARBAGE:
             return `/${WinningConditionType.CLEAR_GARBAGE}`;
         case WinningConditionType.HIGHEST_SCORE_ONE_GAME:
-            return `/${WinningConditionType.HIGHEST_SCORE_ONE_GAME}/${winningCondition}`;
+            return `/${WinningConditionType.HIGHEST_SCORE_ONE_GAME}`;
         case WinningConditionType.SUM_IN_TIME:
             return `/${WinningConditionType.SUM_IN_TIME}/${winningCondition.seconds}`;
     }
@@ -36,21 +36,19 @@ export class SinglePlayerSetup extends React.Component {
     @bind private handleBack() { this.history.push("/main-menu"); }
 
     @bind private handleStart() {
-        this.ui.page = Page.SINGLE_PLAYER;
         const {
-            seed,
             initialGarbageLines,
             garbageMode,
             initialLevel,
             levelUpDisabled,
-            gameMode,
             winningCondition,
         } = this.ui.parameters;
         let url = "/single-player";
         url += `/${initialGarbageLines}`;
         url += `/${garbageMode}`;
+        url += `/${initialLevel}`;
         url += levelUpToString(levelUpDisabled);
-        url += winningConditionToString(winningCondition);
+        url += winningConditionToString(winningCondition).replace(/ /g, "-");
         this.history.push(url);
     }
 

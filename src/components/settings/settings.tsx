@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import { History } from "history";
 import { Slider } from "react-semantic-ui-range";
 import { UI } from "ui";
-import { Page } from "types";
 import { AudioHit } from "resources";
 import { Sounds } from "sounds";
 import { bind } from "lodash-decorators";

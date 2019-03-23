@@ -1,7 +1,7 @@
 import { component, initialize } from "tsdi";
 import { generateName, randomSeed } from "utils";
 import { observable } from "mobx";
-import { Page, Settings, GameParameters, GarbageMode, GameMode, WinningConditionType } from "types";
+import { Settings, GameParameters, GarbageMode, GameMode, WinningConditionType } from "types";
 
 const localStorageIdentifier = "FRETRIS";
 const localStorageVersion = 1;
@@ -10,7 +10,6 @@ const localStorageVersion = 1;
 export class UI {
     @observable private volume = { music: 0.5, sounds: 0.6 };
     @observable private userName = generateName();
-    @observable public page = Page.MENU;
     @observable public leaderboardSubmitted = false;
     @observable public parameters: GameParameters = {
         seed: randomSeed(),

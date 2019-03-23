@@ -25,7 +25,9 @@ export class GraphicsLighting extends Graphics {
         ).mult(this.scaleFactor);
         const pixelPosition = this.translate(position).sub(vec2(0, this.cellPixelSize.y));
         const time = this.getTetriminoBloomAnimationTime(position, sprite);
+        if (cellColor === CellColor.GHOST) { this.ctx.globalAlpha = 0.5; }
         this.renderSprite(spriteClass, pixelPosition.sub(margin), sprite.dimensions.mult(this.scaleFactor), time);
+        if (cellColor === CellColor.GHOST) { this.ctx.globalAlpha = 1; }
     }
 
     private getTetriminoBloomAnimationTime(position: Vec2, sprite: Sprite) {

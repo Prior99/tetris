@@ -1,9 +1,4 @@
-@import "colors.scss";
-@import "../block.scss";
-
 .tetriminoPreview {
-    @extend .block;
-
     display: flex;
     justify-content: center;
     align-items: center;

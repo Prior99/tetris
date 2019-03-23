@@ -4,6 +4,7 @@ import { vec2, Vec2, Matrix } from "utils";
 import { CellColor } from "types";
 import { SpriteTetriminoOther, SpriteTetriminoGhost } from "resources";
 import { Graphics } from "../graphics";
+import { spriteForCellColor } from "../sprite-for-cell-color";
 
 @external
 export class GraphicsRemoteGame extends Graphics {
@@ -24,7 +25,7 @@ export class GraphicsRemoteGame extends Graphics {
                 break;
             }
             default: {
-                this.renderSprite(SpriteTetriminoOther, position, this.cellPixelSize);
+                this.renderSprite(spriteForCellColor(cellColor)!, position, this.cellPixelSize);
                 break;
             }
         }

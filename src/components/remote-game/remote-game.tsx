@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import { Networking } from "networking";
 import { RemoteGameCanvas } from "../remote-game-canvas";
 import * as css from "./remote-game.scss";
+import { Segment, Statistic } from "semantic-ui-react";
 
 const cx = classNames.bind(css);
 
@@ -35,19 +36,19 @@ export class RemoteGame extends React.Component<{ userId: string }> {
                             <div className={css.gameOverText}>
                                 {this.isWinner ? "Winner" : "Game Over"}
                             </div>
-                            <div className={css.gameOverStats}>
-                                <div className={css.info}>
-                                    <div className={css.label}>Score</div>
-                                    <div className={css.value}>{state.score}</div>
-                                </div>
-                                <div className={css.info}>
-                                    <div className={css.label}>Lines</div>
-                                    <div className={css.value}>{state.lines}</div>
-                                </div>
-                                <div className={css.info}>
-                                    <div className={css.label}>Level</div>
-                                    <div className={css.value}>{state.level}</div>
-                                </div>
+                            <div>
+                                <Statistic size="mini" className={css.statistic}>
+                                    <Statistic.Label>Score</Statistic.Label>
+                                    <Statistic.Value>{state.score}</Statistic.Value>
+                                </Statistic>
+                                <Statistic size="mini" className={css.statistic}>
+                                    <Statistic.Label>Lines</Statistic.Label>
+                                    <Statistic.Value>{state.lines}</Statistic.Value>
+                                </Statistic>
+                                <Statistic size="mini" className={css.statistic}>
+                                    <Statistic.Label>Level</Statistic.Label>
+                                    <Statistic.Value>{state.level}</Statistic.Value>
+                                </Statistic>
                             </div>
                         </div>
                     ) : <></>
@@ -59,10 +60,10 @@ export class RemoteGame extends React.Component<{ userId: string }> {
     public render() {
         const { userId } = this.props;
         return (
-            <section className={css.remoteGame}>
-                <div className={css.headline}>{this.networking.userById(userId)!.name}</div>
+            <Segment className={css.remoteGame}>
+                <h3>{this.networking.userById(userId)!.name}</h3>
                 {this.renderCanvas()}
-            </section>
+            </Segment>
         );
     }
 }

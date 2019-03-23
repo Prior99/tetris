@@ -6,7 +6,7 @@ import { History } from "history";
 import { Networking } from "networking";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
-import { Page, NetworkingMode } from "types";
+import { NetworkingMode } from "types";
 import { ChatMessage } from "../chat-message";
 import { Configure } from "../configure";
 import { MenuContainer } from "../menu-container";

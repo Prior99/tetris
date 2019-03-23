@@ -66,6 +66,10 @@ export class GraphicsBackground extends Graphics {
 
     @bind public render() {
         if (!this.shouldRender) { return; }
+        this.ctx.globalAlpha = 1;
+        this.ctx.fillStyle = "rgb(0, 0, 0)";
+        this.ctx.fillRect(0, 0, this.pixelSize.x, this.pixelSize.y);
+        this.ctx.globalAlpha = 0.5;
         const { dimensions } = this.sprite;
         const renderSize = dimensions.mult(this.scaleFactor);
         for (let y = 0; y < this.pixelSize.y; y += renderSize.y) {

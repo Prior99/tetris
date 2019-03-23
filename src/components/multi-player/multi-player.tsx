@@ -7,8 +7,6 @@ import classNames from "classnames/bind";
 import { bind } from "lodash-decorators";
 import { ObservableGame } from "observable-game";
 import { UI } from "ui";
-import { leaderboardEnabled } from "utils";
-import { Page } from "types";
 import { Leaderboard } from "leaderboard";
 import { TetriminoPreviews } from "../tetrimino-previews";
 import { GameCanvas } from "../game-canvas";
@@ -16,6 +14,9 @@ import { Info } from "../info";
 import { RemoteGame } from "../remote-game";
 import { Scoreboard } from "../scoreboard";
 import * as css from "./multi-player.scss";
+import { GameOver } from "components/game-over";
+import { Segment } from "semantic-ui-react";
+import { MenuContainer } from "components/menu-container";
 
 const cx = classNames.bind(css);
 
@@ -49,7 +50,6 @@ export class MultiPlayer extends React.Component {
 
     @bind private handleBack() {
         this.observableGame.stop();
-        this.ui.page = Page.MENU;
         if (this.networking.gameOngoing) { this.networking.close(); }
     }
 
@@ -67,63 +67,27 @@ export class MultiPlayer extends React.Component {
             winner: this.networking.isWinner,
         });
         return (
-            <section className={css.multiPlayer}>
-                <div className={css.scoreboard}>
-                    <Scoreboard />
-                </div>
-                <div className={css.wrapper}>
-                    <Info />
-                    <GameCanvas>
+            <MenuContainer>
+                <section className={css.multiPlayer}>
+                    <div className={css.scoreboard}>
+                        <Scoreboard />
+                    </div>
+                    <div className={css.wrapper}>
+                        <Info />
+                        <Segment style={{ margin: 0 }}>
+                            <GameCanvas><GameOver multiPlayer /></GameCanvas>
+                        </Segment>
+                        <TetriminoPreviews />
+                    </div>
+                    <div className={css.others}>
                         {
-                            this.observableGame.gameOver ? (
-                                <div className={classes}>
-                                    <div className={css.gameOverText}>
-                                        {this.networking.isWinner ? "Winner" : "Game Over"}
-                                    </div>
-                                    {
-                                        this.canRestart ? (
-                                            <div className={css.restart}><a onClick={this.handleReset}>Restart</a></div>
-                                        ) : <></>
-                                    }
-                                    {
-                                        this.ui.leaderboardSubmitted ||
-                                        !leaderboardEnabled(this.networking.parameters) ? (
-                                            <></>
-                                        ) : (
-                                            <div className={css.submitScore}>
-                                                {
-                                                    !this.submitScoreVisible ? (
-                                                        <a onClick={this.handleSubmitScore}>Submit score</a>
-                                                    ) : (
-                                                        <div className={css.submitScoreForm}>
-                                                            <input
-                                                                value={this.leaderboardName}
-                                                                onChange={this.handleLeaderboardNameChange}
-                                                            />
-                                                            <button onClick={this.handleLeaderboardSubmit}>
-                                                                Submit
-                                                            </button>
-                                                        </div>
-                                                    )
-                                                }
-                                            </div>
-                                        )
-                                    }
-                                    <div className={css.back}><a onClick={this.handleBack}>Back</a></div>
-                                </div>
-                            ) : <></>
+                            this.networking.allUsers
+                                .filter(user => user.id !== this.networking.ownId)
+                                .map(user => <RemoteGame key={user.id} userId={user.id} />)
                         }
-                    </GameCanvas>
-                    <TetriminoPreviews />
-                </div>
-                <div className={css.others}>
-                    {
-                        this.networking.allUsers
-                            .filter(user => user.id !== this.networking.ownId)
-                            .map(user => <RemoteGame key={user.id} userId={user.id} />)
-                    }
-                </div>
-            </section>
+                    </div>
+                </section>
+            </MenuContainer>
         );
     }
 }

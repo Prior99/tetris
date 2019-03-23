@@ -1,6 +1,3 @@
-@import "../single-player/single-player.scss";
-@import "../game-over.scss";
-
 .multiPlayer {
 
     display: flex;
@@ -8,7 +5,8 @@
     justify-content: center;
 
     .wrapper {
-        margin: 0 5px;
+        display: flex;
+        margin: 0 20px;
     }
 
     .others {
@@ -16,7 +14,7 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
     }
 }

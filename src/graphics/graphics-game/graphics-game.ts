@@ -58,7 +58,8 @@ export class GraphicsGame extends Graphics {
 
     private renderLighting() {
         this.lighting.render();
-        this.ctx.globalCompositeOperation = "multiply";
+        this.ctx.globalAlpha = 0.3;
+        this.ctx.globalCompositeOperation = "lighter";
         if (this.lighting.canvas) {
             this.ctx.drawImage(
                 this.lighting.canvas,
@@ -76,6 +77,7 @@ export class GraphicsGame extends Graphics {
 
     private renderOverlay() {
         this.overlay.render();
+        this.ctx.globalAlpha = 0.7;
         this.ctx.globalCompositeOperation = "lighter";
         if (this.overlay.canvas) {
             this.ctx.drawImage(
@@ -93,6 +95,7 @@ export class GraphicsGame extends Graphics {
     }
 
     private renderCells() {
+        this.ctx.globalAlpha = 1;
         this.ctx.globalCompositeOperation = "source-over";
         for (let y = 0; y < this.config.visibleSize.y; ++y) {
             for (let x = 0; x < this.config.visibleSize.x; ++x) {

@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { ObservableGame } from "observable-game";
 import { TetriminoPreview } from "../tetrimino-preview";
 import * as css from "./tetrimino-previews.scss";
+import { Segment } from "semantic-ui-react";
 
 @external @observer
 export class TetriminoPreviews extends React.Component {
@@ -12,7 +13,13 @@ export class TetriminoPreviews extends React.Component {
     public render() {
         return (
             <div className={css.tetriminoPreviews}>
-                {this.game.tetriminoPreview.map((matrix, index) => <TetriminoPreview key={index} matrix={matrix} />)}
+                {
+                    this.game.tetriminoPreview.map((matrix, index) => (
+                        <Segment key={index}>
+                            <TetriminoPreview size={0.7} matrix={matrix} />
+                        </Segment>
+                    ))
+                }
             </div>
         );
     }

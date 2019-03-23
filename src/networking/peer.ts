@@ -1,11 +1,12 @@
 import { inject } from "tsdi";
 import { observable } from "mobx";
 import PeerJS from "peerjs";
+import { History } from "history";
 import { Matrix } from "utils";
 import { UI } from "ui";
 import { Config } from "config";
 import { Game } from "game";
-import { GameOverReason, Page, GameParameters } from "types";
+import { GameOverReason, GameParameters } from "types";
 import { ObservableGame } from "observable-game";
 import { Message, MessageType } from "./messages";
 import { RemoteUsers } from "./remote-users";
@@ -17,6 +18,7 @@ export abstract class Peer {
     @inject private ui: UI;
     @inject protected game: Game;
     @inject protected observableGame: ObservableGame;
+    @inject("History") private history: History;
 
     protected peer?: PeerJS;
     private timeout?: any;
@@ -123,7 +125,7 @@ export abstract class Peer {
         this.networkGame.start();
         this.observableGame.start(parameters);
         this.tick();
-        this.ui.page = Page.MULTI_PLAYER;
+        this.history.push("/multi-player");
     }
 
     protected stopNetworkGame() {

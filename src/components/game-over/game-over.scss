@@ -1,15 +1,3 @@
-.remoteGame {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    margin: 0 5px 10px 5px !important;
-
-    canvas {
-        border-radius: 5px;
-        background: lighten(rgb(0, 0, 0), 10%);
-    }
-}
-
 .gameOver {
     position: absolute;
     background: rgba(255, 255, 255, 0.3);
@@ -17,24 +5,14 @@
     height: 100%;
     display: flex;
     align-items: center;
-    flex-direction: column;
     justify-content: center;
-}
-
-.statistic {
-    width: 100%;
-    margin: 5px 0 !important;
-
-    > * {
-        color: rgb(255, 255, 255) !important;
-    }
 }
 
 .gameOverText {
     color: rgb(255, 255, 255);
-    font-size: 2rem;
+    font-size: 3rem;
     text-align: center;
-    padding: 30px 0;
+    padding: 30px;
 }
 
 .inner {

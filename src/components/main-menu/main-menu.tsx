@@ -4,8 +4,7 @@ import { History } from "history";
 import { observer } from "mobx-react";
 import { Menu, Segment } from "semantic-ui-react";
 import { bind } from "lodash-decorators";
-import { UI } from "ui";
-import { Page, SoundsMode } from "types";
+import { SoundsMode } from "types";
 import { Sounds } from "sounds";
 import { MenuContainer } from "../menu-container";
 import * as css from "./main-menu.scss";
@@ -15,7 +14,6 @@ declare const SOFTWARE_VERSION: string;
 @external @observer
 export class MainMenu extends React.Component {
     @inject("History") private history: History;
-    @inject private ui: UI;
     @inject private sounds: Sounds;
 
     @initialize protected initialize() {

@@ -67,7 +67,7 @@ export class GameCanvas extends React.Component {
         return (
             <div className={css.canvasWrapper}>
                 {this.props.children}
-                <canvas ref={this.canvasRef} className={css.observableGameCanvas} />
+                <canvas ref={this.canvasRef} className={css.gameCanvas} />
             </div>
         );
     }

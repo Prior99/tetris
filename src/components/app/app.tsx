@@ -31,8 +31,8 @@ export class App extends React.Component {
                     <Switch>
                         <Redirect exact from="/" to="main-menu" />
                         <Route exact path="/main-menu" component={MainMenu} />
-                        <Route exact path="/single-player/:initialGarbageLines/:garbageMode/:levelUpDisabled/:condition" component={SinglePlayer} /> {/* tslint:disable-line */}
-                        <Route exact path="/single-player/:initialGarbageLines/:garbageMode/:levelUpDisabled/:condition/:secondsOrLives" component={SinglePlayer} /> {/* tslint:disable-line */}
+                        <Route exact path="/single-player/:initialGarbageLines/:garbageMode/:initialLevel/:levelUpDisabled/:condition" component={SinglePlayer} /> {/* tslint:disable-line */}
+                        <Route exact path="/single-player/:initialGarbageLines/:garbageMode/:initialLevel/:levelUpDisabled/:condition/:secondsOrLives" component={SinglePlayer} /> {/* tslint:disable-line */}
                         <Route exact path="/settings" component={Settings} />
                         <Route exact path="/lobby/:mode" component={Lobby} />
                         <Route exact path="/lobby/:mode/:id" component={Lobby} />

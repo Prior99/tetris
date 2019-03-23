@@ -1,16 +1,18 @@
 import { external, inject, initialize } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
+import { History } from "history";
 import { Leaderboard } from "leaderboard";
 import { UI } from "ui";
 import { bind } from "lodash-decorators";
-import { Page } from "types";
 import * as css from "./leaderboard-view.scss";
 
 @external @observer
 export class LeaderboardView extends React.Component {
     @inject private leaderboard: Leaderboard;
     @inject private ui: UI;
+    @inject("History") private history: History;
+
     private interval: any;
 
     @initialize protected initialize() {
@@ -27,7 +29,7 @@ export class LeaderboardView extends React.Component {
     }
 
     @bind private handleBack() {
-        this.ui.page = Page.MENU;
+        this.history.push("/main-menu");
     }
 
     public render() {

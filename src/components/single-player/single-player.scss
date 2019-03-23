@@ -1,18 +1,3 @@
-@import "colors.scss";
-@import "../game-over.scss";
-
-.game {
+.singlePlayer {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-
-    .wrapper {
-        display: flex;
-        justify-content: center;
-        border: 2px solid $white;
-        border-radius: 5px;
-        background: $white;
-    }
 }
