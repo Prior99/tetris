@@ -21,7 +21,7 @@ export class TetriminoI extends Tetrimino {
     constructor(playfield: Playfield, @inject config?: Config) {
         super(
             new TetriminoMatrixI(),
-            config!.visibleSize.horizontalCenter().add(vec2(0, -4)),
+            config!.visibleSize.horizontalCenter().add(vec2(0, 0)),
             playfield,
         );
     }
