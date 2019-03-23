@@ -15,7 +15,7 @@ import {
     AudioScore4,
     AudioLevelUp,
 } from "resources";
-import { musicSpeedForLevel, Sounds } from "sounds";
+import { Sounds } from "sounds";
 import {
     Garbage,
     EffectType,
@@ -265,9 +265,6 @@ export class GameState {
 
     private handleLevelUp() {
         this.sounds.play(AudioLevelUp);
-        setTimeout(() => {
-            this.sounds.changeMusicSpeed(musicSpeedForLevel(this.level));
-        }, 100);
     }
 
     private playScoreSound(count: number) {

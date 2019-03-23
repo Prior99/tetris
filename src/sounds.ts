@@ -1,46 +1,8 @@
 import { component, inject, initialize } from "tsdi";
-import {
-    AudioManager,
-    Audio,
-    AudioMusic120Bpm,
-    AudioMusic130Bpm,
-    AudioMusic140Bpm,
-    AudioMusic150Bpm,
-    AudioMusic160Bpm,
-    AudioMusic170Bpm,
-} from "resources";
+import { AudioManager, Audio, AudioMusic140Bpm } from "resources";
 import { SoundsMode, Constructable } from "types";
 import { UI } from "ui";
 import { autorun } from "mobx";
-
-export enum MusicSpeed {
-    BPM_120,
-    BPM_130,
-    BPM_140,
-    BPM_150,
-    BPM_160,
-    BPM_170,
-}
-
-function musicForSpeed (musicSpeed: MusicSpeed): Constructable<Audio> {
-    switch (musicSpeed) {
-        case MusicSpeed.BPM_120: return AudioMusic120Bpm;
-        case MusicSpeed.BPM_130: return AudioMusic130Bpm;
-        case MusicSpeed.BPM_140: return AudioMusic140Bpm;
-        case MusicSpeed.BPM_150: return AudioMusic150Bpm;
-        case MusicSpeed.BPM_160: return AudioMusic160Bpm;
-        case MusicSpeed.BPM_170: return AudioMusic170Bpm;
-    }
-}
-
-export function musicSpeedForLevel(level: number): MusicSpeed {
-    if (level < 2) { return MusicSpeed.BPM_120; }
-    if (level < 4) { return MusicSpeed.BPM_130; }
-    if (level < 8) { return MusicSpeed.BPM_140; }
-    if (level < 12) { return MusicSpeed.BPM_150; }
-    if (level < 16) { return MusicSpeed.BPM_160; }
-    return MusicSpeed.BPM_170;
-}
 
 @component
 export class Sounds {
@@ -48,21 +10,16 @@ export class Sounds {
     @inject("AudioContext") private audioContext: AudioContext;
     @inject private ui: UI;
 
-    private musicSpeed?: MusicSpeed;
-    private timeStarted = 0;
     private currentMusic?: { gain: GainNode, source: AudioBufferSourceNode };
     private musicNode: GainNode;
     private soundsNode: GainNode;
     private filterNode: BiquadFilterNode;
 
     private get musicAudio() {
-        if (typeof this.musicSpeed !== "number") { return; }
-        return this.audioManager.audio(musicForSpeed(this.musicSpeed));
+        return this.audioManager.audio(AudioMusic140Bpm);
     }
 
     @initialize protected initialize() {
-        this.timeStarted = this.audioContext.currentTime;
-
         this.filterNode = this.audioContext.createBiquadFilter();
         this.filterNode.type = "lowpass";
         this.filterNode.connect(this.audioContext.destination);
@@ -78,7 +35,12 @@ export class Sounds {
             this.musicNode.gain.value = this.ui.volumeMusic;
         });
 
-        this.changeMusicSpeed(MusicSpeed.BPM_120);
+        const music = this.musicAudio!.createSource();
+        const { gain, source } = music;
+        this.currentMusic = music;
+        gain.connect(this.musicNode);
+        source.loop = true;
+        source.start();
     }
 
     public play(audioClass: Constructable<Audio>) {
@@ -86,17 +48,6 @@ export class Sounds {
         const { gain, source } = audio.createSource();
         gain.connect(this.soundsNode);
         source.start();
-    }
-
-    public get time() {
-        return this.audioContext.currentTime - this.timeStarted;
-    }
-
-    private get relativeMusicPosition() {
-        if (!this.musicAudio) { return; }
-        const { duration } = this.musicAudio;
-        const timeInMusic = this.time % duration;
-        return timeInMusic / duration;
     }
 
     public stopMusic() {
@@ -113,19 +64,5 @@ export class Sounds {
         } else {
             this.filterNode.frequency.value = 1000;
         }
-    }
-
-    public changeMusicSpeed(speed: MusicSpeed) {
-        if (speed === this.musicSpeed) { return; }
-        const { relativeMusicPosition } = this;
-        this.stopMusic();
-        this.musicSpeed = speed;
-        const music = this.musicAudio!.createSource();
-        const { gain, source } = music;
-        this.currentMusic = music;
-        gain.connect(this.musicNode);
-        source.loop = true;
-        source.start(0, relativeMusicPosition ? this.musicAudio!.duration * relativeMusicPosition : 0);
-        this.timeStarted = this.audioContext.currentTime;
     }
 }
