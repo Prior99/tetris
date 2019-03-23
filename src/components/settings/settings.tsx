@@ -1,12 +1,15 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
+import { History } from "history";
+import { Slider } from "react-semantic-ui-range";
 import { UI } from "ui";
 import { Page } from "types";
 import { AudioHit } from "resources";
 import { Sounds } from "sounds";
 import { bind } from "lodash-decorators";
-import * as css from "./settings.scss";
+import { MenuContainer } from "components/menu-container";
+import { Segment, Form, Button } from "semantic-ui-react";
 
 export enum NetworkingMode {
     CLIENT = "client",
@@ -18,52 +21,59 @@ export enum NetworkingMode {
 export class Settings extends React.Component {
     @inject private ui: UI;
     @inject private sounds: Sounds;
+    @inject("History") private history: History;
 
     public mode = NetworkingMode.DISCONNECTED;
 
-    @bind private handleBack() {
-        this.ui.page = Page.MENU;
-    }
+    @bind private handleBack() { this.history.push("/main-menu"); }
 
     get volumeMusic() { return this.ui.volumeMusic * 100; }
 
     get volumeSounds() { return this.ui.volumeSounds * 100; }
 
-    @bind private handleVolumeMusic(evt: React.ChangeEvent<HTMLInputElement>) {
-        this.ui.volumeMusic = Number(evt.currentTarget.value) / 100;
+    @bind private handleVolumeMusic(value: number) {
+        this.ui.volumeMusic = value / 100;
     }
 
-    @bind private handleVolumeSounds(evt: React.ChangeEvent<HTMLInputElement>) {
-        this.ui.volumeSounds = Number(evt.currentTarget.value) / 100;
+    @bind private handleVolumeSounds(value: number) {
+        this.ui.volumeSounds = value / 100;
         this.sounds.play(AudioHit);
     }
 
     public render() {
         return (
-            <section className={css.settings}>
-                <div className={css.wrapper}>
+            <MenuContainer>
+                <Segment>
                     <h1>Settings</h1>
-                    <div className={css.content}>
-                        <p>Music</p>
-                        <input
-                            type="range"
-                            min={1}
-                            max={100}
-                            value={this.volumeMusic}
-                            onChange={this.handleVolumeMusic}
+                    <Form>
+                        <Form.Field label="Music" />
+                        <Slider
+                            color="blue"
+                            settings={{
+                                start: this.volumeMusic,
+                                min: 0,
+                                max: 100,
+                                step: 1,
+                                onChange: this.handleVolumeMusic,
+                            }}
                         />
-                        <p>Sounds</p>
-                        <input
-                            type="range"
-                            min={1}
-                            max={100}
-                            value={this.volumeSounds}
-                            onChange={this.handleVolumeSounds}
+                        <br />
+                        <Form.Field label="Sounds" />
+                        <Slider
+                            color="blue"
+                            settings={{
+                                start: this.volumeSounds,
+                                min: 0,
+                                max: 100,
+                                step: 1,
+                                onChange: this.handleVolumeSounds,
+                            }}
                         />
-                        <a onClick={this.handleBack}>Back</a>
-                    </div>
-                </div>
-            </section>
+                        <br />
+                        <Button primary fluid onClick={this.handleBack}>Back</Button>
+                    </Form>
+                </Segment>
+            </MenuContainer>
         );
     }
 }

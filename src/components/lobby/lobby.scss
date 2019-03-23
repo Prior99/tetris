@@ -1,31 +1,15 @@
-@import "colors.scss";
+.lobbyGrid {
+    width: 1024px;
+    height: 768px;
+}
 
-.lobby {
+.lobbyRow {
+    margin-bottom: 30px;
+}
 
-    .chat {
-        padding-left: 5px !important;
-        min-width: 500px;
-
-
-        li:hover {
-            list-style: none !important;
-        }
-    }
-
-    .users {
-        li:hover {
-            list-style: none !important;
-        }
-    }
-
-    .outer {
-        display: flex;
-    }
-
-    .id {
-        text-align: center;
-        margin: 20px 0 25px 0;
-        font-weight: bold;
-        font-size: 20pt;
+.message {
+    cursor: pointer;
+    p {
+        font-size: 2rem !important;
     }
 }

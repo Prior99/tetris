@@ -3,17 +3,25 @@ import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { ChatMessage as ChatMessageInterface } from "types";
 import { Networking } from "networking";
-import * as css from "./chat-message.scss";
+import { Comment } from "semantic-ui-react";
 
 @external @observer
 export class ChatMessage extends React.Component<{ message: ChatMessageInterface }> {
     @inject private networking: Networking;
 
     public render() {
+        const { message } = this.props;
+        const { text, date } = message;
         return (
-            <li className={css.chatMessage}>
-                <b>{this.networking.userById(this.props.message.userId)!.name}</b> {this.props.message.text}
-            </li>
+            <Comment>
+                <Comment.Content>
+                    <Comment.Author style={{ display: "inline-block" }}>
+                        {this.networking.userById(this.props.message.userId)!.name}
+                    </Comment.Author>
+                    <Comment.Metadata>{date.toLocaleTimeString()}</Comment.Metadata>
+                    <Comment.Text>{text}</Comment.Text>
+                </Comment.Content>
+            </Comment>
         );
     }
 }

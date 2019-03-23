@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import DevTools from "mobx-react-devtools";
 import { TSDI } from "tsdi";
-import { FactoryAudioContext } from "factory-audio-context";
+import { FactoryAudioContext } from "factories";
 import { App } from "components";
 import "./index.scss";
 import "semantic-ui-css/semantic.min.css";

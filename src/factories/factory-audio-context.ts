@@ -4,7 +4,7 @@ import { component, factory } from "tsdi";
 export class FactoryAudioContext {
     private audioContext: AudioContext;
 
-    public initialize() {
+    public async initialize() {
         this.audioContext = new AudioContext();
     }
 

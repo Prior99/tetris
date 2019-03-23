@@ -1,1 +1,1 @@
-export * from "./singl-player-setup";
+export * from "./single-player-setup";

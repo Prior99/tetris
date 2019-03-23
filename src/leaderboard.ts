@@ -1,7 +1,8 @@
 import { component, initialize, inject } from "tsdi";
 import { observable } from "mobx";
 import { Config } from "config";
-import { initializeApp, database } from "firebase";
+import { initializeApp, database } from "firebase/app";
+import "firebase/database";
 
 export interface LeaderboardEntry {
     name: string;
