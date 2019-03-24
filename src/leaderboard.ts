@@ -14,17 +14,19 @@ export class Leaderboard {
     @inject private config: Config;
 
     @observable public scores: LeaderboardEntry[] = [];
+    @observable public loading = true;
 
     @initialize protected async initialize() {
         initializeApp(this.config.firebaseConfig);
         await this.refresh();
+        this.loading = false;
     }
 
     public async refresh() {
         const result = await database()
             .ref("/scores/global/scores")
             .orderByChild("score")
-            .limitToLast(25)
+            .limitToLast(100)
             .once("value");
         const scores: LeaderboardEntry[] = Object.values(result.toJSON() as any);
         this.scores = scores.sort((a, b) => b.score - a.score);

@@ -2,46 +2,42 @@ import { external, inject } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Networking } from "networking";
-import * as css from "./scoreboard.scss";
+import { Segment, Table } from "semantic-ui-react";
 
 @external @observer
 export class Scoreboard extends React.Component {
     @inject private networking: Networking;
     public render() {
         return (
-            <section className={css.scoreboard}>
-                <div className={css.wrapper}>
-                    <h1>Scoreboard</h1>
-                    <div className={css.content}>
-                        <table className={css.table}>
-                            <thead>
-                                <tr>
-                                    <td className={css.head}>Rank</td>
-                                    <td className={css.head}>Won</td>
-                                    <td className={css.head}>Name</td>
-                                    <td className={css.head}>Score</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.networking.scoreboard.map(({ userId, wins }, index) => {
-                                    const { score } = this.networking.stateForUser(userId)!;
-                                    const { name } = this.networking.userById(userId)!;
-                                    return (
-                                        <tr key={userId}>
-                                            <td className={css.rank}>{index + 1}</td>
-                                            <td className={css.wins}>{wins}</td>
-                                            <td className={css.name}>{name}</td>
-                                            <td className={css.score}>{score}</td>
-                                        </tr>
-                                    );
-                                })
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
+            <Segment>
+                <h1>Scoreboard</h1>
+                <Table basic="very">
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>#</Table.HeaderCell>
+                            <Table.HeaderCell>Name</Table.HeaderCell>
+                            <Table.HeaderCell>Won</Table.HeaderCell>
+                            <Table.HeaderCell>Score</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                    {
+                        this.networking.scoreboard.map(({ userId, wins }, index) => {
+                            const { score } = this.networking.stateForUser(userId)!;
+                            const { name } = this.networking.userById(userId)!;
+                            return (
+                                <Table.Row key={userId}>
+                                    <Table.Cell>{index + 1}</Table.Cell>
+                                    <Table.Cell>{wins}</Table.Cell>
+                                    <Table.Cell>{name}</Table.Cell>
+                                    <Table.Cell>{score}</Table.Cell>
+                                </Table.Row>
+                            );
+                        })
+                    }
+                    </Table.Body>
+                </Table>
+            </Segment>
         );
     }
 }

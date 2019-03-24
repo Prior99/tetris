@@ -1,5 +1,3 @@
-@import "colors.scss";
-
 :global {
     body {
         height: 95vh;
@@ -9,26 +7,5 @@
 
     #root {
         height: 100%;
-    }
-
-    input {
-        background: lighten($black, 20%);
-        border: none;
-        color: $white;
-        padding: 2px 5px;
-        box-sizing: border-box;
-        font-family: hackregular;
-
-        &.inputFullWidth {
-            width: 100%;
-        }
-    }
-
-    button {
-        background: lighten($black, 5%);
-        border: none;
-        color: $white;
-        padding: 2px;
-        font-family: hackregular;
     }
 }

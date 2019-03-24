@@ -1,7 +1,5 @@
-@import "colors.scss";
-
 .garbage {
-    margin-bottom: 7px;
+    margin-bottom: 20px;
 
     .label {
         font-family: hackregular;
@@ -12,7 +10,7 @@
         width: 100%;
 
         .progressInner {
-            border-bottom: 2px solid $white;
+            border-bottom: 2px solid rgb(0, 0, 0);
         }
     }
 }

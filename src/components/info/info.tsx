@@ -47,9 +47,8 @@ export class Info extends React.Component {
                     </Statistic>
                 </Segment>
                 {
-                    this.game.incomingGarbage.length > 0 ? (
+                    this.game.incomingGarbage.length > 0 && (
                         <Segment>
-                            <div className={css.label}>Incoming</div>
                             <div className={css.value}>
                                 {
                                     this.game.incomingGarbage.map((garbage, index) => {
@@ -58,7 +57,7 @@ export class Info extends React.Component {
                                 }
                             </div>
                         </Segment>
-                    ) : <></>
+                    )
                 }
             </div>
         );

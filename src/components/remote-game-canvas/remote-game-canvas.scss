@@ -1,12 +1,9 @@
-@import "colors.scss";
-
 .canvasWrapper {
     position: relative;
 
     .gameCanvas {
         height: 100%;
         box-sizing: border-box;
-        border: 1px inset lighten($black, 10%);
 
         image-rendering: optimizeSpeed;
         image-rendering: -moz-crisp-edges;
@@ -17,11 +14,10 @@
     }
 
     .gameOver {
-        font-family: hackregular;
-        color: $white;
+        color: rgb(255, 255, 255);
         width: 100%;
         height: 100%;
-        background: rgba($black, 0.5);
+        background: rgba(0, 0, 0, 0.5);
         text-align: center;
         display: flex;
         align-items: center;
@@ -38,17 +34,17 @@
         }
 
         .info {
-            color: $white;
+            color: rgb(255, 255, 255);
             font-size: 15pt;
             margin-bottom: 5px;
 
             .label {
                 padding-right: 5px;
-                color: rgba($white, 0.7);
+                color: rgba(255, 255, 255, 0.7);
             }
 
             .value {
-                color: $white;
+                color: rgb(255, 255, 255);
             }
         }
     }
