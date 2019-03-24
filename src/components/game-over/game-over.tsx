@@ -24,7 +24,6 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     @inject private networking: Networking;
     @inject("History") private history: History;
 
-    @observable private submitScoreVisible = false;
     @observable private leaderboardName = "";
 
     @initialize protected initialize() {
@@ -36,12 +35,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
         this.observableGame.restart(this.ui.parameters);
     }
 
-    @bind private handleSubmitScore() {
-        this.submitScoreVisible = true;
-    }
-
     @bind private handleLeaderboardSubmit() {
-        this.submitScoreVisible = false;
         this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score);
         this.ui.leaderboardSubmitted = true;
     }

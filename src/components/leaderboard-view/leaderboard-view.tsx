@@ -3,14 +3,12 @@ import * as React from "react";
 import { observer } from "mobx-react";
 import { History } from "history";
 import { Leaderboard } from "leaderboard";
-import { UI } from "ui";
 import { bind } from "lodash-decorators";
 import * as css from "./leaderboard-view.scss";
 
 @external @observer
 export class LeaderboardView extends React.Component {
     @inject private leaderboard: Leaderboard;
-    @inject private ui: UI;
     @inject("History") private history: History;
 
     private interval: any;

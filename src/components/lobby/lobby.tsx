@@ -13,7 +13,6 @@ import { MenuContainer } from "../menu-container";
 import {
     Segment,
     Grid,
-    Statistic,
     Dimmer,
     Loader,
     Message,

@@ -2,7 +2,6 @@ import * as React from "react";
 import { leaderboardEnabled } from "utils";
 import { GameParameters, WinningConditionType, GarbageMode, WinningCondition } from "types";
 import { bind } from "lodash-decorators";
-import * as css from "./configure.scss";
 import { computed } from "mobx";
 import { Message, Icon, Form } from "semantic-ui-react";
 

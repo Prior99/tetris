@@ -33,7 +33,7 @@ describe("GameState", () => {
 
     describe("after topping out", () => {
         beforeEach(() => {
-            for (let i = 0; i < 8; ++i) { gameState.inputHardDrop(); }
+            for (let i = 0; i < 9; ++i) { gameState.inputHardDrop(); }
         });
 
         it("shows the expected temporary state", () => expect(gameState.temporaryState.toString()).toMatchSnapshot());
@@ -71,7 +71,7 @@ describe("GameState", () => {
 
                 it("reports the cleared line", () => expect(gameState.lines).toBe(1));
 
-                it("reports the score", () => expect(gameState.score).toBe(32));
+                it("reports the score", () => expect(gameState.score).toBe(36));
 
                 describe("dropping fourth tetrimino", () => {
                     beforeEach(() => gameState.inputHardDrop());
@@ -82,7 +82,7 @@ describe("GameState", () => {
 
                     it("reports the cleared line", () => expect(gameState.lines).toBe(2));
 
-                    it("reports the score", () => expect(gameState.score).toBe(64));
+                    it("reports the score", () => expect(gameState.score).toBe(76));
 
                     it("reports the correct game over reason", () => {
                         expect(gameState.gameOverReason).toBe(GameOverReason.GARBAGE_CLEARED);

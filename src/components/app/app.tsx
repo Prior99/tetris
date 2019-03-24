@@ -4,7 +4,6 @@ import { History } from "history";
 import * as React from "react";
 import { Route, Switch, Router, Redirect } from "react-router-dom";
 import { Loader } from "resources";
-import { UI } from "ui";
 import { SinglePlayer } from "../single-player";
 import { Settings } from "../settings";
 import { MainMenu } from "../main-menu";
@@ -20,7 +19,6 @@ import { Background } from "../background";
 export class App extends React.Component {
     @inject("History") private history: History;
     @inject private loader: Loader;
-    @inject private ui: UI;
 
     public render() {
         if (!this.loader.done) { return <LoaderScreen />; }

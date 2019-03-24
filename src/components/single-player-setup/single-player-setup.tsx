@@ -2,7 +2,6 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { History } from "history";
-import { ObservableGame } from "observable-game";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
 import { WinningCondition, WinningConditionType } from "types";
@@ -29,7 +28,6 @@ function levelUpToString(levelUpDisabled: boolean) {
 
 @external @observer
 export class SinglePlayerSetup extends React.Component {
-    @inject private observableGame: ObservableGame;
     @inject private ui: UI;
     @inject("History") private history: History;
 

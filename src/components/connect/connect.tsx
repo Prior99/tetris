@@ -2,7 +2,6 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
-import { Networking } from "networking";
 import { History } from "history";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
@@ -13,7 +12,6 @@ import { Segment, Form, Input, Tab } from "semantic-ui-react";
 @external @observer
 export class Connect extends React.Component {
     @inject private ui: UI;
-    @inject private networking: Networking;
     @inject("History") private history: History;
 
     @observable private otherId = "";
