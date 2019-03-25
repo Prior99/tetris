@@ -58,7 +58,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     }
 
     @computed private get canRestart() {
-        return !this.props.multiPlayer || this.networking.isHost;
+        return !this.props.multiPlayer || (this.networking.isHost && this.networking.allUsersGameOver);
     }
 
     @computed private get classes() {
@@ -69,7 +69,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     }
 
     public render() {
-        if (!this.observableGame.gameOver || this.networking.mode === NetworkingMode.DISCONNECTED) {
+        if (!this.observableGame.gameOver) {
             return <></>;
         }
         return (
