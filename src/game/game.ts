@@ -190,10 +190,12 @@ export class Game {
         }
         const now = new Date();
         const time = differenceInMilliseconds(now, this.timeStarted) / 1000;
-        this.effectsController.tick(time);
-        this.input.tick(time);
-        this.gameState.tick(time);
-        if (this.gameState.gameOver) {
+        if (time >= this.config.countdownSeconds) {
+            this.effectsController.tick(time);
+            this.input.tick(time - this.config.countdownSeconds);
+            this.gameState.tick(time);
+        }
+        if (this.gameState.gameOver && time >= this.config.countdownSeconds) {
             this.stop();
         } else {
             this.timeout = setTimeout(() => this.tick(), this.config.tickSpeed * 1000);

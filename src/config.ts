@@ -13,6 +13,7 @@ export class Config {
     public loadStride = 2;
     public garbageTimeout = 4;
     public lockTime = 0.5;
+    public countdownSeconds = 3;
 
     public get visibleRatio() {
         return this.visibleSize.x / this.visibleSize.y;

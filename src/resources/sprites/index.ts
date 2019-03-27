@@ -44,3 +44,4 @@ export * from "./sprite-combo-3";
 export * from "./sprite-combo-4";
 export * from "./sprite-combo-5";
 export * from "./sprite-combo-6";
+export * from "./sprite-countdown";

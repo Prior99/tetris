@@ -16,6 +16,7 @@ import {
     SpriteCombo4,
     SpriteCombo5,
     SpriteCombo6,
+    SpriteCountdown,
 } from "resources";
 import { Constructable } from "types";
 
@@ -116,6 +117,17 @@ export class GraphicsOverlay extends Graphics {
         });
     }
 
+    private renderCountdown() {
+        const sprite = this.sprites.sprite(SpriteCountdown);
+        if (this.game.seconds <= sprite.totalDuration) {
+            const offset = this.pixelSize
+                .sub(sprite.dimensions.mult(this.scaleFactor))
+                .div(vec2(1, 2))
+                .sub(vec2(0, 32).mult(this.scaleFactor));
+            this.renderSprite(SpriteCountdown, offset, sprite.dimensions.mult(this.scaleFactor), this.game.seconds);
+        }
+    }
+
     @bind public render() {
         this.renderClear();
         this.ctx.globalAlpha = 0.7;
@@ -125,5 +137,6 @@ export class GraphicsOverlay extends Graphics {
         this.renderTetris();
         this.renderComboSplash();
         this.renderComboCount();
+        this.renderCountdown();
     }
 }
