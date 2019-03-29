@@ -39,7 +39,7 @@ export class ShuffleBag {
 
     public get preview(): Tetrimino[] {
         if (!this.random) { throw new Error("Can't peek into from unitialized bag."); }
-        return this.sequence.slice(0, 6);
+        return this.sequence.slice(0, 5);
     }
 
     private refill() {
