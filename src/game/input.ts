@@ -133,6 +133,7 @@ export class Input {
                 break;
             }
             case " ": {
+                if (evt.target === document.body) { evt.preventDefault(); }
                 if (!this.hardDrop) {
                     this.hardDrop = this.keyState(this.timeCurrent);
                 }
