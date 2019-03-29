@@ -30,7 +30,11 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
         this.leaderboardName = this.ui.name || "";
     }
 
-    @bind private handleReset() {
+    @bind private handleRestart() {
+        if (this.props.multiPlayer) {
+            this.networking.sendRestartGame();
+            return;
+        }
         this.ui.reset();
         this.observableGame.restart(this.ui.parameters);
     }
@@ -90,7 +94,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
                         )
                     }
                     <Button fluid onClick={this.handleBack}>Back</Button>
-                    { this.canRestart && <Button fluid primary onClick={this.handleReset}>Restart</Button> }
+                    { this.canRestart && <Button fluid primary onClick={this.handleRestart}>Restart</Button> }
                 </div>
             </div>
         );
