@@ -12,7 +12,6 @@ import { ObservableGame } from "observable-game";
 import { leaderboardEnabled } from "utils";
 import * as css from "./game-over.scss";
 import { Button, Input } from "semantic-ui-react";
-import { NetworkingMode } from "types";
 
 const cx = classNames.bind(css);
 

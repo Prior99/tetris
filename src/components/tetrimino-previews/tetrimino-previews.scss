@@ -1,3 +1,20 @@
 .tetriminoPreviews {
+    display: flex;
+    flex-direction: column;
     margin: 0 0 0 10px !important;
+
+    > * {
+        height: 110px;
+        width: 110px;
+        margin: 5px 0 !important;
+
+        &:first-child {
+            margin-top: 0 !important;
+        }
+
+        @media (min-height: 1280px) {
+            height: 220px;
+            width: 220px;
+        }
+    }
 }

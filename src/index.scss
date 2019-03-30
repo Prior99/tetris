@@ -5,6 +5,14 @@
         font-family: hackregular;
     }
 
+    body, html {
+        font-size: 14px !important;
+        @media (min-height: 1280px) {
+            font-size: 28px !important;
+        }
+    }
+
+
     #root {
         height: 100%;
     }

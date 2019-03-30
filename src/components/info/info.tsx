@@ -4,8 +4,11 @@ import { ObservableGame } from "observable-game";
 import { observer } from "mobx-react";
 import { IncomingGabage } from "../incoming-garbage";
 import { TetriminoPreview } from "../tetrimino-preview";
+import classNames from "classnames/bind";
 import * as css from "./info.scss";
 import { Segment, Statistic } from "semantic-ui-react";
+
+const cx = classNames.bind(css);
 
 function prefix(str: string, value: string, width: number): string {
     while (str.length < width) {
@@ -23,7 +26,7 @@ export class Info extends React.Component {
             <div className={css.info}>
                 {
                     this.game.holdPiece && (
-                        <Segment className={css.infoItem}>
+                        <Segment className={cx("infoItem", "holdPiece")}>
                             <TetriminoPreview size={0.7} matrix={this.game.holdPiece} />
                         </Segment>
                     )
