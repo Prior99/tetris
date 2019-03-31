@@ -41,6 +41,10 @@ export class Connect extends React.Component {
         this.activeTab = activeIndex;
     }
 
+    private get nameValid() {
+        return this.ui.name.length > 0 && this.ui.name.length < 16;
+    }
+
     private get panes() {
         return [
             { menuItem: "Join" },
@@ -54,7 +58,7 @@ export class Connect extends React.Component {
                 <Segment>
                     <h1>Connect</h1>
                     <Form>
-                        <Form.Field>
+                        <Form.Field error={!this.nameValid}>
                             <label>Change name</label>
                             <Input value={this.ui.name} onChange={this.handleNameChange} />
                         </Form.Field>
@@ -71,13 +75,27 @@ export class Connect extends React.Component {
                                         <label>Join</label>
                                         <Input value={this.otherId} onChange={this.handleOtherIdChange} />
                                     </Form.Field>
-                                    <Form.Button primary fluid onClick={this.handleConnect}>Join</Form.Button>
+                                    <Form.Button
+                                        disabled={!this.nameValid}
+                                        primary
+                                        fluid
+                                        onClick={this.handleConnect}
+                                    >
+                                        Join
+                                    </Form.Button>
                                 </>
                             )
                         }
                         {
                             this.activeTab === 1 && (
-                                <Form.Button primary fluid onClick={this.handleHost}>Host</Form.Button>
+                                <Form.Button
+                                    disabled={!this.nameValid}
+                                    primary
+                                    fluid
+                                    onClick={this.handleHost}
+                                >
+                                    Host
+                                </Form.Button>
                             )
                         }
                         <Form.Button fluid onClick={this.handleBack}>Back</Form.Button>
