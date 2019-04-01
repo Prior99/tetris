@@ -1,4 +1,4 @@
-import { differenceInMilliseconds } from "date-fns";
+import { differenceInMilliseconds, addMilliseconds, differenceInSeconds } from "date-fns";
 import { component, inject } from "tsdi";
 import { GameOverReason, EffectInfo, Garbage, SoundsMode, GameParameters } from "types";
 import { Matrix, Vec2 } from "utils";
@@ -25,15 +25,11 @@ export class Game {
     public running = false;
     public serial: string;
     public parameters: GameParameters;
+    public paused = false;
+    public seconds = 0;
 
-    private timeStarted?: Date;
     private timeLastTick?: Date;
     private timeout: any;
-
-    public get seconds(): number {
-        if (!this.timeLastTick || !this.timeStarted) { return 0; }
-        return differenceInMilliseconds(this.timeLastTick, this.timeStarted) / 1000;
-    }
 
     public get tetriminoPreviews(): Matrix[] {
         if (!this.running || !this.shuffleBag) { return []; }
@@ -168,7 +164,7 @@ export class Game {
         this.input = new Input(this.gameState);
         this.running = true;
         this.sounds.setMode(SoundsMode.GAME);
-        this.timeStarted = new Date();
+        this.timeLastTick = new Date();
         this.tick();
         this.serial = Uuid.v4();
     }
@@ -177,30 +173,45 @@ export class Game {
         if (this.input === undefined) { throw new Error("Tried to stop game that wasn't fully initialized."); }
         clearTimeout(this.timeout);
         this.running = false;
-        this.timeStarted = undefined;
         this.timeLastTick = undefined;
         this.sounds.setMode(SoundsMode.MENU);
         this.input.disable();
     }
 
     private tick() {
-        if (!this.timeStarted) { throw new Error("Ticked but game was not started."); }
+        if (!this.timeLastTick) { throw new Error("Ticked but game was not started."); }
         if (!this.gameState || !this.input || !this.effectsController) {
             throw new Error("Tried to tick game that wasn't fully initialized.");
         }
-        const now = new Date();
-        const time = differenceInMilliseconds(now, this.timeStarted) / 1000;
-        if (time >= this.config.countdownSeconds) {
-            this.effectsController.tick(time);
-            this.input.tick(time - this.config.countdownSeconds);
-            this.gameState.tick(time);
+        if (!this.paused) {
+            const now = new Date();
+            const seconds = differenceInMilliseconds(now, this.timeLastTick) / 1000;
+            this.seconds += seconds;
+            this.timeLastTick = now;
         }
-        if (this.gameState.gameOver && time >= this.config.countdownSeconds) {
+        if (this.seconds >= this.config.countdownSeconds) {
+            this.effectsController.tick(this.seconds);
+            this.input.tick(this.seconds - this.config.countdownSeconds);
+            this.gameState.tick(this.seconds);
+        }
+        if (this.gameState.gameOver) {
             this.stop();
         } else {
             this.timeout = setTimeout(() => this.tick(), this.config.tickSpeed * 1000);
         }
-        this.timeLastTick = now;
+    }
+
+    public pause() {
+        if (!this.input) { throw new Error("Can't pause game that was not properly initialized."); }
+        this.paused = true;
+        this.input.disable();
+    }
+
+    public unpause() {
+        if (!this.input) { throw new Error("Can't unpause game that was not properly initialized."); }
+        this.paused = false;
+        this.timeLastTick = new Date();
+        this.input.enable();
     }
 
     public get incomingGarbage(): Garbage[] {

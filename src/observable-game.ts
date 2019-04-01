@@ -17,6 +17,7 @@ export class ObservableGame {
     @observable public gameMode?: GameMode;
     @observable public seconds: number;
     @observable public running = false;
+    @observable public paused = false;
     @observable.shallow public incomingGarbage: Garbage[] = [];
     @observable.shallow public tetriminoPreview: Matrix[] = [];
 
@@ -57,6 +58,7 @@ export class ObservableGame {
         this.level = this.game.level;
         this.gameMode = this.game.parameters.gameMode;
         this.seconds = this.game.seconds;
+        this.paused = this.game.paused;
         if (this.incomingGarbageChanged) {
             this.incomingGarbage = [ ...this.game.incomingGarbage ];
         }
@@ -65,18 +67,26 @@ export class ObservableGame {
         }
     }
 
-    public restart(parameters: GameParameters): void {
+    @bind public restart(parameters: GameParameters): void {
         this.game.restart(parameters);
     }
 
-    public start(parameters: GameParameters): void {
+    @bind public start(parameters: GameParameters): void {
         this.game.start(parameters);
         this.interval = setInterval(this.update, 100);
         this.update();
     }
 
-    public stop() {
+    @bind public stop() {
         this.game.stop();
         clearInterval(this.interval);
+    }
+
+    @bind public unpause() {
+        this.game.unpause();
+    }
+
+    @bind public pause() {
+        this.game.pause();
     }
 }

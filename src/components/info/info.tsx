@@ -7,6 +7,7 @@ import { TetriminoPreview } from "../tetrimino-preview";
 import classNames from "classnames/bind";
 import * as css from "./info.scss";
 import { Segment, Statistic } from "semantic-ui-react";
+import { computed } from "mobx";
 
 const cx = classNames.bind(css);
 
@@ -17,9 +18,20 @@ function prefix(str: string, value: string, width: number): string {
     return str;
 }
 
+function formatSeconds(time: number) {
+    const ms = (Math.floor((time - Math.floor(time)) * 1000) / 1000) * 1000;
+    const s = Math.floor(time) % 60;
+    const m = Math.floor((time - s) / 60);
+    return `${prefix(m.toString(), "0", 3)}:${prefix(s.toString(), "0", 2)}.${prefix(ms.toString(), "0", 3)}`;
+}
+
 @external @observer
 export class Info extends React.Component {
     @inject private game: ObservableGame;
+
+    @computed private get time() {
+        return formatSeconds(this.game.seconds);
+    }
 
     public render() {
         return (
@@ -47,6 +59,12 @@ export class Info extends React.Component {
                     <Statistic size="mini">
                         <Statistic.Label>Level</Statistic.Label>
                         <Statistic.Value>{this.game.level}</Statistic.Value>
+                    </Statistic>
+                </Segment>
+                <Segment className={css.infoItem}>
+                    <Statistic size="mini">
+                        <Statistic.Label>Time</Statistic.Label>
+                        <Statistic.Value>{this.time}</Statistic.Value>
                     </Statistic>
                 </Segment>
                 {

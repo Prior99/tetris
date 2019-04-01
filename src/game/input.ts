@@ -23,8 +23,7 @@ export class Input {
     private timeCurrent = 0;
 
     constructor(private gameState: GameState) {
-        window.addEventListener("keyup", this.handleKeyUp);
-        window.addEventListener("keydown", this.handleKeyDown);
+        this.enable();
     }
 
     private keyState(timePressed: number) {
@@ -33,6 +32,11 @@ export class Input {
             initialFired: false,
             nextRepeat: timePressed + this.config.initialInputTimeout,
         };
+    }
+
+    public enable() {
+        window.addEventListener("keyup", this.handleKeyUp);
+        window.addEventListener("keydown", this.handleKeyDown);
     }
 
     public disable() {

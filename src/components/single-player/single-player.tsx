@@ -1,4 +1,5 @@
 import * as React from "react";
+import { History } from "history";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
@@ -11,7 +12,9 @@ import { GameOver } from "../game-over";
 import { Info } from "../info";
 import * as css from "./single-player.scss";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
-import { MenuContainer } from "components/menu-container";
+import { MenuContainer } from "../menu-container";
+import { PauseMenu } from "../pause-menu";
+import { bind } from "lodash-decorators";
 
 function winningConditionFromString(condition: WinningConditionType, secondsOrLives: string): WinningCondition {
     switch (condition) {
@@ -50,12 +53,26 @@ interface SinglePlayerProps {
 export class SinglePlayer extends React.Component<SinglePlayerProps> {
     @inject private observableGame: ObservableGame;
     @inject private ui: UI;
+    @inject("History") private history: History;
 
     @observable private loading = true;
 
     @initialize protected initialize() {
         this.observableGame.start({ ...this.ui.parameters, ...this.parameters });
         this.loading = false;
+    }
+
+    public componentDidMount() {
+        window.addEventListener("keydown", this.keyDown);
+    }
+
+    public componentWillUnmount() {
+        window.removeEventListener("keydown", this.keyDown);
+    }
+
+    @bind private keyDown(evt: KeyboardEvent) {
+        if (evt.key !== "Escape") { return; }
+        this.observableGame.pause();
     }
 
     private get parameters(): Partial<GameParameters> {
@@ -76,6 +93,11 @@ export class SinglePlayer extends React.Component<SinglePlayerProps> {
         };
     }
 
+    @bind private exit() {
+        this.observableGame.stop();
+        this.history.push("/");
+    }
+
     public render() {
         if (this.loading) {
             return (
@@ -93,6 +115,11 @@ export class SinglePlayer extends React.Component<SinglePlayerProps> {
                     </Segment>
                     <TetriminoPreviews />
                 </div>
+                <PauseMenu
+                    open={this.observableGame.paused}
+                    onResume={this.observableGame.unpause}
+                    onResign={this.exit}
+                />
             </MenuContainer>
         );
     }
