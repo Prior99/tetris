@@ -1,5 +1,6 @@
 import { component } from "tsdi";
 import { observable, computed } from "mobx";
+import { bind } from "lodash-decorators";
 import { GameParameters, NetworkingMode, RemoteUser, ChatMessage } from "types";
 import { Peer } from "./peer";
 import { Host } from "./host";
@@ -23,7 +24,7 @@ export class Networking {
         this.chat = new Chat();
     }
 
-    public async host(name: string) {
+    @bind public async host(name: string) {
         this.initialize();
         this.mode = NetworkingMode.HOST;
         const host = new Host(this.users!, this.chat!, this.networkGame!, name);
@@ -31,7 +32,7 @@ export class Networking {
         this.peer = host;
     }
 
-    public async client(hostId: string, name: string) {
+    @bind public async client(hostId: string, name: string) {
         this.initialize();
         this.mode = NetworkingMode.CLIENT;
         const client = new Client(this.users!, this.chat!, this.networkGame!, hostId, name);
@@ -39,26 +40,26 @@ export class Networking {
         this.peer = client;
     }
 
-    public async close() {
+    @bind public async close() {
         this.mode = NetworkingMode.DISCONNECTED;
         this.peer.close();
     }
 
-    public startGame() {
+    @bind public startGame() {
         if (this.mode !== NetworkingMode.HOST) { return; }
         (this.peer as Host).sendStartGame();
     }
 
-    public restartGame() {
+    @bind public restartGame() {
         if (this.mode !== NetworkingMode.HOST) { return; }
         (this.peer as Host).sendRestartGame();
     }
 
-    public sendChatMessage(text: string) {
+    @bind public sendChatMessage(text: string) {
         this.peer.sendChatMessage(text);
     }
 
-    public userById(id: string): RemoteUser | undefined {
+    @bind public userById(id: string): RemoteUser | undefined {
         return this.users.byId(id);
     }
 
@@ -82,11 +83,11 @@ export class Networking {
         return this.mode !== NetworkingMode.DISCONNECTED;
     }
 
-    public playfieldForUser(userId: string) {
+    @bind public playfieldForUser(userId: string) {
         return this.networkGame.playfieldForUser(userId);
     }
 
-    public stateForUser(userId: string) {
+    @bind public stateForUser(userId: string) {
         return this.networkGame.stateForUser(userId);
     }
 
@@ -111,30 +112,30 @@ export class Networking {
         return this.networkGame.parameters;
     }
 
-    public changeParameters(parameters: GameParameters) {
+    @bind public changeParameters(parameters: GameParameters) {
         if (this.isHost) { return; }
         this.networkGame.parameters = parameters;
         (this.peer as Host).sendParameterChange(parameters);
     }
 
-    public get isWinner(): boolean {
+    @computed public get isWinner(): boolean {
         if (!this.currentWinners) { return false; }
         return this.currentWinners.includes(this.ownId!);
     }
 
-    public get currentWinners(): string[] | undefined {
+    @computed public get currentWinners(): string[] | undefined {
         return this.networkGame.currentWinners;
     }
 
-    public get scoreboard() {
+    @computed public get scoreboard() {
         return this.networkGame.scoreboard;
     }
 
-    public pause() {
+    @bind public pause() {
         this.peer.sendPause();
     }
 
-    public unpause() {
+    @bind public unpause() {
         this.peer.sendUnpause();
     }
 }
