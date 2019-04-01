@@ -6,8 +6,7 @@ import { UI } from "ui";
 import { AudioHit } from "resources";
 import { Sounds } from "sounds";
 import { bind } from "lodash-decorators";
-import { MenuContainer } from "components/menu-container";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 
 @external @observer
 export class SettingsForm extends React.Component {

@@ -2,13 +2,9 @@ import * as React from "react";
 import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
 import { History } from "history";
-import { Slider } from "react-semantic-ui-range";
-import { UI } from "ui";
-import { AudioHit } from "resources";
-import { Sounds } from "sounds";
 import { bind } from "lodash-decorators";
 import { MenuContainer } from "components/menu-container";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Segment, Button } from "semantic-ui-react";
 import { SettingsForm } from "../settings-form";
 
 @external @observer
