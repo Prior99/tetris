@@ -44,12 +44,12 @@ export class Networking {
         this.peer.close();
     }
 
-    public sendStartGame() {
+    public startGame() {
         if (this.mode !== NetworkingMode.HOST) { return; }
         (this.peer as Host).sendStartGame();
     }
 
-    public sendRestartGame() {
+    public restartGame() {
         if (this.mode !== NetworkingMode.HOST) { return; }
         (this.peer as Host).sendRestartGame();
     }
@@ -112,7 +112,7 @@ export class Networking {
     }
 
     public changeParameters(parameters: GameParameters) {
-        if (this.mode !== NetworkingMode.HOST) { return; }
+        if (this.isHost) { return; }
         this.networkGame.parameters = parameters;
         (this.peer as Host).sendParameterChange(parameters);
     }
@@ -128,5 +128,13 @@ export class Networking {
 
     public get scoreboard() {
         return this.networkGame.scoreboard;
+    }
+
+    public pause() {
+        this.peer.sendPause();
+    }
+
+    public unpause() {
+        this.peer.sendUnpause();
     }
 }

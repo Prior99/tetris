@@ -3,6 +3,7 @@ import { History } from "history";
 import { external, inject, initialize } from "tsdi";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
+import { bind } from "lodash-decorators";
 import { ObservableGame } from "observable-game";
 import { WinningCondition, WinningConditionType, GarbageMode, GameParameters } from "types";
 import { UI } from "ui";
@@ -14,7 +15,6 @@ import * as css from "./single-player.scss";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import { MenuContainer } from "../menu-container";
 import { PauseMenu } from "../pause-menu";
-import { bind } from "lodash-decorators";
 
 function winningConditionFromString(condition: WinningConditionType, secondsOrLives: string): WinningCondition {
     switch (condition) {

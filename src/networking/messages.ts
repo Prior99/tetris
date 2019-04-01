@@ -11,6 +11,8 @@ export enum MessageType {
     RESTART,
     GARBAGE,
     PARAMETERS_CHANGE,
+    PAUSE,
+    UNPAUSE,
 }
 
 export interface MessageHello {
@@ -67,6 +69,14 @@ export interface MessageUpdatePlayfield {
     state: RemoteGameState;
 }
 
+export interface MessagePause {
+    message: MessageType.PAUSE;
+}
+
+export interface MessageUnpause {
+    message: MessageType.UNPAUSE;
+}
+
 export type Message = MessageHello |
     MessageStart |
     MessageWelcome |
@@ -75,4 +85,6 @@ export type Message = MessageHello |
     MessageChatMessage |
     MessageRestart |
     MessageGarbage |
-    MessageParametersChange;
+    MessageParametersChange |
+    MessagePause |
+    MessageUnpause;

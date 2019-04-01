@@ -31,7 +31,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
 
     @bind private handleRestart() {
         if (this.props.multiPlayer) {
-            this.networking.sendRestartGame();
+            this.networking.restartGame();
             return;
         }
         this.ui.reset();

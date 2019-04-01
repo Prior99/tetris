@@ -66,7 +66,7 @@ export class Lobby extends React.Component<LobbyProps> {
     }
 
     @bind private handleStart() {
-        this.networking.sendStartGame();
+        this.networking.startGame();
     }
 
     @computed private get hasClipboardApi() {

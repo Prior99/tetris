@@ -44,6 +44,16 @@ export abstract class Peer {
         });
     }
 
+    public sendPause() {
+        this.send({ message: MessageType.PAUSE });
+        this.pauseNetworkGame();
+    }
+
+    public sendUnpause() {
+        this.send({ message: MessageType.PAUSE });
+        this.unpauseNetworkGame();
+    }
+
     public async close(): Promise<void> {
         this.stopNetworkGame();
         this.id = undefined;
@@ -107,6 +117,14 @@ export abstract class Peer {
                 }
                 break;
             }
+            case MessageType.PAUSE: {
+                this.pauseNetworkGame();
+                break;
+            }
+            case MessageType.UNPAUSE: {
+                this.unpauseNetworkGame();
+                break;
+            }
         }
     }
 
@@ -132,6 +150,14 @@ export abstract class Peer {
         this.observableGame.stop();
         if (!this.timeout) { return; }
         clearTimeout(this.timeout);
+    }
+
+    protected pauseNetworkGame() {
+        this.observableGame.pause();
+    }
+
+    protected unpauseNetworkGame() {
+        this.observableGame.pause();
     }
 
     protected tick() {
