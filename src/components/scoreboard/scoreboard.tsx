@@ -2,7 +2,7 @@ import { external, inject } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Networking } from "networking";
-import { Segment, Table } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 
 @external @observer
 export class Scoreboard extends React.Component {

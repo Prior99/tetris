@@ -2,7 +2,7 @@ import { external, inject } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Networking } from "networking";
-import { Button, Segment, Table } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 import { Scoreboard } from "../scoreboard";
 import { SettingsForm } from "components/settings-form";
 import * as css from "./pause-menu.scss";

@@ -31,6 +31,7 @@ import { speed } from "./speed";
 import { Tetrimino } from "./tetriminos";
 import { Playfield } from "./playfield";
 import { ShuffleBag } from "./shuffle-bag";
+import { Statistics } from "./statistics";
 
 function calculateGarbage(lines: number): number {
     switch (lines) {
@@ -73,6 +74,7 @@ export class GameState {
         private playfield: Playfield,
         private effects: Effects,
         private parameters: GameParameters,
+        private statistics: Statistics,
     ) {
         this.newTetrimino();
     }
@@ -360,6 +362,7 @@ export class GameState {
                 this.playScoreSound(count);
             }
             this.scoreLineCount(count);
+            this.statistics.reportLines(count);
             this.createOutgoingGarbage(count);
             this.checkClearGarbageGameOver();
             offsets.forEach(y => this.effects.report({ effect: EffectType.LINE_CLEARED, y }));
@@ -370,6 +373,7 @@ export class GameState {
         this.newTetrimino();
         this.timeLastLock = this.timeCurrent;
         this.timeLastHit = undefined;
+        this.statistics.reportLock();
     }
 
     public get timeSinceLastHit(): number | undefined {

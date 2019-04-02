@@ -1,8 +1,6 @@
-import { inject } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
-import { Segment, Table } from "semantic-ui-react";
-import { Scoreboard } from "../scoreboard";
+import { Segment } from "semantic-ui-react";
 
 @observer
 export class ScoreboardMenu extends React.Component {

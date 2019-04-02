@@ -1,4 +1,4 @@
-import { differenceInMilliseconds, addMilliseconds, differenceInSeconds } from "date-fns";
+import { differenceInMilliseconds } from "date-fns";
 import { component, inject } from "tsdi";
 import { GameOverReason, EffectInfo, Garbage, SoundsMode, GameParameters } from "types";
 import { Matrix, Vec2 } from "utils";
@@ -9,6 +9,7 @@ import { ShuffleBag } from "./shuffle-bag";
 import { Input } from "./input";
 import { Effects } from "./effects";
 import { Playfield } from "./playfield";
+import { Statistics } from "./statistics";
 import * as Uuid from "uuid";
 
 @component
@@ -21,6 +22,7 @@ export class Game {
     private shuffleBag?: ShuffleBag;
     private effectsController?: Effects;
     private playfield?: Playfield;
+    private statistics?: Statistics;
 
     public running = false;
     public serial: string;
@@ -160,7 +162,14 @@ export class Game {
         this.playfield = new Playfield(parameters);
         this.shuffleBag = new ShuffleBag(this.playfield, parameters.seed);
         this.effectsController = new Effects();
-        this.gameState = new GameState(this.shuffleBag, this.playfield, this.effectsController, this.parameters);
+        this.statistics = new Statistics();
+        this.gameState = new GameState(
+            this.shuffleBag,
+            this.playfield,
+            this.effectsController,
+            this.parameters,
+            this.statistics,
+        );
         this.input = new Input(this.gameState);
         this.running = true;
         this.sounds.setMode(SoundsMode.GAME);
@@ -180,7 +189,7 @@ export class Game {
 
     private tick() {
         if (!this.timeLastTick) { throw new Error("Ticked but game was not started."); }
-        if (!this.gameState || !this.input || !this.effectsController) {
+        if (!this.gameState || !this.input || !this.effectsController || !this.statistics) {
             throw new Error("Tried to tick game that wasn't fully initialized.");
         }
         if (!this.paused) {
@@ -193,6 +202,7 @@ export class Game {
             this.effectsController.tick(this.seconds);
             this.input.tick(this.seconds - this.config.countdownSeconds);
             this.gameState.tick(this.seconds);
+            this.statistics.tick(this.seconds);
         }
         if (this.gameState.gameOver) {
             this.stop();

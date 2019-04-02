@@ -4,6 +4,7 @@ import { GameState } from "../game-state";
 import { ShuffleBag } from "../shuffle-bag";
 import { Playfield } from "../playfield";
 import { Effects } from "../effects";
+import { Statistics } from "../statistics";
 
 describe("GameState", () => {
     let shuffleBag: ShuffleBag;
@@ -18,7 +19,7 @@ describe("GameState", () => {
         playfield = new Playfield(parameters);
         shuffleBag = new ShuffleBag(playfield, parameters.seed);
         effects = new Effects();
-        gameState = new GameState(shuffleBag, playfield, effects, parameters);
+        gameState = new GameState(shuffleBag, playfield, effects, parameters, new Statistics());
     });
 
     describe("initially", () => {
