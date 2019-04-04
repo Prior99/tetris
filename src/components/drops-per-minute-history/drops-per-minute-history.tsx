@@ -47,15 +47,26 @@ export class DropsPerMinuteHistory extends React.Component {
         const dataAmount = Math.min(maxDataAmount, pastIntervals.length);
         const stats = pastIntervals.slice(pastIntervals.length - dataAmount, pastIntervals.length);
         const yScaleFactor = canvas.height / this.config.maxLocksPerMinute;
-        ctx.lineWidth = resolution;
+        ctx.strokeStyle = "rgba(34, 36, 38, .15)";
+        for (let x = 0; x < canvas.width; x += canvas.width / 10) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+        for (let y = canvas.height; y > 0; y -= canvas.height / 4) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
         ctx.beginPath();
         ctx.strokeStyle = "rgba(50, 32, 213)";
         for (let index = 0; index < stats.length; ++index) {
             const x = index * resolution + (maxDataAmount - dataAmount) * resolution;
-            const y = canvas.height - Math.ceil(yScaleFactor * stats[index].locksPerMinute);
+            const y = Math.max(1, canvas.height - Math.ceil(yScaleFactor * stats[index].locksPerMinute));
             if (index === 0) { ctx.moveTo(x, y); }
             ctx.lineTo(x, y);
-            // ctx.fillRect(x, canvas.height - y, resolution, y);
         }
         ctx.stroke();
         ctx.beginPath();
@@ -65,7 +76,6 @@ export class DropsPerMinuteHistory extends React.Component {
             const y = canvas.height - Math.ceil(yScaleFactor * stats[index].linesPerMinute);
             if (index === 0) { ctx.moveTo(x, y); }
             ctx.lineTo(x, y);
-            // ctx.fillRect(x, canvas.height - y, resolution, y);
         }
         ctx.stroke();
         window.requestAnimationFrame(this.renderCanvas);
@@ -76,6 +86,7 @@ export class DropsPerMinuteHistory extends React.Component {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d")!;
         this.running = true;
+        this.rescale();
         this.renderCanvas();
     }
 
