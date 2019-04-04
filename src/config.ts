@@ -14,7 +14,8 @@ export class Config {
     public garbageTimeout = 4;
     public lockTime = 0.5;
     public countdownSeconds = 3;
-    public statisticsInterval = 5;
+    public statisticsInterval = 2;
+    public maxLocksPerMinute = 60 * 4;
 
     public get visibleRatio() {
         return this.visibleSize.x / this.visibleSize.y;

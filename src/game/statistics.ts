@@ -1,10 +1,10 @@
 import { Interval } from "utils";
 
 export class Statistics {
-    private pastIntervals: Interval[] = [];
+    public pastIntervals: Interval[] = [];
     private nextInterval = new Interval(0);
     private currentTime = 0;
-    private overallInterval = new Interval(0);
+    public overallInterval = new Interval(0);
 
     public tick(seconds: number) {
         this.nextInterval.addTime(seconds - this.currentTime);

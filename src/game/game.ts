@@ -22,8 +22,8 @@ export class Game {
     private shuffleBag?: ShuffleBag;
     private effectsController?: Effects;
     private playfield?: Playfield;
-    private statistics?: Statistics;
 
+    public statistics?: Statistics;
     public running = false;
     public serial: string;
     public parameters: GameParameters;

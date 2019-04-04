@@ -8,6 +8,7 @@ import classNames from "classnames/bind";
 import * as css from "./info.scss";
 import { Segment, Statistic } from "semantic-ui-react";
 import { computed } from "mobx";
+import { DropsPerMinuteHistory } from "../drops-per-minute-history";
 
 const cx = classNames.bind(css);
 
@@ -66,6 +67,9 @@ export class Info extends React.Component {
                         <Statistic.Label>Time</Statistic.Label>
                         <Statistic.Value>{this.time}</Statistic.Value>
                     </Statistic>
+                </Segment>
+                <Segment className={css.infoItem} style={{ height: 100 }}>
+                    <DropsPerMinuteHistory />
                 </Segment>
                 {
                     this.game.incomingGarbage.length > 0 && (
