@@ -34,19 +34,9 @@ export class DropsPerMinuteHistory extends React.Component {
         this.canvas.height = rect.height;
     }
 
-    @bind private renderCanvas() {
-        if (!this.running) { return; }
-        const { canvas, ctx, game } = this;
-        if (!canvas || !ctx || !game.statistics) {
-            window.requestAnimationFrame(this.renderCanvas);
-            return;
-        }
-        const { pastIntervals } = game.statistics;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const maxDataAmount = canvas.width / resolution;
-        const dataAmount = Math.min(maxDataAmount, pastIntervals.length);
-        const stats = pastIntervals.slice(pastIntervals.length - dataAmount, pastIntervals.length);
-        const yScaleFactor = canvas.height / this.config.maxLocksPerMinute;
+    private renderGrid() {
+        const { canvas, ctx } = this;
+        if (!canvas || !ctx) { return; }
         ctx.strokeStyle = "rgba(34, 36, 38, .15)";
         for (let x = 0; x < canvas.width; x += canvas.width / 10) {
             ctx.beginPath();
@@ -60,24 +50,68 @@ export class DropsPerMinuteHistory extends React.Component {
             ctx.lineTo(canvas.width, y);
             ctx.stroke();
         }
+    }
+
+    private get maxDataAmount() {
+        return this.canvas ? this.canvas.width / resolution : 0;
+    }
+
+    private get dataAmount() {
+        return this.game.statistics ? Math.min(this.maxDataAmount, this.game.statistics.pastIntervals.length) : 0;
+    }
+
+    private get stats() {
+        const { statistics } = this.game;
+        if (!statistics) { return []; }
+        const { pastIntervals } = statistics;
+        return pastIntervals.slice(pastIntervals.length - this.dataAmount, pastIntervals.length);
+    }
+
+    private get yScaleFactor() {
+        return this.canvas ? this.canvas.height / this.config.maxLocksPerMinute : 0;
+    }
+
+    private renderDropsPerMinute() {
+        const { canvas, ctx } = this;
+        if (!canvas || !ctx) { return; }
+        const { stats } = this;
         ctx.beginPath();
         ctx.strokeStyle = "rgba(50, 32, 213)";
         for (let index = 0; index < stats.length; ++index) {
-            const x = index * resolution + (maxDataAmount - dataAmount) * resolution;
-            const y = Math.max(1, canvas.height - Math.ceil(yScaleFactor * stats[index].locksPerMinute));
+            const x = index * resolution + (this.maxDataAmount - this.dataAmount) * resolution;
+            const y = Math.max(1, canvas.height - Math.ceil(this.yScaleFactor * stats[index].locksPerMinute));
             if (index === 0) { ctx.moveTo(x, y); }
             ctx.lineTo(x, y);
         }
         ctx.stroke();
+    }
+
+    private renderLinesPerMinute() {
+        const { canvas, ctx } = this;
+        if (!canvas || !ctx) { return; }
+        const { stats } = this;
         ctx.beginPath();
         ctx.strokeStyle = "rgb(221, 32, 52)";
         for (let index = 0; index < stats.length; ++index) {
-            const x = index * resolution + (maxDataAmount - dataAmount) * resolution;
-            const y = canvas.height - Math.ceil(yScaleFactor * stats[index].linesPerMinute);
+            const x = index * resolution + (this.maxDataAmount - this.dataAmount) * resolution;
+            const y = canvas.height - Math.ceil(this.yScaleFactor * stats[index].linesPerMinute);
             if (index === 0) { ctx.moveTo(x, y); }
             ctx.lineTo(x, y);
         }
         ctx.stroke();
+    }
+
+    @bind private renderCanvas() {
+        if (!this.running) { return; }
+        const { canvas, ctx, game } = this;
+        if (!canvas || !ctx || !game.statistics) {
+            window.requestAnimationFrame(this.renderCanvas);
+            return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.renderGrid();
+        this.renderDropsPerMinute();
+        this.renderLinesPerMinute();
         window.requestAnimationFrame(this.renderCanvas);
     }
 
