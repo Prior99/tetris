@@ -50,7 +50,7 @@ export abstract class Peer {
     }
 
     public sendUnpause() {
-        this.send({ message: MessageType.PAUSE });
+        this.send({ message: MessageType.UNPAUSE });
         this.unpauseNetworkGame();
     }
 
@@ -157,7 +157,7 @@ export abstract class Peer {
     }
 
     protected unpauseNetworkGame() {
-        this.observableGame.pause();
+        this.observableGame.unpause();
     }
 
     protected tick() {

@@ -174,6 +174,8 @@ export class Game {
         this.running = true;
         this.sounds.setMode(SoundsMode.GAME);
         this.timeLastTick = new Date();
+        this.paused = false;
+        this.seconds = 0;
         this.tick();
         this.serial = Uuid.v4();
     }
