@@ -68,7 +68,7 @@ export class Info extends React.Component {
                         <Statistic.Value>{this.time}</Statistic.Value>
                     </Statistic>
                 </Segment>
-                <Segment className={css.infoItem} style={{ height: 100 }}>
+                <Segment className={css.infoItem} style={{ height: 80 }}>
                     <DropsPerMinuteHistory />
                 </Segment>
                 {

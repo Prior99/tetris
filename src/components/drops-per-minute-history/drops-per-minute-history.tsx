@@ -71,12 +71,16 @@ export class DropsPerMinuteHistory extends React.Component {
         return this.canvas ? this.canvas.height / this.config.maxLocksPerMinute : 0;
     }
 
+    private get dropsPerMinute() {
+        return this.game.statistics ? this.game.statistics.currentLocksPerMinute : 0;
+    }
+
     private renderDropsPerMinute() {
         const { canvas, ctx } = this;
         if (!canvas || !ctx) { return; }
         const { stats } = this;
         ctx.beginPath();
-        ctx.strokeStyle = "rgba(50, 32, 213)";
+        ctx.strokeStyle = "rgb(50, 32, 213)";
         for (let index = 0; index < stats.length; ++index) {
             const x = index * resolution + (this.maxDataAmount - this.dataAmount) * resolution;
             const y = Math.max(1, canvas.height - Math.ceil(this.yScaleFactor * stats[index].locksPerMinute));
@@ -101,6 +105,15 @@ export class DropsPerMinuteHistory extends React.Component {
         ctx.stroke();
     }
 
+    private renderText() {
+        const { canvas, ctx } = this;
+        if (!canvas || !ctx) { return; }
+        ctx.fillStyle = "rgba(34, 36, 38, .45)";
+        ctx.font = `${canvas.height - 20}px Lato`;
+        ctx.textAlign = "center";
+        ctx.fillText(`${Math.floor(this.dropsPerMinute)}`, canvas.width / 2, canvas.height - 20);
+    }
+
     @bind private renderCanvas() {
         if (!this.running) { return; }
         const { canvas, ctx, game } = this;
@@ -110,6 +123,7 @@ export class DropsPerMinuteHistory extends React.Component {
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.renderGrid();
+        this.renderText();
         this.renderDropsPerMinute();
         this.renderLinesPerMinute();
         window.requestAnimationFrame(this.renderCanvas);

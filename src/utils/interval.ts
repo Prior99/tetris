@@ -3,9 +3,13 @@ import { Config } from "config";
 
 @external
 export class Interval {
+    public static combine(...intervals: Interval[]): Interval {
+        return intervals.reduce((last, current) => last.combineWith(current));
+    }
+
     @inject private config: Config;
 
-    private time = 0;
+    public time = 0;
     public lineDistribution = new Map<number, number>([
         [1, 0],
         [2, 0],
@@ -39,10 +43,22 @@ export class Interval {
     }
 
     public get linesPerMinute() {
+        if (this.time === 0) { return 0; }
         return (this.lines / this.time) * 60;
     }
 
     public get locksPerMinute() {
+        if (this.time === 0) { return 0; }
         return (this.locks / this.time) * 60;
+    }
+
+    public combineWith(other: Interval): Interval {
+        const result = new Interval(Math.min(this.start, other.start));
+        result.time = this.time + other.time;
+        result.locks = this.locks + other.locks;
+        this.lineDistribution.forEach((value, index) => {
+            result.lineDistribution.set(index, value + other.lineDistribution.get(1)!);
+        });
+        return result;
     }
 }

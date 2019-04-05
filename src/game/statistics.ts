@@ -29,4 +29,14 @@ export class Statistics {
         this.nextInterval.reportLines(count);
         this.overallInterval.reportLines(count);
     }
+
+    public lastN(n: number) {
+        const intervals = [...this.pastIntervals, this.nextInterval];
+        const result = Interval.combine(...intervals.slice(intervals.length - n, intervals.length));
+        return result;
+    }
+
+    public get currentLocksPerMinute() {
+        return this.overallInterval.locksPerMinute;
+    }
 }
