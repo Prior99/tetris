@@ -49,6 +49,7 @@ export class ObservableGame {
         if (!this.game.running) {
             this.running = false;
             this.gameOver = true;
+            this.updateIntervals();
             return;
         }
         this.running = this.game.running;
