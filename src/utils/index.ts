@@ -6,3 +6,5 @@ export * from "./matrix-initializer";
 export * from "./create-canvas";
 export * from "./leaderboard-enabled";
 export * from "./interval";
+export * from "./format-seconds";
+export * from "./chart-colors";

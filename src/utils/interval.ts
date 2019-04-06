@@ -17,6 +17,7 @@ export class Interval {
         [4, 0],
     ]);
     public locks = 0;
+    public score = 0;
 
     constructor(public start: number) {}
 

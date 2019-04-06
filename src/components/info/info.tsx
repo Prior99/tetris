@@ -1,30 +1,17 @@
 import * as React from "react";
 import { external, inject } from "tsdi";
-import { ObservableGame } from "observable-game";
+import { Segment, Statistic } from "semantic-ui-react";
+import classNames from "classnames/bind";
+import { computed } from "mobx";
 import { observer } from "mobx-react";
+import { ObservableGame } from "observable-game";
+import { formatSeconds, prefix } from "utils";
 import { IncomingGabage } from "../incoming-garbage";
 import { TetriminoPreview } from "../tetrimino-preview";
-import classNames from "classnames/bind";
 import * as css from "./info.scss";
-import { Segment, Statistic } from "semantic-ui-react";
-import { computed } from "mobx";
 import { DropsPerMinuteHistory } from "../drops-per-minute-history";
 
 const cx = classNames.bind(css);
-
-function prefix(str: string, value: string, width: number): string {
-    while (str.length < width) {
-        str = `${value}${str}`;
-    }
-    return str;
-}
-
-function formatSeconds(time: number) {
-    const ms = (Math.floor((time - Math.floor(time)) * 1000) / 1000) * 1000;
-    const s = Math.floor(time) % 60;
-    const m = Math.floor((time - s) / 60);
-    return `${prefix(m.toString(), "0", 3)}:${prefix(s.toString(), "0", 2)}.${prefix(ms.toString(), "0", 3)}`;
-}
 
 @external @observer
 export class Info extends React.Component {

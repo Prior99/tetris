@@ -16,6 +16,10 @@ export class Statistics {
         }
     }
 
+    public reportScore(score: number) {
+        this.nextInterval.score += score;
+    }
+
     public reportLock() {
         this.nextInterval.reportLock();
         this.overallInterval.reportLock();

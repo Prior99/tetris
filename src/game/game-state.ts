@@ -391,7 +391,9 @@ export class GameState {
     }
 
     public awardScore(action: ScoreAction) {
-        this.score += scorePointValue(action);
+        const value = scorePointValue(action);
+        this.score += value;
+        this.statistics.reportScore(value);
     }
 
     public scoreLineCount(count: number) {

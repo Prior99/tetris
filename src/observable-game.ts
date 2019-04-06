@@ -3,7 +3,7 @@ import { observable, computed } from "mobx";
 import { bind } from "lodash-decorators";
 import { Game } from "game";
 import { GameMode, Garbage, GameParameters } from "types";
-import { Matrix } from "utils";
+import { Matrix, Interval } from "utils";
 
 @component @external
 export class ObservableGame {
@@ -18,6 +18,7 @@ export class ObservableGame {
     @observable public seconds: number;
     @observable public running = false;
     @observable public paused = false;
+    @observable.shallow public intervals: Interval[] = [];
     @observable.shallow public incomingGarbage: Garbage[] = [];
     @observable.shallow public tetriminoPreview: Matrix[] = [];
 
@@ -80,6 +81,7 @@ export class ObservableGame {
     @bind public stop() {
         this.game.stop();
         clearInterval(this.interval);
+        this.updateIntervals();
     }
 
     @bind public unpause() {
@@ -88,5 +90,11 @@ export class ObservableGame {
 
     @bind public pause() {
         this.game.pause();
+        this.updateIntervals();
+    }
+
+    private updateIntervals() {
+        if (!this.game.statistics) { return; }
+        this.intervals = this.game.statistics.pastIntervals;
     }
 }
