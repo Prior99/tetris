@@ -7,6 +7,8 @@ import { observer } from "mobx-react";
 import { ChartScoreTime } from "../chart-score-time";
 import { ChartScoreTimeCumulative } from "../chart-score-time-cumulative";
 import { ChartDistributionTime } from "../chart-distribution-time";
+import { ChartSpeedTime } from "../chart-speed-time";
+import { ChartDistribution } from "../chart-distribution";
 
 @observer
 export class StatisticsMenu extends React.Component<{ intervals: Interval[] }> {
@@ -20,8 +22,8 @@ export class StatisticsMenu extends React.Component<{ intervals: Interval[] }> {
         return [
             { menuItem: "Score / Time (Cumulative)" },
             { menuItem: "Score / Time" },
-            { menuItem: "Combinations / Time" },
-            { menuItem: "Combinations" },
+            { menuItem: "Distribution / Time" },
+            { menuItem: "Distribution" },
             { menuItem: "Speed / Time" },
         ];
     }
@@ -35,8 +37,8 @@ export class StatisticsMenu extends React.Component<{ intervals: Interval[] }> {
             case 0: return <ChartScoreTimeCumulative intervals={this.props.intervals} />;
             case 1: return <ChartScoreTime intervals={this.props.intervals} />;
             case 2: return <ChartDistributionTime intervals={this.props.intervals} />;
-            // case 3: return <StatisticCombinations intervals={this.overall} />;
-            // case 4: return <StatisticScoreTimeCumulative intervals={this.props.intervals} />;
+            case 3: return <ChartDistribution overall={this.overall} />;
+            case 4: return <ChartSpeedTime intervals={this.props.intervals} />;
             default: return <></>;
         }
     }

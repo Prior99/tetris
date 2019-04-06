@@ -6,14 +6,14 @@ import { bind } from "lodash-decorators";
 import { Interval, formatSeconds, chartColors } from "utils";
 
 @observer
-export class ChartScoreTime extends React.Component<{ intervals: Interval[] }> {
+export class ChartSpeedTime extends React.Component<{ intervals: Interval[] }> {
     @bind private xAxisTickFormatter(index: number) {
         const interval = this.props.intervals[index];
         return formatSeconds(interval.start);
     }
 
     @computed public get data() {
-        return this.props.intervals.map(({ start, score }) => ({ start, score }));
+        return this.props.intervals.map(({ start, locksPerMinute }) => ({ start, speed: locksPerMinute }));
     }
 
     public render() {
@@ -28,7 +28,7 @@ export class ChartScoreTime extends React.Component<{ intervals: Interval[] }> {
                     <CartesianGrid strokeDasharray="1 3"/>
                     <Tooltip/>
                     <Legend />
-                    <Line type="monotone" dataKey="score" stroke={chartColors[0]} />
+                    <Line type="monotone" dataKey="score" stroke={chartColors[5]} />
                 </LineChart>
             </ResponsiveContainer>
 

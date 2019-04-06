@@ -1,1 +1,1 @@
-export * from "./chart-score-time";
+export * from "./chart-speed-time";

@@ -3,7 +3,8 @@ import { Config } from "config";
 
 @external
 export class Interval {
-    public static combine(...intervals: Interval[]): Interval {
+    public static combine(...intervals: Interval[]): Interval | undefined {
+        if (intervals.length === 0) { return; }
         return intervals.reduce((last, current) => last.combineWith(current));
     }
 
@@ -58,7 +59,7 @@ export class Interval {
         result.time = this.time + other.time;
         result.locks = this.locks + other.locks;
         this.lineDistribution.forEach((value, index) => {
-            result.lineDistribution.set(index, value + other.lineDistribution.get(1)!);
+            result.lineDistribution.set(index, value + other.lineDistribution.get(index)!);
         });
         return result;
     }
