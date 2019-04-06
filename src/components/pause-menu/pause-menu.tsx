@@ -8,7 +8,7 @@ import { Networking } from "networking";
 import { ObservableGame } from "observable-game";
 import { Scoreboard } from "../scoreboard";
 import { SettingsForm } from "../settings-form";
-import { StatisticsMenu } from "../statistics-menu";
+import { Statistics } from "../statistics";
 import * as css from "./pause-menu.scss";
 
 export interface PauseMenuProps {
@@ -44,7 +44,7 @@ export class PauseMenu extends React.Component<PauseMenuProps> {
                             Statistics
                         </Accordion.Title>
                         <Accordion.Content active={this.activeIndex === 1}>
-                            <StatisticsMenu intervals={this.observableGame.intervals} />
+                            <Statistics intervals={this.observableGame.intervals} />
                         </Accordion.Content>
                     </Accordion>
                     <Button.Group fluid>

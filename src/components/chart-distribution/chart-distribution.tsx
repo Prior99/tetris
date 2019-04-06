@@ -1,9 +1,9 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { computed, observable } from "mobx";
-import { ResponsiveContainer, PieChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Pie } from "recharts";
+import { PieChart, Pie } from "recharts";
 import { bind } from "lodash-decorators";
-import { Interval, formatSeconds, chartColors } from "utils";
+import { Interval, chartColors } from "utils";
 import { ActiveShape } from "../active-shape";
 
 function combinationToString(combination: number) {
@@ -16,6 +16,16 @@ function combinationToString(combination: number) {
     }
 }
 
+function combinationToColor(combination: number) {
+    switch (combination) {
+        case 1: return chartColors[2];
+        case 2: return chartColors[1];
+        case 3: return chartColors[3];
+        case 4: return chartColors[0];
+        default: return chartColors[4];
+    }
+}
+
 @observer
 export class ChartDistribution extends React.Component<{ overall: Interval | undefined }> {
     @observable private activeIndex = 0;
@@ -25,7 +35,8 @@ export class ChartDistribution extends React.Component<{ overall: Interval | und
         return Array.from(this.props.overall.lineDistribution.entries())
             .map(([combination, lines]) => ({
                 name: combinationToString(combination),
-                value: lines,
+                value: (lines || 0) * combination,
+                fill: combinationToColor(combination),
             }))
             .sort((a, b) => a.value - b.value);
     }
@@ -36,7 +47,7 @@ export class ChartDistribution extends React.Component<{ overall: Interval | und
 
     public render() {
         return (
-            <PieChart style={{ margin: "auto" }} width={500} height={300}>
+            <PieChart style={{ margin: "auto" }} width={500} height={350}>
                 <Pie
                     activeIndex={this.activeIndex}
                     activeShape={ActiveShape}

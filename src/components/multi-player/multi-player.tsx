@@ -16,6 +16,7 @@ import { TetriminoPreviews } from "../tetrimino-previews";
 import { GameCanvas } from "../game-canvas";
 import { Info } from "../info";
 import { RemoteGame } from "../remote-game";
+import { StatisticsMenu } from "../statistics-menu";
 import * as css from "./multi-player.scss";
 
 @external @observer
@@ -78,6 +79,7 @@ export class MultiPlayer extends React.Component {
                     onResume={this.networking.unpause}
                     onResign={this.exit}
                 />
+                <StatisticsMenu />
             </>
         );
     }

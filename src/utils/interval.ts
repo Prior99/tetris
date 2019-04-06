@@ -58,7 +58,7 @@ export class Interval {
         const result = new Interval(Math.min(this.start, other.start));
         result.time = this.time + other.time;
         result.locks = this.locks + other.locks;
-        this.lineDistribution.forEach((value, index) => {
+        Array.from(this.lineDistribution.entries()).forEach(([index, value]) => {
             result.lineDistribution.set(index, value + other.lineDistribution.get(index)!);
         });
         return result;

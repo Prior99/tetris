@@ -15,6 +15,7 @@ import * as css from "./single-player.scss";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import { MenuContainer } from "../menu-container";
 import { PauseMenu } from "../pause-menu";
+import { StatisticsMenu } from "../statistics-menu";
 
 function winningConditionFromString(condition: WinningConditionType, secondsOrLives: string): WinningCondition {
     switch (condition) {
@@ -121,6 +122,7 @@ export class SinglePlayer extends React.Component<SinglePlayerProps> {
                     onResume={this.observableGame.unpause}
                     onResign={this.exit}
                 />
+                <StatisticsMenu />
             </MenuContainer>
         );
     }

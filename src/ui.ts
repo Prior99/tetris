@@ -20,6 +20,7 @@ export class UI {
         levelUpDisabled: false,
         winningCondition: { condition: WinningConditionType.HIGHEST_SCORE_ONE_GAME },
     };
+    @observable public showStats = false;
 
     @initialize protected initialize() {
         const json = localStorage.getItem(localStorageIdentifier);
@@ -47,6 +48,7 @@ export class UI {
     public reset() {
         this.leaderboardSubmitted = false;
         this.parameters.seed = randomSeed();
+        this.showStats = false;
     }
 
     get name() {

@@ -15,10 +15,10 @@ export class ChartDistributionTime extends React.Component<{ intervals: Interval
     @computed public get data() {
         return this.props.intervals.map(({ start, lineDistribution }) => ({
             start,
-            tetris: lineDistribution.get(4),
-            triple: lineDistribution.get(3),
-            double: lineDistribution.get(2),
-            single: lineDistribution.get(1),
+            tetris: (lineDistribution.get(4) || 0) * 4,
+            triple: (lineDistribution.get(3) || 0) * 3,
+            double: (lineDistribution.get(2) || 0) * 2,
+            single: (lineDistribution.get(1) || 0) * 1,
          }));
     }
 

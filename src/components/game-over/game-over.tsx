@@ -47,6 +47,10 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
         this.leaderboardName = evt.currentTarget.value;
     }
 
+    @bind private handleStats() {
+        this.ui.showStats = true;
+    }
+
     @bind private handleBack() {
         this.observableGame.stop();
         this.history.push("/main-menu");
@@ -92,8 +96,9 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
                             />
                         )
                     }
-                    <Button fluid onClick={this.handleBack}>Back</Button>
+                    <Button color="yellow" onClick={this.handleStats}>Show Stats</Button>
                     { this.canRestart && <Button fluid primary onClick={this.handleRestart}>Restart</Button> }
+                    <Button fluid onClick={this.handleBack}>Back</Button>
                 </div>
             </div>
         );

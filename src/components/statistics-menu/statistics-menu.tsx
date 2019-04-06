@@ -1,58 +1,32 @@
 import * as React from "react";
-import { Interval } from "utils";
-import { Tab } from "semantic-ui-react";
-import { bind } from "lodash-decorators";
-import { observable, computed } from "mobx";
+import { external, inject } from "tsdi";
 import { observer } from "mobx-react";
-import { ChartScoreTime } from "../chart-score-time";
-import { ChartScoreTimeCumulative } from "../chart-score-time-cumulative";
-import { ChartDistributionTime } from "../chart-distribution-time";
-import { ChartSpeedTime } from "../chart-speed-time";
-import { ChartDistribution } from "../chart-distribution";
+import { bind } from "lodash-decorators";
+import { Button, Segment } from "semantic-ui-react";
+import { UI } from "ui";
+import { ObservableGame } from "observable-game";
+import { Statistics } from "../statistics";
+import * as css from "./statistics-menu.scss";
 
-@observer
-export class StatisticsMenu extends React.Component<{ intervals: Interval[] }> {
-    @observable private activeTab = 0;
+@external @observer
+export class StatisticsMenu extends React.Component {
+    @inject private ui: UI;
+    @inject private observableGame: ObservableGame;
 
-    @computed public get overall() {
-        return Interval.combine(...this.props.intervals);
-    }
-
-    public get panes() {
-        return [
-            { menuItem: "Score / Time (Cumulative)" },
-            { menuItem: "Score / Time" },
-            { menuItem: "Distribution / Time" },
-            { menuItem: "Distribution" },
-            { menuItem: "Speed / Time" },
-        ];
-    }
-
-    @bind private handleTabChange(_, { activeIndex }: { activeIndex: number }) {
-        this.activeTab = activeIndex;
-    }
-
-    private renderTab() {
-        switch (this.activeTab) {
-            case 0: return <ChartScoreTimeCumulative intervals={this.props.intervals} />;
-            case 1: return <ChartScoreTime intervals={this.props.intervals} />;
-            case 2: return <ChartDistributionTime intervals={this.props.intervals} />;
-            case 3: return <ChartDistribution overall={this.overall} />;
-            case 4: return <ChartSpeedTime intervals={this.props.intervals} />;
-            default: return <></>;
-        }
+    @bind private handleClose() {
+        this.ui.showStats = false;
     }
 
     public render() {
+        if (!this.ui.showStats) { return <></>; }
         return (
-            <>
-                <Tab
-                    panes={this.panes}
-                    activeIndex={this.activeTab}
-                    onTabChange={this.handleTabChange}
-                />
-                {this.renderTab()}
-            </>
+            <div className={css.statisticsMenu}>
+                <Segment>
+                    <h1>Statistics</h1>
+                    <Statistics intervals={this.observableGame.intervals} />
+                    <Button primary onClick={this.handleClose}>Close</Button>
+                </Segment>
+            </div>
         );
     }
 }

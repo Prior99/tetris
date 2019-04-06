@@ -28,7 +28,7 @@ export class ChartSpeedTime extends React.Component<{ intervals: Interval[] }> {
                     <CartesianGrid strokeDasharray="1 3"/>
                     <Tooltip/>
                     <Legend />
-                    <Line type="monotone" dataKey="score" stroke={chartColors[5]} />
+                    <Line type="monotone" dataKey="speed" stroke={chartColors[5]} />
                 </LineChart>
             </ResponsiveContainer>
 
