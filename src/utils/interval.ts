@@ -20,7 +20,7 @@ export class Interval {
     public locks = 0;
     public score = 0;
 
-    constructor(public start: number) {}
+    constructor(public start: number, public highestBlock = 0, public holes = 0) {}
 
     public addTime(seconds: number) {
         this.time += seconds;
@@ -30,8 +30,10 @@ export class Interval {
         return this.time >= this.config.statisticsInterval;
     }
 
-    public reportLock() {
+    public reportLock(highestBlock: number, holes: number) {
         this.locks++;
+        this.highestBlock = highestBlock;
+        this.holes = holes;
     }
 
     public reportLines(count: number) {

@@ -9,6 +9,8 @@ import { ChartScoreTimeCumulative } from "../chart-score-time-cumulative";
 import { ChartDistributionTime } from "../chart-distribution-time";
 import { ChartSpeedTime } from "../chart-speed-time";
 import { ChartDistribution } from "../chart-distribution";
+import { ChartHighestBlockTime } from "../chart-highest-block-time";
+import { ChartHolesTime } from "../chart-holes-time";
 
 @observer
 export class Statistics extends React.Component<{ intervals: Interval[] }> {
@@ -25,6 +27,8 @@ export class Statistics extends React.Component<{ intervals: Interval[] }> {
             { menuItem: "Distribution / Time" },
             { menuItem: "Distribution" },
             { menuItem: "Speed / Time" },
+            { menuItem: "Height / Time" },
+            { menuItem: "Holes / Time" },
         ];
     }
 
@@ -39,6 +43,8 @@ export class Statistics extends React.Component<{ intervals: Interval[] }> {
             case 2: return <ChartDistributionTime intervals={this.props.intervals} />;
             case 3: return <ChartDistribution overall={this.overall} />;
             case 4: return <ChartSpeedTime intervals={this.props.intervals} />;
+            case 5: return <ChartHighestBlockTime intervals={this.props.intervals} />;
+            case 6: return <ChartHolesTime intervals={this.props.intervals} />;
             default: return <></>;
         }
     }

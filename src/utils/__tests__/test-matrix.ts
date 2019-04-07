@@ -166,4 +166,23 @@ describe("Matrix", () => {
             ]));
         });
     });
+
+    describe("highestBlock", () => {
+        it("detects highest block", () => expect(new Matrix(vec2(4, 6), [
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            1, 0, 0, 0,
+            1, 1, 0, 0,
+            1, 1, 1, 0,
+        ]).highestBlock).toBe(2));
+    });
+
+    describe("holes", () => {
+        it("detects one hole in matrix A", () => expect(matrixA.holes).toBe(1));
+
+        it("detects two holes in matrix B", () => expect(matrixB.holes).toBe(2));
+
+        it("detects no holes in tetrimino A", () => expect(tetriminoA.holes).toBe(0));
+    });
 });

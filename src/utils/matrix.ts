@@ -225,4 +225,49 @@ export class Matrix {
         }
         return result;
     }
+
+    public get highestBlock() {
+        let y: number;
+        for (y = this.dimensions.y - 1; y >= 0; --y) {
+            for (let x = 0; x < this.dimensions.x; ++x) {
+                if (!this.emptyAt(vec2(x, y))) { return y; }
+            }
+        }
+        return 0;
+    }
+
+    public get holes() {
+        let todo: Vec2[] = [];
+        let holes = 0;
+
+        for (let x = 0; x < this.dimensions.x; ++x) {
+            for (let y = 0; y < this.dimensions.y - 1; ++y) {
+                const vec = vec2(x, y);
+                if (this.emptyAt(vec)) { todo.push(vec); }
+            }
+        }
+
+        while (todo.length > 0) {
+            const current = todo[0];
+            let visited: Vec2[] = [];
+
+            const isConnectedToTop = (vec: Vec2): boolean => {
+                if (visited.some(visitedVec => visitedVec.equals(vec))) { return false; }
+                todo = todo.filter(todoVec => !todoVec.equals(vec));
+                visited.push(vec);
+                if (!this.isInside(vec)) { return false; }
+                if (!this.emptyAt(vec)) { return false; }
+                if (vec.y === this.dimensions.y - 1) { return true; }
+                return (
+                    isConnectedToTop(vec.add(vec2(1, 0))) ||
+                    isConnectedToTop(vec.add(vec2(-1, 0))) ||
+                    isConnectedToTop(vec.add(vec2(0, 1))) ||
+                    isConnectedToTop(vec.add(vec2(0, -1)))
+                );
+            };
+            if (!isConnectedToTop(current)) { holes++; }
+        }
+
+        return holes;
+    }
 }

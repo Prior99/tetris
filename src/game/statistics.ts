@@ -12,7 +12,7 @@ export class Statistics {
         this.currentTime = seconds;
         if (this.nextInterval.completed) {
             this.pastIntervals.push(this.nextInterval);
-            this.nextInterval = new Interval(this.currentTime);
+            this.nextInterval = new Interval(this.currentTime, this.nextInterval.highestBlock, this.nextInterval.holes);
         }
     }
 
@@ -20,9 +20,9 @@ export class Statistics {
         this.nextInterval.score += score;
     }
 
-    public reportLock() {
-        this.nextInterval.reportLock();
-        this.overallInterval.reportLock();
+    public reportLock(highestBlock: number, holes: number) {
+        this.nextInterval.reportLock(highestBlock, holes);
+        this.overallInterval.reportLock(highestBlock, holes);
     }
 
     public get currentInterval(): Interval | undefined {

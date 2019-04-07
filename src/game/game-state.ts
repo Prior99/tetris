@@ -373,7 +373,7 @@ export class GameState {
         this.newTetrimino();
         this.timeLastLock = this.timeCurrent;
         this.timeLastHit = undefined;
-        this.statistics.reportLock();
+        this.statistics.reportLock(this.playfield.highestBlock, this.playfield.holes);
     }
 
     public get timeSinceLastHit(): number | undefined {
