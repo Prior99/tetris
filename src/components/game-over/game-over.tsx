@@ -39,7 +39,7 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     }
 
     @bind private handleLeaderboardSubmit() {
-        this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score);
+        this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score, this.observableGame.intervals);
         this.ui.leaderboardSubmitted = true;
     }
 

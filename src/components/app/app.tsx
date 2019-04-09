@@ -12,6 +12,7 @@ import { Connect } from "../connect";
 import { Lobby } from "../lobby";
 import { MultiPlayer } from "../multi-player";
 import { LeaderboardView } from "../leaderboard-view";
+import { LeaderboardStatisticsView } from "../leaderboard-statistics-view";
 import { SinglePlayerSetup } from "../single-player-setup";
 import { Background } from "../background";
 
@@ -37,6 +38,7 @@ export class App extends React.Component {
                         <Route exact path="/connect" component={Connect} />
                         <Route exact path="/multi-player" component={MultiPlayer} />
                         <Route exact path="/leaderboard" component={LeaderboardView} />
+                        <Route exact path="/statistics/:id" component={LeaderboardStatisticsView} />
                         <Route exact path="/single-player-setup" component={SinglePlayerSetup} />
                     </Switch>
                 </Router>

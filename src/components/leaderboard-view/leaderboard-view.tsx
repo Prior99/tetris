@@ -2,11 +2,12 @@ import { external, inject, initialize } from "tsdi";
 import * as React from "react";
 import { observer } from "mobx-react";
 import { History } from "history";
+import { Segment, Table, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import { Leaderboard } from "leaderboard";
 import { bind } from "lodash-decorators";
 import * as css from "./leaderboard-view.scss";
 import { MenuContainer } from "components/menu-container";
-import { Segment, Table, Button } from "semantic-ui-react";
 
 @external @observer
 export class LeaderboardView extends React.Component {
@@ -39,14 +40,22 @@ export class LeaderboardView extends React.Component {
                     <Table.HeaderCell className={css.rank}>#</Table.HeaderCell>
                     <Table.HeaderCell>Name</Table.HeaderCell>
                     <Table.HeaderCell>Score</Table.HeaderCell>
+                    <Table.HeaderCell></Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                     {
-                        this.leaderboard.scores.slice(start - 1, end).map(({ name, score }, index) => (
+                        this.leaderboard.scores.slice(start - 1, end).map(({ name, score, statisticsId }, index) => (
                             <Table.Row key={index}>
                                 <Table.Cell className={css.cell}>{index + start}</Table.Cell>
                                 <Table.Cell className={css.cell}>{name}</Table.Cell>
                                 <Table.Cell className={css.cell}>{score}</Table.Cell>
+                                <Table.Cell className={css.cell}>
+                                    {
+                                        statisticsId && <Link to={`/statistics/${statisticsId}`}>
+                                            Stats
+                                        </Link>
+                                    }
+                                </Table.Cell>
                             </Table.Row>
                         ))
                     }
