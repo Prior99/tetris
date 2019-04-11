@@ -41,10 +41,6 @@ export class Host extends Peer {
         await this.open();
         if (!this.peer || !this.id) { throw new Error("PeerJS failed to initialize."); }
         this.peer.on("connection", connection => this.handleConnect(connection));
-        this.users.add({
-            id: this.id,
-            name: this.name,
-        });
     }
 
     public sendStartGame() {
