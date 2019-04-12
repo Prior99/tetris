@@ -4,7 +4,7 @@ import { NetworkGame } from "../network-game";
 import { Chat } from "../chat";
 import { MockPeerJS, MockDataConnection } from "../../__mocks__/peerjs";
 import { MessageType } from "../messages";
-import { RemoteUser } from "../../types";
+import { RemoteUser, GameParameters } from "../../types";
 
 describe("Host", () => {
     let host: Host;
@@ -22,7 +22,6 @@ describe("Host", () => {
         chat = new Chat();
         remoteUsers = new RemoteUsers();
         networkGame = new NetworkGame(remoteUsers);
-        networkGame.parameters.seed = "some seed";
         name = "Some name";
         host = new Host(remoteUsers, chat, networkGame, name);
         mockPeerJS = (host as any).peer;
@@ -58,7 +57,7 @@ describe("Host", () => {
                 otherUsers = connections.map((_, index) => ({
                     name: `Another user #${index}`,
                     id: `ANOTHERID0000${index}`,
-                }))
+                }));
                 connections.forEach(connection => mockPeerJS.emulateConnection(connection));
             });
 
@@ -94,6 +93,92 @@ describe("Host", () => {
                     expect(connections[0].send).toHaveBeenNthCalledWith(2, {
                         message: MessageType.USER_CONNECTED,
                         user: otherUsers[1],
+                    });
+                });
+
+                describe("when sending a chat message to the host", () => {
+                    let spyChatAdd: jest.SpyInstance<any>;
+
+                    beforeEach(() => {
+                        spyChatAdd = jest.spyOn(chat, "add");
+                        connections[0].emulateData({
+                            message: MessageType.CHAT_MESSAGE,
+                            chatMessage: "some text",
+                        });
+                    });
+
+                    it("forwards message to connection #2", () => expect(connections[1].send).toHaveBeenLastCalledWith({
+                        message: MessageType.CHAT_MESSAGE,
+                        chatMessage: "some text",
+                    }));
+
+                    it("appends the message to the chat module", () => {
+                        expect(spyChatAdd).toHaveBeenCalledWith("some text");
+                    });
+                });
+
+                describe("when changing parameters", () => {
+                    let parameters: GameParameters;
+                    beforeEach(() => {
+                        parameters = {
+                            ...networkGame.parameters,
+                            levelUpDisabled: true,
+                        };
+
+                        host.sendParameterChange(parameters);
+                    });
+
+                    it("sends `PARAMETERS_CHANGE` to both connections", () => {
+                        connections.forEach(connection => {
+                            expect(connection.send).toBeCalledWith({
+                                message: MessageType.PARAMETERS_CHANGE,
+                                parameters,
+                            });
+                        });
+                    });
+                });
+
+                describe("when starting the game", () => {
+                    let spyStartNetworkGame: jest.SpyInstance<any>;
+
+                    beforeEach(() => {
+                        spyStartNetworkGame = jest.spyOn(host as any, "startNetworkGame").mockImplementation();
+                        host.sendStartGame();
+                    });
+
+                    it("sends `START` to both connections", () => {
+                        connections.forEach(connection => {
+                            expect(connection.send).toBeCalledWith({
+                                message: MessageType.START,
+                                parameters: networkGame.parameters,
+                            });
+                        });
+                    });
+
+                    it("calls `startNetworkGame`", () => {
+                        expect(spyStartNetworkGame).toHaveBeenCalledWith(networkGame.parameters);
+                    });
+
+                    describe("when starting the game", () => {
+                        let spyRestartNetworkGame: jest.SpyInstance<any>;
+
+                        beforeEach(() => {
+                            spyRestartNetworkGame = jest.spyOn(host as any, "restartNetworkGame").mockImplementation();
+                            host.sendRestartGame();
+                        });
+
+                        it("sends `RESTART` to both connections", () => {
+                            connections.forEach(connection => {
+                                expect(connection.send).toBeCalledWith({
+                                    message: MessageType.RESTART,
+                                    parameters: networkGame.parameters,
+                                });
+                            });
+                        });
+
+                        it("calls `restartNetworkGame`", () => {
+                            expect(spyRestartNetworkGame).toHaveBeenCalledWith(networkGame.parameters);
+                        });
                     });
                 });
             });

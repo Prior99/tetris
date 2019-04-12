@@ -4,6 +4,7 @@ jest.mock("./src/sounds");
 jest.mock("./src/resources/audio/audio");
 jest.mock("./src/utils/create-canvas");
 jest.mock("./src/utils/generate-names");
+jest.mock("./src/utils/generate-random-seed");
 jest.mock("./src/resources/sprites/image-manager");
 
 import { setupJestScreenshot } from "jest-screenshot";
