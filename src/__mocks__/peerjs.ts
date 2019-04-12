@@ -9,7 +9,7 @@ export class MockPeerJS implements PeerJS {
     public disconnected = true;
     public destroyed = false;
 
-    public connect = jest.fn();
+    public connect = jest.fn(() => new MockDataConnection());
 
     public call = jest.fn();
     
@@ -54,7 +54,8 @@ export class MockDataConnection implements DataConnection {
 
     public on = jest.fn((event: string, callback: () => void) => {
         switch (event) {
-            case "data": this.dataListeners.push(callback);
+            case "data": this.dataListeners.push(callback); return;
+            case "open": callback(); return;
         }
     }) as any;
 
