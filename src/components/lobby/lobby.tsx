@@ -75,7 +75,7 @@ export class Lobby extends React.Component<LobbyProps> {
     }
 
     @computed private get connectUrl() {
-        return `${location.origin}/#/lobby/connect/${this.networking.hostId}`;
+        return location.href.replace(location.hash, `#/lobby/connect/${this.networking.hostId}`);
     }
 
     @computed private get popupText() {

@@ -99,7 +99,7 @@ export class Configure extends React.Component<ConfigureProps> {
     }
 
     public render() {
-        const { parameters, singleplayer } = this.props;
+        const { parameters, singleplayer, enabled } = this.props;
         const { winningCondition, garbageMode, initialGarbageLines, initialLevel, levelUpDisabled } = parameters;
         return (
             <>
@@ -110,6 +110,7 @@ export class Configure extends React.Component<ConfigureProps> {
                         options={this.winningConditionOptions}
                         value={winningCondition.condition}
                         onChange={this.handleWinningCondition}
+                        disabled={!enabled}
                     />
                     {
                         winningCondition.condition === WinningConditionType.SUM_IN_TIME && (
@@ -118,6 +119,7 @@ export class Configure extends React.Component<ConfigureProps> {
                                 type="number"
                                 onChange={this.handleSeconds}
                                 value={`${winningCondition.seconds}`}
+                                disabled={!enabled}
                             />
                         )
                     }
@@ -128,6 +130,7 @@ export class Configure extends React.Component<ConfigureProps> {
                                 type="number"
                                 onChange={this.handleLives}
                                 value={winningCondition.lives}
+                                disabled={!enabled}
                             />
                         )
                     }
@@ -138,6 +141,7 @@ export class Configure extends React.Component<ConfigureProps> {
                                 options={this.garbageModeOptions}
                                 value={garbageMode}
                                 onChange={this.handleGarbageMode}
+                                disabled={!enabled}
                             />
                         )
                     }
@@ -146,18 +150,21 @@ export class Configure extends React.Component<ConfigureProps> {
                         type="number"
                         onChange={this.handleInitialGarbageLines}
                         value={initialGarbageLines}
+                        disabled={!enabled}
                     />
                     <Form.Input
                         label="Initial level"
                         type="number"
                         onChange={this.handleInitialLevel}
                         value={initialLevel}
+                        disabled={!enabled}
                     />
                     <Form.Checkbox
                         toggle
                         label="Level up disabled"
                         onClick={this.handleLevelUpDisabled}
                         checked={levelUpDisabled}
+                        disabled={!enabled}
                     />
                 </Form>
             </>

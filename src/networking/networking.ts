@@ -113,7 +113,7 @@ export class Networking {
     }
 
     @bind public changeParameters(parameters: GameParameters) {
-        if (this.isHost) { return; }
+        if (!this.isHost) { return; }
         this.networkGame.parameters = parameters;
         (this.peer as Host).sendParameterChange(parameters);
     }
