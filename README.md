@@ -22,8 +22,8 @@ This game has the following features:
  * Hold piece
 
 <p align="center">
-    <img width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-1.png">
-    <img width="300" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-2.png">
+    <img width="600" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-1.png">
+    <img width="600" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-2.png">
 </p>
 
 ## Multiplayer
@@ -31,7 +31,7 @@ This game has the following features:
 Multiplayer is possible using WebRTC. The players send garbage lines to each other which are cancellable.
 
 <p align="center">
-    <img width="600" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-4.png">
+    <img width="600" src="https://raw.githubusercontent.com/Prior99/tetris/master/images/screenshot-3.png">
 </p>
 
 <br>
