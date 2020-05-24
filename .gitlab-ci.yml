@@ -13,7 +13,6 @@ build:
   before_script:
     - apt-get update -qq
     - apt-get install make git aseprite xvfb -qq
-    - npm install -g yarn
   stage: build
   script:
     - xvfb-run make build
@@ -29,7 +28,6 @@ test:
   before_script:
     - apt-get update -qq
     - apt-get install make git -qq
-    - npm install -g yarn
   stage: test
   script:
     - make test
@@ -43,7 +41,6 @@ lint:
   before_script:
     - apt-get update -qq
     - apt-get install make git -qq
-    - npm install -g yarn
   stage: test
   script:
     - make lint
