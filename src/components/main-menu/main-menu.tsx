@@ -32,10 +32,6 @@ export class MainMenu extends React.Component {
         this.history.push("/connect");
     }
 
-    @bind private handleLeaderboard() {
-        this.history.push("/leaderboard");
-    }
-
     public render() {
         return (
             <MenuContainer>
@@ -45,7 +41,6 @@ export class MainMenu extends React.Component {
                         <Menu.Item onClick={this.handleSinglePlayer}>Singleplayer</Menu.Item>
                         <Menu.Item onClick={this.handleSettings}>Settings</Menu.Item>
                         <Menu.Item onClick={this.handleMultiplayer}>Multiplayer</Menu.Item>
-                        <Menu.Item onClick={this.handleLeaderboard}>Leaderboard</Menu.Item>
                     </Menu>
                     <p className={css.version}>version {SOFTWARE_VERSION}</p>
                 </Segment>

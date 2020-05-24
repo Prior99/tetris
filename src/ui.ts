@@ -10,7 +10,6 @@ const localStorageVersion = 1;
 export class UI {
     @observable private volume = { music: 0.5, sounds: 0.6 };
     @observable private userName = generateName();
-    @observable public leaderboardSubmitted = false;
     @observable public parameters: GameParameters = {
         seed: randomSeed(),
         garbageMode: GarbageMode.NONE,
@@ -46,7 +45,6 @@ export class UI {
     }
 
     public reset() {
-        this.leaderboardSubmitted = false;
         this.parameters.seed = randomSeed();
         this.showStats = false;
     }

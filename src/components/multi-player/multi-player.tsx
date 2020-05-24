@@ -47,7 +47,6 @@ export class MultiPlayer extends React.Component {
 
     @bind private exit() {
         this.networking.close();
-        this.ui.leaderboardSubmitted = false;
         this.history.push("/");
     }
 

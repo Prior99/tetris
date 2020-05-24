@@ -96,7 +96,6 @@ export class SinglePlayer extends React.Component<SinglePlayerProps> {
 
     @bind private exit() {
         this.observableGame.stop();
-        this.ui.leaderboardSubmitted = false;
         this.history.push("/");
     }
 

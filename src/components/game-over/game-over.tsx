@@ -7,9 +7,7 @@ import { observable, computed } from "mobx";
 import classNames from "classnames/bind";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
-import { Leaderboard } from "leaderboard";
 import { ObservableGame } from "observable-game";
-import { leaderboardEnabled } from "utils";
 import * as css from "./game-over.scss";
 import { Button, Input } from "semantic-ui-react";
 
@@ -19,15 +17,8 @@ const cx = classNames.bind(css);
 export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     @inject private observableGame: ObservableGame;
     @inject private ui: UI;
-    @inject private leaderboard: Leaderboard;
     @inject private networking: Networking;
     @inject("History") private history: History;
-
-    @observable private leaderboardName = "";
-
-    @initialize protected initialize() {
-        this.leaderboardName = this.ui.name || "";
-    }
 
     @bind private handleRestart() {
         if (this.props.multiPlayer) {
@@ -38,15 +29,6 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
         this.observableGame.restart(this.ui.parameters);
     }
 
-    @bind private handleLeaderboardSubmit() {
-        this.leaderboard.submitScore(this.leaderboardName, this.observableGame.score, this.observableGame.intervals);
-        this.ui.leaderboardSubmitted = true;
-    }
-
-    @bind private handleLeaderboardNameChange(evt: React.SyntheticEvent<HTMLInputElement>) {
-        this.leaderboardName = evt.currentTarget.value;
-    }
-
     @bind private handleStats() {
         this.ui.showStats = true;
     }
@@ -54,10 +36,6 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
     @bind private handleBack() {
         this.observableGame.stop();
         this.history.push("/main-menu");
-    }
-
-    @computed private get leaderboardFormVisible() {
-        return !this.ui.leaderboardSubmitted && leaderboardEnabled(this.ui.parameters);
     }
 
     @computed private get isWinner() {
@@ -85,17 +63,6 @@ export class GameOver extends React.Component<{ multiPlayer?: boolean }> {
                     <div className={css.gameOverText}>
                         {this.isWinner ? "Winner" : "Game Over"}
                     </div>
-                    {
-                        this.leaderboardFormVisible && (
-                            <Input
-                                value={this.leaderboardName}
-                                onChange={this.handleLeaderboardNameChange}
-                                action={
-                                    <Button onClick={this.handleLeaderboardSubmit}>Submit</Button>
-                                }
-                            />
-                        )
-                    }
                     <Button color="yellow" onClick={this.handleStats}>Show Stats</Button>
                     { this.canRestart && <Button fluid primary onClick={this.handleRestart}>Restart</Button> }
                     <Button fluid onClick={this.handleBack}>Back</Button>

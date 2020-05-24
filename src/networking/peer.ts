@@ -63,7 +63,7 @@ export abstract class Peer {
 
     protected async open(): Promise<void> {
         await new Promise(resolve => {
-            this.peer = new PeerJS(null as any, { debug: 3 });
+            this.peer = new PeerJS(null as any, { host: "peerjs.92k.de", secure: true });
             this.peer.on("open", () => resolve());
         });
         if (!this.peer) { throw new Error("Connection id could not be determined."); }

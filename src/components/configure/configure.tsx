@@ -1,5 +1,4 @@
 import * as React from "react";
-import { leaderboardEnabled } from "utils";
 import { GameParameters, WinningConditionType, GarbageMode, WinningCondition } from "types";
 import { bind } from "lodash-decorators";
 import { computed } from "mobx";
@@ -19,24 +18,6 @@ function winningConditionFromType(condition: WinningConditionType): WinningCondi
         case WinningConditionType.SUM_IN_TIME: return { condition, seconds: 180 };
         case WinningConditionType.CLEAR_GARBAGE: return { condition };
     }
-}
-
-function LeaderboardMessage({ enabled }: { enabled: boolean }) {
-    if (enabled) {
-        return (
-            <Message color="green">
-                <Icon name="check" />
-                Leaderboard enabled.
-            </Message>
-
-        );
-    }
-    return (
-        <Message color="red">
-            <Icon name="times" />
-            Leaderboard disabled.
-        </Message>
-    );
 }
 
 export class Configure extends React.Component<ConfigureProps> {
@@ -76,10 +57,6 @@ export class Configure extends React.Component<ConfigureProps> {
         this.props.onChange({ ...this.props.parameters, winningCondition });
     }
 
-    @computed private get leaderboardEnabled() {
-        return leaderboardEnabled(this.props.parameters);
-    }
-
     @computed private get garbageModeOptions() {
         return [
             { value: GarbageMode.NONE, text: "No Garbage" },
@@ -103,7 +80,6 @@ export class Configure extends React.Component<ConfigureProps> {
         const { winningCondition, garbageMode, initialGarbageLines, initialLevel, levelUpDisabled } = parameters;
         return (
             <>
-                <LeaderboardMessage enabled={this.leaderboardEnabled} />
                 <Form>
                     <Form.Select
                         label="Winning condition"

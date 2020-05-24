@@ -18,7 +18,6 @@ This game has the following features:
  * Peer-To-Peer multiplayer
  * SRS rotation system
  * Lighting system
- * Leaderboards
  * Hold piece
 
 <p align="center">

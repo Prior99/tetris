@@ -18,7 +18,7 @@ export class ChatMessage extends React.Component<{ message: ChatMessageInterface
                     <Comment.Author style={{ display: "inline-block" }}>
                         {this.networking.userById(this.props.message.userId)!.name}
                     </Comment.Author>
-                    <Comment.Metadata>{date.toLocaleTimeString()}</Comment.Metadata>
+                    <Comment.Metadata>{new Date(date).toLocaleTimeString()}</Comment.Metadata>
                     <Comment.Text>{text}</Comment.Text>
                 </Comment.Content>
             </Comment>
