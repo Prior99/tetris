@@ -8,7 +8,6 @@ import { bind } from "lodash-decorators";
 import { GameOver } from "components/game-over";
 import { ObservableGame } from "observable-game";
 import { NetworkingMode } from "types";
-import { UI } from "ui";
 import { TabMenu } from "../tab-menu";
 import { MenuContainer } from "../menu-container";
 import { PauseMenu } from "../pause-menu";
@@ -23,7 +22,6 @@ import * as css from "./multi-player.scss";
 export class MultiPlayer extends React.Component {
     @inject private networking: Networking;
     @inject private observableGame: ObservableGame;
-    @inject private ui: UI;
     @inject("History") private history: History;
 
     @initialize protected initialize() {

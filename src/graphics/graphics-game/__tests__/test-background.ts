@@ -15,7 +15,7 @@ describe("Background", () => {
         canvas = createCanvas(320, 640);
         graphics = new GraphicsBackground(game as Game);
         graphics.rescale(vec2(320, 640));
-        graphics.updateCanvas(canvas);
+        graphics.updateCanvas(canvas as any);
         graphics.render();
     });
 

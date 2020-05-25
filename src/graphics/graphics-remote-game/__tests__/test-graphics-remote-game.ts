@@ -12,7 +12,7 @@ describe("GraphicsRemoteGame", () => {
         canvas = createCanvas(320, 640);
         matrix = mockPlayfield();
         graphics = new GraphicsRemoteGame(matrix);
-        graphics.updateCanvas(canvas);
+        graphics.updateCanvas(canvas as any);
         graphics.render();
     });
 

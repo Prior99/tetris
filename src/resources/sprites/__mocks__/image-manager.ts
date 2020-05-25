@@ -20,8 +20,8 @@ export class ImageManager {
             this.handlers.set(url, [{ resolve, reject }]);
             const image = new Image();
             image.onload = () => {
-                this.handlers.get(url)!.forEach(({ resolve: resolveHandler }) => resolveHandler(image));
-                this.images.set(url, image);
+                this.handlers.get(url)!.forEach(({ resolve: resolveHandler }) => resolveHandler(image as any));
+                this.images.set(url, image as any);
                 this.handlers.delete(url);
             };
             image.onerror = err => {

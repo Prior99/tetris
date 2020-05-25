@@ -1,15 +1,15 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Networking } from "networking";
-import { external, inject, initialize } from "tsdi";
+import { external, inject } from "tsdi";
 import { History } from "history";
-import { observable, computed } from "mobx";
+import { computed } from "mobx";
 import classNames from "classnames/bind";
 import { bind } from "lodash-decorators";
 import { UI } from "ui";
 import { ObservableGame } from "observable-game";
 import * as css from "./game-over.scss";
-import { Button, Input } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 const cx = classNames.bind(css);
 

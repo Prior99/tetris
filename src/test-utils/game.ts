@@ -1,12 +1,11 @@
 import { merge } from "ramda";
-import { GameMode, Mutable } from "types";
+import { GameMode, Mutable, WinningConditionType, GarbageMode } from "types";
 import { vec2 } from "utils";
 import { Game } from "game";
 import { mockPlayfield } from "./playfield";
 
 export function mockGame(override?: Partial<Game>): Mutable<Game> {
-    return merge({
-        gameMode: GameMode.SINGLE_PLAYER,
+    const defaults: Game = {
         running: true,
         serial: "random string",
         seconds: 10,
@@ -40,5 +39,17 @@ export function mockGame(override?: Partial<Game>): Mutable<Game> {
         incomingGarbage: [],
         holdPiece: undefined,
         latestIncomingGarbage: undefined,
-    }, override) as any as Mutable<Game>;
+        parameters:{
+            winningCondition: {
+                condition: WinningConditionType.CLEAR_GARBAGE,
+            },
+            gameMode: GameMode.SINGLE_PLAYER,
+            seed: "some-seed",
+            initialGarbageLines: 10,
+            garbageMode: GarbageMode.NONE,
+            initialLevel: 0,
+            levelUpDisabled: false,
+        }
+    } as any;
+    return merge(defaults, override ?? {}) as any as Mutable<Game>;
 }

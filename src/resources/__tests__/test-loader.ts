@@ -7,7 +7,7 @@ describe("Loader", () => {
         describe(`Sprite ${name}`, () => {
             it("is loaded and drawable", () => {
                 const sprite: Sprite = tsdi.get(SpriteManager).sprite(spriteClass);
-                const canvas: Canvas = createCanvas();
+                const canvas: Canvas = createCanvas(800, 600);
 
                 canvas.width = sprite.dimensions.x;
                 canvas.height = sprite.dimensions.y;

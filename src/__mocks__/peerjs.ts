@@ -38,6 +38,9 @@ export class MockPeerJS implements PeerJS {
 }
 
 export class MockDataConnection implements DataConnection {
+    public bufferSize = 0;
+    public stringify: (data: any) => string;
+    public parse: (data: string) => any;
     public dataListeners: ((data: any) => void)[] = [];
     public dataChannel: RTCDataChannel;
     public label: string;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { GameParameters, WinningConditionType, GarbageMode, WinningCondition } from "types";
 import { bind } from "lodash-decorators";
 import { computed } from "mobx";
-import { Message, Icon, Form } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 
 interface ConfigureProps {
     enabled: boolean;
