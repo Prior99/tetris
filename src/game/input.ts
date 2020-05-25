@@ -79,21 +79,25 @@ export class Input {
         switch (evt.key) {
             case "ArrowUp":
             case "x":
+            case "k":
             case "w": {
                 this.rotateRight = undefined;
                 break;
             }
             case "ArrowLeft":
+            case "h":
             case "a": {
                 this.moveLeft = undefined;
                 break;
             }
             case "ArrowRight":
+            case "l":
             case "d": {
                 this.moveRight = undefined;
                 break;
             }
             case "ArrowDown":
+            case "j":
             case "s": {
                 this.moveDown = undefined;
                 break;
@@ -109,6 +113,7 @@ export class Input {
         switch (evt.key) {
             case "ArrowUp":
             case "x":
+            case "k":
             case "w": {
                 if (!this.rotateRight) {
                     this.rotateRight = this.keyState(this.timeCurrent);
@@ -116,6 +121,7 @@ export class Input {
                 break;
             }
             case "ArrowLeft":
+            case "h":
             case "a": {
                 if (!this.moveLeft) {
                     this.moveLeft = this.keyState(this.timeCurrent);
@@ -123,6 +129,7 @@ export class Input {
                 break;
             }
             case "ArrowRight":
+            case "l":
             case "d": {
                 if (!this.moveRight) {
                     this.moveRight = this.keyState(this.timeCurrent);
@@ -130,6 +137,7 @@ export class Input {
                 break;
             }
             case "ArrowDown":
+            case "j":
             case "s": {
                 if (!this.moveDown) {
                     this.moveDown = this.keyState(this.timeCurrent);
