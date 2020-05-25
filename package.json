@@ -5,7 +5,7 @@
     "author": "Frederick Gnodtke",
     "license": "MIT",
     "scripts": {
-        "build": "webpack",
+        "build": "webpack -p",
         "start": "webpack-dev-server",
         "test": "TZ=UTC jest",
         "lint": "tslint --format stylish --project tsconfig.json"
@@ -25,7 +25,7 @@
             "js"
         ],
         "transform": {
-            ".ts": "ts-jest"
+            "\\.ts": "ts-jest"
         },
         "coverageReporters": [
             "lcov",
@@ -72,7 +72,7 @@
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^6.0.0",
         "git-revision-webpack-plugin": "^3.0.3",
-        "jest": "^25.5.3",
+        "jest": "^26.0.1",
         "jest-screenshot": "^0.3.1",
         "json-loader": "^0.5.7",
         "node-sass": "^4.11.0",
@@ -80,7 +80,7 @@
         "sass-loader": "^8.0.2",
         "style-loader": "^1.2.1",
         "ts-jest": "^26.0.0",
-        "ts-loader": "^7.0.4",
+        "ts-loader": "^7.0.5",
         "tslint": "^6.1.2",
         "typescript": "^3.3.3",
         "url-loader": "^4.1.0",
@@ -100,7 +100,7 @@
         "react-dom": "^16.8.2",
         "react-router": "^5.0.0",
         "react-router-dom": "^5.0.0",
-        "react-semantic-ui-range": "^0.6.2",
+        "react-semantic-ui-range": "^0.7.0",
         "recharts": "^1.5.0",
         "semantic-ui-css": "^2.4.1",
         "semantic-ui-react": "^0.88.2",
