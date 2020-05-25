@@ -4,7 +4,6 @@ import { TSDI } from "tsdi";
 import { FactoryAudioContext } from "factories";
 import { App } from "components";
 import "./index.scss";
-import "semantic-ui-css/semantic.min.css";
 
 async function main() {
     // Setup dependency injection.

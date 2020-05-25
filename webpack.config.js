@@ -1,21 +1,20 @@
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const path = require('path');
 const { HotModuleReplacementPlugin, DefinePlugin } = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const gitRevision = new GitRevisionPlugin({ lightweightTags: true });
 
 module.exports = {
-    mode: "development",
-    entry:  path.join(__dirname, "src"),
+    entry: {
+        bundle: path.join(__dirname, "src"),
+    },
     output: {
         path: path.join(__dirname, "dist"),
         filename: "bundle.js",
-        publicPath: "/dist/"
+        publicPath: "dist/"
     },
     resolve: {
         extensions: [".js", ".ts", ".tsx"],
-        alias: {
-            "typeorm": "typeorm/browser",
-        },
         modules: [
             path.join(__dirname, "node_modules"),
             path.join(__dirname, "src"),
@@ -36,27 +35,16 @@ module.exports = {
             }, {
                 test: /\.tsx?/,
                 loader: "ts-loader",
-                exclude: [/__tests__/ ],
+                exclude: [/__tests__/],
                 options: {
                     configFile: "tsconfig-webpack.json",
                 },
             }, {
-                test: /\.css$/,
-                use: [
-                    {
-                        loader: "style-loader",
-                    }, {
-                        loader: "css-loader",
-                        options: { sourceMap: true },
-                    }, {
-                        loader: "resolve-url-loader",
-                    },
-                ],
-            }, {
                 test: /\.scss$/,
                 use: [
                     {
-                        loader: "style-loader",
+                        loader: MiniCssExtractPlugin.loader,
+                        options: { publicPath: "." },
                     }, {
                         loader: "css-loader",
                         options: {
@@ -64,8 +52,6 @@ module.exports = {
                             importLoaders: 1,
                             sourceMap: true
                         },
-                    }, {
-                        loader: "resolve-url-loader"
                     }, {
                         loader: "sass-loader",
                         options: { sourceMap: true },
@@ -87,5 +73,7 @@ module.exports = {
             // See: https://www.npmjs.com/package/git-revision-webpack-plugin
             "SOFTWARE_VERSION": JSON.stringify(gitRevision.version()),
         }),
+        new MiniCssExtractPlugin(),
+
     ],
 };
